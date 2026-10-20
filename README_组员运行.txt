@@ -6,13 +6,38 @@
 
 ## 先看这几句
 
-**先完整解压，再安装依赖，然后启动网页。模型和样例已经在包内，演示不需要重新训练，也不需要下载完整数据。**
+**完整转发包：先完整解压，再安装依赖，然后启动网页，模型已在包内。GitHub 克隆：获取源码后另下模型附件。两种方式演示都不需要重新训练或下载完整数据。**
 
 - Windows 路线已在原电脑验证；组员新电脑仍需按下文验收。
 - 使用 64 位 Python 3.11，默认 CPU。演示无需配置 CUDA、显卡或 Anaconda。
 - 首次安装需要联网。依赖装好后，包内模型和骨干缓存可用于本地推理。
 - 网页只在运行它的电脑上打开；每位组员的 `127.0.0.1` 指向自己的电脑。
 - 保持启动窗口打开；关闭窗口或按 Ctrl+C 后网页服务会停止。
+
+## 推荐：通过 GitHub 获取与更新
+
+仓库地址：**https://github.com/chinesecanfly99/foundation-ai-industrial-inspection**
+
+这是私有仓库。组员需要先由仓库所有者添加协作者，接受邀请后用自己的 GitHub 账号访问；没有权限时可能看到404页面，不要据此判断仓库不存在。
+
+已安装 Git 的同学，在自己准备存放项目的文件夹打开终端：
+
+```powershell
+git clone https://github.com/chinesecanfly99/foundation-ai-industrial-inspection.git industrial-inspection
+cd industrial-inspection
+```
+
+随后在浏览器打开 **https://github.com/chinesecanfly99/foundation-ai-industrial-inspection/releases/tag/v0.1.0**，下载 `demo-assets-v0.1.0.zip`，将其中的 `models`、`.cache` 和 `samples` 解压到刚克隆的 `industrial-inspection` 根目录。确认不是多套一层同名文件夹，再按下文安装和启动。
+
+不装 Git 也可在仓库页面选择 Code → Download ZIP，再另外解压模型附件。仓库下载的源码ZIP不自带模型；它与前面单独转发的完整交接包不同。
+
+今后更新代码，在项目目录执行：
+
+```powershell
+git pull --ff-only
+```
+
+有自己的未提交修改时先保存并提交，不要强行覆盖。新增模型版本另下对应附件。以下“一”描述完整交接包的布局，GitHub获取方式可直接跳到“二、Windows首次安装”。
 
 ## 一、收到的文件怎么用
 
@@ -178,7 +203,7 @@ bash start_macos.command
 
 ## 八、可选：恢复 Git 历史后继续开发
 
-**仅运行演示的同学可跳过。** 演示不要求安装 Git。包中的源码目录没有 `.git`，完整Git历史另放在 `可选_Git历史/industrial-inspection.bundle`，目前没有GitHub远程地址。
+**通过 GitHub 克隆的同学可跳过本节，克隆目录已经有Git历史。** 本节仅供使用完整转发包但暂时无法连接GitHub的同学：包中源码目录没有 `.git`，离线历史另放在 `可选_Git历史/industrial-inspection.bundle`。
 
 已安装 Git 的同学，在演示项目 `industrial-inspection` 文件夹打开 PowerShell，恢复到旁边的新目录：
 
@@ -193,7 +218,7 @@ Copy-Item -LiteralPath .\models -Destination ..\industrial-inspection-git -Recur
 Copy-Item -LiteralPath .\.cache -Destination ..\industrial-inspection-git -Recurse
 ```
 
-不要向Git提交 `.venv`、完整数据或大型权重。之后如何推送和合并，由组内确定远程仓库与分支安排。
+不要向Git提交 `.venv`、完整数据或大型权重。主要远程仓库已建立，离线bundle仅作为备用快照；继续开发建议从上面的GitHub地址克隆，组内再安排分支和合并。
 
 ## 九、每位组员安装后的验收
 

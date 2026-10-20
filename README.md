@@ -1,6 +1,19 @@
 # 工业异常定位与可解释质量决策
 
-**收到组员转发包后，请先读 [README_组员运行.md](README_组员运行.md)。** 包内已有模型、骨干缓存与样例，先安装依赖即可演示。下面的 F 盘位置是原电脑路径，组员可解压到自己的目录。
+**组员先读 [README_组员运行.md](README_组员运行.md)。** GitHub 克隆包含源码和样例；真实瓶类演示需另外下载下方模型附件。完整转发包已带模型和骨干缓存。下面的 F 盘位置是原电脑路径，组员可使用自己的目录。
+
+## 从 GitHub 获取并运行
+
+私有仓库：[chinesecanfly99/foundation-ai-industrial-inspection](https://github.com/chinesecanfly99/foundation-ai-industrial-inspection)。组员需先获得协作者权限，并使用自己的 GitHub 账号登录。
+
+```powershell
+git clone https://github.com/chinesecanfly99/foundation-ai-industrial-inspection.git industrial-inspection
+cd industrial-inspection
+```
+
+打开 [v0.1.0 下载页](https://github.com/chinesecanfly99/foundation-ai-industrial-inspection/releases/tag/v0.1.0)，下载 `demo-assets-v0.1.0.zip`，将其中的 `models`、`.cache`、`samples` 解压到当前项目根目录。然后双击 `首次安装_Windows.cmd`，安装结束后双击 `start_windows.cmd`。
+
+只想先检查界面时，可不下载模型附件：安装脚本会建立合成联调模型。真实 bottle 演示和模型评估仍需要对应模型。以后更新源码，在项目目录运行 `git pull --ff-only`；模型版本更新时另外更新附件。
 
 Foundation of AI 小组项目初稿。输入一张产品照片，输出异常位置、异常分数、质量建议、触发规则及可下载记录。
 
@@ -127,7 +140,7 @@ python -m pip install -r requirements/browser-test.txt
 python scripts/test_ui_browser.py --browser-executable "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe"
 ```
 
-该脚本检查合成正常/异常与黑图的上传、热图、规则、报告下载和窄屏布局；实际范围与通过状态写入 `results/ui_smoke.json`。它不代替83张真实测试图的模型评估。GitHub Actions配置仅提供后续远程测试入口，本次未创建远程仓库或执行远程CI。
+该脚本检查合成正常/异常与黑图的上传、热图、规则、报告下载和窄屏布局；实际范围与通过状态写入 `results/ui_smoke.json`。它不代替83张真实测试图的模型评估。私有仓库已配置 GitHub Actions，远程运行状态以仓库 Actions 页面为准；已保存的33项通过记录来自本机测试。
 
 ## 后续优先任务
 
