@@ -1,0 +1,36 @@
+{
+  "model": "bottle_patch",
+  "method": "patch_memory",
+  "dataset_source": "mvtec_ad/bottle",
+  "data_validation": {
+    "verified_images": 292,
+    "verified_masks": 63
+  },
+  "model_card_sha256": "a45838b8d9dd40863be8c96ff53112aeb186f38ba64ca84911a633f6be995c6e",
+  "evaluation_code_sha256": "3c9eb927b7531ae32790973bf7eb40d5f617c37910b0eb6425ce9d9cd9bd8004",
+  "manifest_sha256": "e91d0a6b4c17ebc1e9fa9be41dbd64e94278011067b73411d6f1e2805274217a",
+  "n_test": 83,
+  "n_normal": 20,
+  "n_anomaly": 63,
+  "image_auroc": 0.9920634920634921,
+  "image_average_precision": 0.9976445160197771,
+  "precision": 1.0,
+  "recall": 0.7936507936507936,
+  "f1": 0.8849557522123894,
+  "confusion": {
+    "tn": 20,
+    "fp": 0,
+    "fn": 13,
+    "tp": 50
+  },
+  "pixel_auroc_128": 0.9728575204123676,
+  "mean_anomaly_dice_128": 0.5081534541660121,
+  "mean_anomaly_iou_128": 0.35719856730739047,
+  "inference_median_ms": 118.06460004299879,
+  "inference_p95_ms": 130.3046899382025,
+  "warmup_ms": 2008.7911000009626,
+  "device": "cpu",
+  "protocol": "Frozen normal-calibration thresholds; all held-out test images; pooled pixel AUROC at 128x128, NOT official full-resolution MVTec evaluation or AUPRO. No quality-decision ground truth.",
+  "threshold_selection": "Normal calibration images only. Test data never changes thresholds.",
+  "synthetic_only": false
+}

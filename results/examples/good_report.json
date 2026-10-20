@@ -1,0 +1,63 @@
+{
+  "score": 0.0530223473906517,
+  "image_threshold": 0.11651823967695236,
+  "pixel_threshold": 0.07430853433907032,
+  "anomaly_area_ratio": 0.0,
+  "critical_overlap_ratio": 0.0,
+  "brightness": 136.94947407407406,
+  "sharpness": 39.99172098765432,
+  "decision": "pass",
+  "label_zh": "通过",
+  "reasons": [
+    "分数低于复核区间，预测异常面积较小。"
+  ],
+  "trace": [
+    {
+      "rule": "R1",
+      "condition": false,
+      "selected": false,
+      "suggestion": "无法判定",
+      "reason": "图像亮度或清晰度未满足输入要求，请重新拍摄。"
+    },
+    {
+      "rule": "R2",
+      "condition": true,
+      "selected": true,
+      "suggestion": "通过",
+      "reason": "分数低于复核区间，预测异常面积较小。"
+    },
+    {
+      "rule": "R3",
+      "condition": true,
+      "selected": false,
+      "suggestion": "人工复核",
+      "reason": "分数接近阈值或存在局部可疑区域，建议人工复核。"
+    },
+    {
+      "rule": "R4",
+      "condition": false,
+      "selected": false,
+      "suggestion": "拒收建议",
+      "reason": "明显异常涉及示范关键区域或超过面积上限。"
+    },
+    {
+      "rule": "R5",
+      "condition": true,
+      "selected": false,
+      "suggestion": "人工复核",
+      "reason": "异常证据不足以自动通过或拒收，建议人工复核。"
+    }
+  ],
+  "policy_version": "demo-policy-v1",
+  "model_id": "bottle_patch",
+  "model_method": "patch_memory",
+  "dataset_source": "mvtec_ad/bottle",
+  "policy_sha256": "cf18c0bfbbc13c4153a03746cf7f390d2e709ab0ea19e07e327c42c3b5f1990b",
+  "image_sha256": "691f833e45a45263eb0aa84b7462214a0acd0e1eb57b4f7b32310d89d6cb5e44",
+  "image_size": [
+    900,
+    900
+  ],
+  "notice": "分数不是概率；热图表示视觉差异，规则解释质量建议，不解释缺陷物理成因。仅适用于模型对应类别和拍摄条件。",
+  "latency_ms": 3723.39
+}

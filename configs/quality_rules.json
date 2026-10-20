@@ -1,0 +1,12 @@
+{
+  "version": "demo-policy-v1",
+  "description": "教学示范策略：固定拍摄位置的瓶类顶视图；区域和门槛尚未经工厂专家验证。",
+  "critical_roi": [0.2, 0.2, 0.8, 0.8],
+  "review_margin": 0.1,
+  "min_anomaly_area": 0.005,
+  "reject_area": 0.06,
+  "critical_overlap": 0.2,
+  "min_brightness": 15,
+  "max_brightness": 245,
+  "min_sharpness": 3.0
+}

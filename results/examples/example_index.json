@@ -1,0 +1,29 @@
+{
+  "selection": "First filename of each class, fixed before inspecting scores; not representative performance statistics",
+  "examples": [
+    {
+      "image": "bottle/test/good/000.png",
+      "decision": "pass",
+      "score": 0.0530223473906517,
+      "threshold": 0.11651823967695236
+    },
+    {
+      "image": "bottle/test/broken_large/000.png",
+      "decision": "reject",
+      "score": 0.1578962355852127,
+      "threshold": 0.11651823967695236
+    },
+    {
+      "image": "bottle/test/broken_small/000.png",
+      "decision": "review",
+      "score": 0.09072279185056686,
+      "threshold": 0.11651823967695236
+    },
+    {
+      "image": "bottle/test/contamination/000.png",
+      "decision": "reject",
+      "score": 0.13428419828414917,
+      "threshold": 0.11651823967695236
+    }
+  ]
+}

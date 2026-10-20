@@ -1,0 +1,19 @@
+{
+  "python": "3.11.1 (tags/v3.11.1:a7a450f, Dec  6 2022, 19:58:39) [MSC v.1934 64 bit (AMD64)]",
+  "executable": "F:\\Codex_file\\Foudationai.groupwork\\.venv\\Scripts\\python.exe",
+  "platform": "Windows-10-10.0.22631-SP0",
+  "packages": {
+    "numpy": "2.4.6",
+    "pillow": "11.3.0",
+    "opencv-python-headless": "4.14.0.94",
+    "scikit-learn": "1.9.1",
+    "torch": "2.6.0+cpu",
+    "torchvision": "0.21.0+cpu",
+    "gradio": "5.49.1",
+    "pytest": "8.4.2"
+  },
+  "default_device": "cpu",
+  "cpu_count": 20,
+  "cuda_available": false,
+  "torch_cuda_version": null
+}

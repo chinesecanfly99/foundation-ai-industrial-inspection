@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=75", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "industrial-inspection"
+version = "0.1.0"
+description = "Normal-only industrial anomaly localization and explainable quality decisions"
+requires-python = ">=3.11,<3.13"
+dependencies = ["numpy>=1.26,<3", "pillow>=10.4,<13", "opencv-python-headless>=4.10,<5", "scikit-learn>=1.5,<2", "requests>=2.32,<3"]
+
+[project.optional-dependencies]
+ui = ["gradio==5.49.1"]
+test = ["pytest>=8,<9"]
+deep = ["torch==2.6.0", "torchvision==0.21.0"]
+
+[project.scripts]
+inspection = "industrial_inspection.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

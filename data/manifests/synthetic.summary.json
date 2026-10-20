@@ -1,0 +1,138 @@
+{
+  "schema_version": 1,
+  "dataset_root": "F:\\Codex_file\\Foudationai.groupwork\\data\\synthetic",
+  "dataset_root_relative_to_manifest": "..\\synthetic",
+  "category": "synthetic",
+  "dataset_source": "synthetic",
+  "source": {
+    "kind": "synthetic",
+    "dataset": "Synthetic aligned washer smoke-test images",
+    "generator": "industrial_inspection.data.generate_synthetic",
+    "seed": 42,
+    "image_size": [
+      128,
+      128
+    ],
+    "counts": {
+      "train_good": 50,
+      "test_good": 10,
+      "test_anomaly": 20
+    },
+    "purpose": "Pipeline smoke tests only; never report these metrics as industrial detection performance.",
+    "defect_locations": [
+      {
+        "image": "test/scratch/scratch_000.png",
+        "location": "ring"
+      },
+      {
+        "image": "test/scratch/scratch_001.png",
+        "location": "center"
+      },
+      {
+        "image": "test/scratch/scratch_002.png",
+        "location": "outside"
+      },
+      {
+        "image": "test/scratch/scratch_003.png",
+        "location": "ring"
+      },
+      {
+        "image": "test/scratch/scratch_004.png",
+        "location": "center"
+      },
+      {
+        "image": "test/scratch/scratch_005.png",
+        "location": "outside"
+      },
+      {
+        "image": "test/scratch/scratch_006.png",
+        "location": "ring"
+      },
+      {
+        "image": "test/scratch/scratch_007.png",
+        "location": "center"
+      },
+      {
+        "image": "test/scratch/scratch_008.png",
+        "location": "outside"
+      },
+      {
+        "image": "test/scratch/scratch_009.png",
+        "location": "ring"
+      },
+      {
+        "image": "test/scratch/scratch_010.png",
+        "location": "center"
+      },
+      {
+        "image": "test/scratch/scratch_011.png",
+        "location": "outside"
+      },
+      {
+        "image": "test/scratch/scratch_012.png",
+        "location": "ring"
+      },
+      {
+        "image": "test/scratch/scratch_013.png",
+        "location": "center"
+      },
+      {
+        "image": "test/scratch/scratch_014.png",
+        "location": "outside"
+      },
+      {
+        "image": "test/scratch/scratch_015.png",
+        "location": "ring"
+      },
+      {
+        "image": "test/scratch/scratch_016.png",
+        "location": "center"
+      },
+      {
+        "image": "test/scratch/scratch_017.png",
+        "location": "outside"
+      },
+      {
+        "image": "test/scratch/scratch_018.png",
+        "location": "ring"
+      },
+      {
+        "image": "test/scratch/scratch_019.png",
+        "location": "center"
+      }
+    ]
+  },
+  "seed": 42,
+  "calibration_fraction": 0.2,
+  "split_counts": {
+    "train": 40,
+    "calibration": 10,
+    "test": 30
+  },
+  "split_label_counts": {
+    "train": {
+      "0": 40,
+      "1": 0
+    },
+    "calibration": {
+      "0": 10,
+      "1": 0
+    },
+    "test": {
+      "0": 10,
+      "1": 20
+    }
+  },
+  "image_count": 80,
+  "unique_content_groups": 80,
+  "duplicate_files_within_splits": 0,
+  "hash_definition": "SHA256 of UTF-8 RGB:width:height: prefix followed by decoded, EXIF-oriented RGB pixel bytes",
+  "manifest_sha256": "0c9b37fed36c2b4cafa13b140adeb59a77ea2ecbb521e56fb861e06f5da77000",
+  "split_policy": "Seeded exact-content-group split of original train/good; original test remains untouched.",
+  "limitations": [
+    "No physical object/product IDs are supplied; different photographs of the same physical product may still cross splits.",
+    "Content grouping detects exact decoded-pixel duplicates, not near duplicates or adjacent captures.",
+    "Anomaly test labels and masks must never be used to choose model thresholds or quality rules.",
+    "Synthetic images are only for pipeline smoke tests; metrics do not represent industrial performance."
+  ]
+}
