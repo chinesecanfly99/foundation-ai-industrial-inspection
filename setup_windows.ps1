@@ -14,4 +14,5 @@ if ($LASTEXITCODE -ne 0) { throw 'Project installation failed.' }
 & $projectPython -m industrial_inspection prepare-demo
 if ($LASTEXITCODE -ne 0) { throw 'Demo preparation failed.' }
 & $projectPython -m industrial_inspection check-env
+if ($LASTEXITCODE -ne 0) { throw 'Environment check failed.' }
 Write-Host 'Ready. Run start_windows.cmd, then open http://127.0.0.1:7860'
