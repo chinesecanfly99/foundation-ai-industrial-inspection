@@ -4,7 +4,7 @@
 
 ## 从 GitHub 获取并运行
 
-私有仓库：[chinesecanfly99/foundation-ai-industrial-inspection](https://github.com/chinesecanfly99/foundation-ai-industrial-inspection)。组员需先获得协作者权限，并使用自己的 GitHub 账号登录。
+公开仓库：[chinesecanfly99/foundation-ai-industrial-inspection](https://github.com/chinesecanfly99/foundation-ai-industrial-inspection)。任何人均可查看、克隆源码和下载 Release 附件，无需邀请；直接推送代码或参与仓库管理仍需相应权限。
 
 ```powershell
 git clone https://github.com/chinesecanfly99/foundation-ai-industrial-inspection.git industrial-inspection
@@ -140,7 +140,7 @@ python -m pip install -r requirements/browser-test.txt
 python scripts/test_ui_browser.py --browser-executable "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe"
 ```
 
-该脚本检查合成正常/异常与黑图的上传、热图、规则、报告下载和窄屏布局；实际范围与通过状态写入 `results/ui_smoke.json`。它不代替83张真实测试图的模型评估。私有仓库已配置 GitHub Actions，远程运行状态以仓库 Actions 页面为准；已保存的33项通过记录来自本机测试。
+该脚本检查合成正常/异常与黑图的上传、热图、规则、报告下载和窄屏布局；实际范围与通过状态写入 `results/ui_smoke.json`。它不代替83张真实测试图的模型评估。仓库已配置 GitHub Actions，远程运行状态以仓库 Actions 页面为准；已保存的33项通过记录来自本机测试。
 
 ## 后续优先任务
 
