@@ -33,7 +33,11 @@ DECISIONS = {
 }
 
 CSS = """
-.gradio-container { max-width: 1280px !important; margin: auto; }
+.gradio-container { width: 100% !important; min-width: 0 !important;
+  max-width: 1280px !important; margin: auto; box-sizing: border-box; }
+.gradio-container main.app, .gradio-container main.app > .wrap { min-width: 0; }
+#rule-trace, #inspection-json { max-width: 100%; min-width: 0 !important;
+  overflow: auto !important; }
 .project-hero { padding: 26px 30px; border-radius: 20px; background: #102d3a;
   color: #f5fbff; margin-bottom: 18px; }
 .project-eyebrow { color: #8de3cd; font-size: 12px; font-weight: 700;
@@ -61,6 +65,10 @@ CSS = """
 .rule-reasons { color: #365464; line-height: 1.8; padding: 3px 1px; }
 .rule-reasons ul { margin: 8px 0; padding-left: 22px; }
 @media (max-width: 700px) {
+  .gradio-container .row { flex-direction: column; }
+  .gradio-container .row > .column, .gradio-container .row > .form {
+    width: 100%; min-width: 0 !important; flex: 1 1 auto !important;
+  }
   .project-hero { padding: 22px; }
   .project-hero h1 { font-size: 24px !important; }
   .metrics-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -292,7 +300,7 @@ def main() -> None:
         parser.error("端口必须在 1 到 65535 之间。")
     # Gradio checks its own loopback endpoint during launch. Corporate/system
     # HTTP proxies must not intercept that request; retain all other exclusions.
-    exclusions = [item.strip() for item in (os.environ.get("NO_PROXY") or os.environ.get("no_proxy") or "").split(",") if item.strip()]
+    exclusions = list(dict.fromkeys(item.strip() for key in ("NO_PROXY", "no_proxy") for item in os.environ.get(key, "").split(",") if item.strip()))
     for host in ("127.0.0.1", "localhost", "::1"):
         if host not in exclusions:
             exclusions.append(host)

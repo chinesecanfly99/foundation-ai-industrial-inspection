@@ -1,0 +1,9 @@
+{
+  "gradio": "5.49.1",
+  "fastapi": "0.116.1",
+  "starlette": "0.47.3",
+  "uvicorn": "0.35.0",
+  "anyio": "4.10.0",
+  "python-multipart": "0.0.20",
+  "playwright": "1.64.0"
+}

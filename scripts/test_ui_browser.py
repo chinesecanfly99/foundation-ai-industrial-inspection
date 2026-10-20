@@ -8,6 +8,7 @@ This checks synthetic examples only; it is not an industrial model benchmark.
 from __future__ import annotations
 
 import argparse
+import csv
 from datetime import datetime, timezone
 import hashlib
 import json
@@ -61,6 +62,7 @@ def inspect_case(page, image_path: Path, case_name: str, model_id: str, results:
         raise AssertionError("Expected one file upload input after DOM reconnaissance")
     upload.set_input_files(str(image_path))
     page.locator("#inspection-input img").wait_for(state="visible", timeout=timeout)
+    page.wait_for_function("() => { const image = document.querySelector('#inspection-input img'); return image?.complete && image.naturalWidth > 0; }", timeout=timeout)
     page.get_by_role("button", name="开始检测", exact=True).click()
     page.wait_for_function(
         "hash => { const next = document.querySelector('#inspection-json')?.textContent || ''; return next.includes(hash) && !document.querySelector('#download-json').disabled; }",
@@ -68,6 +70,7 @@ def inspect_case(page, image_path: Path, case_name: str, model_id: str, results:
         timeout=timeout,
     )
     page.locator("#inspection-overlay img").wait_for(state="visible", timeout=timeout)
+    page.wait_for_function("() => { const image = document.querySelector('#inspection-input img'); return image?.complete && image.naturalWidth > 0; }", timeout=timeout)
     page.wait_for_function("() => { const image = document.querySelector('#inspection-overlay img'); return image?.complete && image.naturalWidth > 0; }", timeout=timeout)
     with page.expect_download(timeout=timeout) as download_info:
         page.locator("#download-json").click()
@@ -168,6 +171,14 @@ def main() -> int:
         assert anomaly["score"] > good["score"], "Anomalous synthetic example should score above normal example"
         assert anomaly["image_sha256"] != good["image_sha256"]
         evidence["checks"].append("Anomalous PNG upload, updated report and higher anomaly score")
+        with page.expect_download(timeout=args.timeout_ms) as csv_download:
+            page.locator("#download-csv").click()
+        csv_path = results / "ui_anomaly_summary.csv"
+        csv_download.value.save_as(str(csv_path))
+        with csv_path.open(encoding="utf-8-sig", newline="") as handle:
+            csv_rows = list(csv.DictReader(handle))
+        assert len(csv_rows) == 1 and csv_rows[0]["image_sha256"] == anomaly["image_sha256"]
+        evidence["checks"].append("CSV download matches the latest inspected image")
 
         page.locator("#rule-trace").wait_for(state="visible")
         assert "R1" in page.locator("#rule-trace").inner_text()
@@ -205,7 +216,18 @@ def main() -> int:
         }
         evidence["page_errors"] = page_errors
         assert not page_errors, f"Browser JavaScript errors: {page_errors}"
-        assert not evidence["browser_console_errors"], f"Browser console errors: {evidence['browser_console_errors']}"
+        known_progress_errors = [item for item in evidence["http_errors"] if item["status"] == 404 and "/upload_progress?upload_id=undefined" in item["url"]]
+        unexpected_http_errors = [item for item in evidence["http_errors"] if item not in known_progress_errors]
+        assert not unexpected_http_errors, f"Unexpected HTTP resource errors: {unexpected_http_errors}"
+        # This Gradio frontend sometimes polls an absent optional progress ID.
+        # Preserve that exact warning in evidence; never waive failed images,
+        # decoding failures, arbitrary HTTP errors or JavaScript exceptions.
+        allowed_console = {"Failed to load resource: the server responded with a status of 404 (Not Found)", "Response"} if known_progress_errors else set()
+        unexpected_console = [message for message in evidence["browser_console_errors"] if message not in allowed_console]
+        assert not unexpected_console, f"Browser console errors: {unexpected_console}"
+        evidence["known_nonblocking_warnings"] = known_progress_errors
+        unexpected_request_failures = [item for item in evidence["request_failures"] if not ("/queue/data?" in item["url"] and item["failure"] == "net::ERR_ABORTED")]
+        assert not unexpected_request_failures, f"Failed resources: {unexpected_request_failures}"
         evidence["passed"] = True
         browser.close()
         browser = None

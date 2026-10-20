@@ -1,0 +1,45 @@
+{
+  "buttons": [
+    "  上传产品图片，或在下方选择演示样例",
+    " 刷新模型",
+    " 开始检测",
+    "3 · 查看逐条规则与完整记录 ▼",
+    "  下载 JSON 报告",
+    "  下载 CSV 摘要",
+    "设置 "
+  ],
+  "inputs": [
+    {
+      "type": "file",
+      "placeholder": "",
+      "value": ""
+    },
+    {
+      "type": "text",
+      "placeholder": "",
+      "value": ""
+    },
+    {
+      "type": "text",
+      "placeholder": "",
+      "value": "bottle_patch"
+    },
+    {
+      "type": "file",
+      "placeholder": "",
+      "value": ""
+    }
+  ],
+  "component_ids": [
+    "inspection-input",
+    "sample-choice",
+    "model-choice",
+    "inspection-overlay",
+    "quality-decision",
+    "inspection-metrics",
+    "inspection-reasons",
+    "inspection-json",
+    "download-json",
+    "download-csv"
+  ]
+}

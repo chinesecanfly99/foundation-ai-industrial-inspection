@@ -1,0 +1,40 @@
+{
+  "tests_passed": 33,
+  "ui_passed": true,
+  "browser_checks": [
+    "Rendered DOM reconnaissance and initial desktop screenshot",
+    "Empty image: friendly error and no download",
+    "Normal PNG upload, heatmap, decision and valid JSON download",
+    "Anomalous PNG upload, updated report and higher anomaly score",
+    "CSV download matches the latest inspected image",
+    "Rule accordion opens and shows selected rule",
+    "Black image routes to undetermined input-quality decision",
+    "Real MVTec good/broken bottle uploads with bottle_patch, heatmaps and JSON downloads",
+    "390px mobile layout without whole-page horizontal overflow"
+  ],
+  "plans_markdown_files": 21,
+  "models": {
+    "bottle_pixel": {
+      "artifact_sha256": "b5fdb04651fd98d245de32406178953b48a1db54491f64abd9fae8045824fc21",
+      "n_test": 83,
+      "image_auroc": 0.9674603174603174,
+      "false_negatives": 15
+    },
+    "bottle_patch": {
+      "artifact_sha256": "82a62f71f0acb36cdb178452cb7595f4475fa626789fc42656b81e8e0a99cbb8",
+      "n_test": 83,
+      "image_auroc": 0.9920634920634921,
+      "false_negatives": 13
+    }
+  },
+  "base_commit": "75eb01fcd23b7f8657f614475ee5323157f62884",
+  "final_source_inventory": "results/source_inventory.json",
+  "exact_web_environment": "results/ui_environment.json",
+  "warning": "Two optional upload-progress 404 warnings are preserved in UI evidence; no image decoding failures, unexpected resource errors or JavaScript page errors in final run.",
+  "remaining_research": [
+    "Independent decision labels",
+    "Robustness and memory-budget ablations",
+    "Second computer/macOS/GPU/offline acceptance",
+    "Final report and presentation"
+  ]
+}

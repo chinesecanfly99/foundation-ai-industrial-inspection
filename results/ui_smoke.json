@@ -1,0 +1,153 @@
+{
+  "started_at_utc": "2026-10-20T03:49:57.186252+00:00",
+  "base_url": "http://127.0.0.1:7860",
+  "project_root": "F:\\Codex_file\\Foudationai.groupwork",
+  "model_id": "synthetic_pixel",
+  "scope": "UI functional smoke test, using synthetic examples and optional real examples; no dataset-level performance claim",
+  "passed": true,
+  "checks": [
+    "Rendered DOM reconnaissance and initial desktop screenshot",
+    "Empty image: friendly error and no download",
+    "Normal PNG upload, heatmap, decision and valid JSON download",
+    "Anomalous PNG upload, updated report and higher anomaly score",
+    "CSV download matches the latest inspected image",
+    "Rule accordion opens and shows selected rule",
+    "Black image routes to undetermined input-quality decision",
+    "Real MVTec good/broken bottle uploads with bottle_patch, heatmaps and JSON downloads",
+    "390px mobile layout without whole-page horizontal overflow"
+  ],
+  "browser_console_errors": [
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Response",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Response"
+  ],
+  "queue_responses": [
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:7860/gradio_api/queue/join?"
+    },
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:7860/gradio_api/queue/data?session_hash=zyt4w15pspb"
+    },
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:7860/gradio_api/queue/join?"
+    },
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:7860/gradio_api/queue/data?session_hash=zyt4w15pspb"
+    },
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:7860/gradio_api/queue/join?"
+    },
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:7860/gradio_api/queue/data?session_hash=zyt4w15pspb"
+    },
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:7860/gradio_api/queue/join?"
+    },
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:7860/gradio_api/queue/data?session_hash=zyt4w15pspb"
+    },
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:7860/gradio_api/queue/join?"
+    },
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:7860/gradio_api/queue/data?session_hash=zyt4w15pspb"
+    },
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:7860/gradio_api/queue/join?"
+    },
+    {
+      "status": 200,
+      "url": "http://127.0.0.1:7860/gradio_api/queue/data?session_hash=zyt4w15pspb"
+    }
+  ],
+  "request_failures": [
+    {
+      "url": "http://127.0.0.1:7860/gradio_api/queue/data?session_hash=zyt4w15pspb",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://127.0.0.1:7860/gradio_api/queue/data?session_hash=zyt4w15pspb",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://127.0.0.1:7860/gradio_api/queue/data?session_hash=zyt4w15pspb",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "http://127.0.0.1:7860/gradio_api/queue/data?session_hash=zyt4w15pspb",
+      "failure": "net::ERR_ABORTED"
+    }
+  ],
+  "http_errors": [
+    {
+      "status": 404,
+      "url": "http://127.0.0.1:7860/gradio_api/upload_progress?upload_id=undefined"
+    },
+    {
+      "status": 404,
+      "url": "http://127.0.0.1:7860/gradio_api/upload_progress?upload_id=undefined"
+    }
+  ],
+  "browser_version": "131.0.2903.51",
+  "case_summaries": {
+    "normal": {
+      "decision": "pass",
+      "score": 0.41441214084625244,
+      "image_threshold": 0.6272954821586609,
+      "anomaly_area_ratio": 0.00018310546875,
+      "critical_overlap_ratio": 0.3333333333333333
+    },
+    "anomaly": {
+      "decision": "reject",
+      "score": 7.416492938995361,
+      "image_threshold": 0.6272954821586609,
+      "anomaly_area_ratio": 0.01708984375,
+      "critical_overlap_ratio": 0.5964285714285714
+    },
+    "black": {
+      "decision": "undetermined",
+      "score": 21.047517776489258,
+      "image_threshold": 0.6272954821586609,
+      "anomaly_area_ratio": 1.0,
+      "critical_overlap_ratio": 0.3571929931640625
+    },
+    "bottle_good": {
+      "decision": "pass",
+      "score": 0.0530223473906517,
+      "image_threshold": 0.11651823967695236,
+      "anomaly_area_ratio": 0.0,
+      "critical_overlap_ratio": 0.0
+    },
+    "bottle_broken": {
+      "decision": "reject",
+      "score": 0.1578962355852127,
+      "image_threshold": 0.11651823967695236,
+      "anomaly_area_ratio": 0.2854358024691358,
+      "critical_overlap_ratio": 0.5913764094756556
+    }
+  },
+  "page_errors": [],
+  "known_nonblocking_warnings": [
+    {
+      "status": 404,
+      "url": "http://127.0.0.1:7860/gradio_api/upload_progress?upload_id=undefined"
+    },
+    {
+      "status": 404,
+      "url": "http://127.0.0.1:7860/gradio_api/upload_progress?upload_id=undefined"
+    }
+  ],
+  "finished_at_utc": "2026-10-20T03:50:07.910493+00:00"
+}
