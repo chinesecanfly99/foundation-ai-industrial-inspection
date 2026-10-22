@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "manifest_sha256": "0c9b37fed36c2b4cafa13b140adeb59a77ea2ecbb521e56fb861e06f5da77000",
+  "category": "synthetic",
+  "critical_roi": [
+    0.2,
+    0.2,
+    0.8,
+    0.8
+  ],
+  "rules_sha256": "9225d4cd50ea39ee8c37cfa61fddb91826d9c5ae9a42b49db9eeedfd37afc536",
+  "image_size": 128,
+  "reference": {
+    "path": "reference_synthetic_128.npz",
+    "array": "reference_rgb",
+    "sha256": "e4bf1d023e42217040c5bb9f9817d0e8569fd4bd7505b9aced0e26c1447fddef",
+    "source": "mean of manifest train split normals"
+  },
+  "input_gate": {
+    "long_edge_median": 128.0,
+    "long_edge_min": 128.0,
+    "long_edge_max": 128.0,
+    "long_edge_source": "long edge of manifest train split images",
+    "calibration_count": 10,
+    "alignment_ncc_min": 0.999781676394588,
+    "alignment_ncc_p01": 0.9997818095483243,
+    "alignment_ncc_median": 0.9997853936719273,
+    "illumination_gain_min": 0.9817917346954346,
+    "illumination_gain_max": 1.0227327346801758,
+    "alignment_ncc_threshold": 0.979,
+    "illumination_gain_min_threshold": 0.951,
+    "illumination_gain_max_threshold": 1.053
+  },
+  "models": {
+    "synthetic_pixel": {
+      "model_artifact_sha256": "509aeb0f67b74c5d98dcd8f91985b3853aae675a36d104bc02b36b0ad6056415",
+      "model_card_sha256": "ee9ce57024dfc86e12e9b95b69b52111061b6a33a1f033d8101266c8a54f243f",
+      "calibration_count": 10,
+      "anomaly_area_ratio_max": 0.00830078125,
+      "anomaly_area_ratio_percentile": 0.004675292968749999,
+      "critical_area_ratio_max": 0.009951087873165796,
+      "critical_area_ratio_percentile": 0.005548996458087365,
+      "pass_area_ratio": 0.005,
+      "pass_critical_area_ratio": 0.005,
+      "area_percentile": 90.0,
+      "area_multiplier": 1.2
+    }
+  }
+}

@@ -21,6 +21,7 @@ from PIL import Image, ImageOps
 @dataclass
 class AnomalyPrediction:
     heatmap: np.ndarray
+    model_heatmap: np.ndarray
     score: float
     image_threshold: float
     pixel_threshold: float
@@ -124,10 +125,11 @@ class _NormalDetector:
     def predict(self, rgb: np.ndarray) -> AnomalyPrediction:
         self._check_fitted()
         rgb = _validate_rgb(rgb)
-        raw = self._raw_maps([rgb])[0]
+        raw = np.asarray(self._raw_maps([rgb])[0], dtype=np.float32)
         heatmap = _resize_map(raw, *rgb.shape[:2])
         return AnomalyPrediction(
             heatmap=heatmap,
+            model_heatmap=raw.copy(),
             score=_score(heatmap),
             image_threshold=float(self.image_threshold),
             pixel_threshold=float(self.pixel_threshold),
@@ -139,6 +141,7 @@ class _NormalDetector:
                 "calibration_count": self.calibration_count,
                 "score_definition": "mean_of_top_1_percent_pixels",
                 "threshold_source": "held_out_normal_calibration_only",
+                "model_heatmap_size": [int(raw.shape[0]), int(raw.shape[1])],
             },
         )
 

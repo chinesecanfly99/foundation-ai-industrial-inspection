@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "manifest_sha256": "e91d0a6b4c17ebc1e9fa9be41dbd64e94278011067b73411d6f1e2805274217a",
+  "category": "bottle",
+  "critical_roi": [
+    0.2,
+    0.2,
+    0.8,
+    0.8
+  ],
+  "rules_sha256": "9225d4cd50ea39ee8c37cfa61fddb91826d9c5ae9a42b49db9eeedfd37afc536",
+  "image_size": 128,
+  "reference": {
+    "path": "reference_bottle_128.npz",
+    "array": "reference_rgb",
+    "sha256": "7143740448a3f493bd112a091ffd9d5442e6e1abc01c1ac226c177466d0e154b",
+    "source": "mean of manifest train split normals"
+  },
+  "input_gate": {
+    "long_edge_median": 900.0,
+    "long_edge_min": 900.0,
+    "long_edge_max": 900.0,
+    "long_edge_source": "long edge of manifest train split images",
+    "calibration_count": 42,
+    "alignment_ncc_min": 0.9830185029882937,
+    "alignment_ncc_p01": 0.9843069247445927,
+    "alignment_ncc_median": 0.9951834468074694,
+    "illumination_gain_min": 0.9781497716903687,
+    "illumination_gain_max": 1.0216337442398071,
+    "alignment_ncc_threshold": 0.963,
+    "illumination_gain_min_threshold": 0.948,
+    "illumination_gain_max_threshold": 1.052
+  },
+  "models": {
+    "bottle_patch": {
+      "model_artifact_sha256": "82a62f71f0acb36cdb178452cb7595f4475fa626789fc42656b81e8e0a99cbb8",
+      "model_card_sha256": "a45838b8d9dd40863be8c96ff53112aeb186f38ba64ca84911a633f6be995c6e",
+      "calibration_count": 42,
+      "anomaly_area_ratio_max": 0.07659912109375,
+      "anomaly_area_ratio_percentile": 0.007086181640624991,
+      "critical_area_ratio_max": 0.2116714454376792,
+      "critical_area_ratio_percentile": 0.01958171698431436,
+      "pass_area_ratio": 0.005,
+      "pass_critical_area_ratio": 0.005,
+      "area_percentile": 90.0,
+      "area_multiplier": 1.2
+    },
+    "bottle_pixel": {
+      "model_artifact_sha256": "b5fdb04651fd98d245de32406178953b48a1db54491f64abd9fae8045824fc21",
+      "model_card_sha256": "c911a0f2bfe1ba53d3c47e56e0dc6a7affbc6ae5753ba0ee4b590e640aaa5c1a",
+      "calibration_count": 42,
+      "anomaly_area_ratio_max": 0.02886962890625,
+      "anomaly_area_ratio_percentile": 0.00916748046875,
+      "critical_area_ratio_max": 0.009107775341541575,
+      "critical_area_ratio_percentile": 0.006695901501096306,
+      "pass_area_ratio": 0.005,
+      "pass_critical_area_ratio": 0.005,
+      "area_percentile": 90.0,
+      "area_multiplier": 1.2
+    }
+  }
+}

@@ -68,6 +68,16 @@ def main():
     predict.add_argument("--model-dir", type=Path, required=True)
     predict.add_argument("--rules", type=Path, default=Path("configs/quality_rules.json"))
     predict.add_argument("--output", type=Path, default=Path("results/prediction"))
+    cal = sub.add_parser("calibrate-policy", help="用训练图建立参考、用校准正态图确定输入门控与通过面积门槛")
+    cal.add_argument("--manifest", type=Path, required=True)
+    cal.add_argument("--model-dir", type=Path, default=None, help="同时校准该模型的通过面积门槛")
+    cal.add_argument("--output", type=Path, default=Path("configs/calibration/bottle.json"))
+    cal.add_argument("--image-size", type=int, default=None)
+    cal.add_argument("--alignment-margin", type=float, default=0.02)
+    cal.add_argument("--illumination-margin", type=float, default=0.03)
+    cal.add_argument("--area-percentile", type=float, default=90.0)
+    cal.add_argument("--area-multiplier", type=float, default=1.2)
+    cal.add_argument("--rules", type=Path, default=Path("configs/quality_rules.json"))
     env = sub.add_parser("check-env")
     env.add_argument("--output", type=Path, default=Path("results/environment.json"))
     args = parser.parse_args()
@@ -85,7 +95,14 @@ def main():
         data_root = generate_synthetic(root / "data/synthetic")
         manifest = root / "data/manifests/synthetic.csv"
         build_manifest(data_root, "synthetic", manifest)
-        result = fit_model(manifest, "pixel", root / "models/synthetic_pixel")
+        model_dir = root / "models/synthetic_pixel"
+        result = fit_model(manifest, "pixel", model_dir)
+        # The policy gate refuses a calibration that does not match the exact
+        # model artifact, so regenerate it after every demo retrain.
+        from .calibration import calibrate
+
+        calibrate(manifest, model_dir, root / "configs/calibration/synthetic.json",
+                  rules=root / "configs/quality_rules.json")
         sample_dir = root / "samples/demo"
         sample_dir.mkdir(parents=True, exist_ok=True)
         for folder in ("good", "scratch"):
@@ -96,6 +113,11 @@ def main():
         result = build_manifest(args.data_root, args.category, args.output, seed=args.seed)
     elif args.command == "train":
         result = fit_model(args.manifest, args.method, args.model_dir, args.image_size, args.memory_size, args.device, args.seed)
+    elif args.command == "calibrate-policy":
+        from .calibration import calibrate
+        result = calibrate(args.manifest, args.model_dir, args.output, args.image_size,
+                           args.alignment_margin, args.illumination_margin,
+                           args.area_percentile, args.area_multiplier, args.rules)
     elif args.command == "evaluate":
         from .evaluation import evaluate
         result = evaluate(args.manifest, args.model_dir, args.output, args.device)
