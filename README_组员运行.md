@@ -145,7 +145,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\setup_windows.ps1
 | 找不到模型或想下载骨干权重 | 确认完整解压，并保留 `models` 和 `.cache/torch/hub/checkpoints/resnet18-f37072fd.pth`；不要仅转发源码文件夹 |
 | 提示缺包，但明明装过 | 使用项目 `.venv` 的解释器或启动脚本；不要混用系统 Python、其他项目环境 |
 | DLL载入失败或WinError126 | 保存完整错误交给环境负责人。若报错确认缺少微软VC++运行库，再按 [微软官方文档](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170) 安装匹配的x64运行库 |
-| 黑图显示“无法判定” | 属于输入质量门控的预期行为；换清晰、曝光正常的图片 |
+| 黑图显示“拒收建议” | 属于输入质量门控不通过、但异常面积已足以拒收的预期行为；换清晰、曝光正常的图片 |
 | 控制台偶见 `upload_progress ... undefined` 的404 | 原电脑验收记录过该进度提示警告；若图片、热图或下载失败，不要仅凭此表格判断成功，应保存错误排查 |
 
 换端口时，在项目文件夹打开终端：
@@ -175,7 +175,7 @@ bash start_macos.command
 
 浏览器同样打开 **http://127.0.0.1:7860**。
 
-**当前未在真实 Mac 上验收。** 现有 torch 2.6.0 安装路线主要面向 Apple Silicon（`arm64`）；Intel Mac（`x86_64`）不能直接假定该版本有可用安装包，需要环境负责人另外确认兼容组合，发行文件见 [PyTorch 2.6.0](https://pypi.org/project/torch/2.6.0/#files)。不要复制 Windows 的 `.venv`，也不要把 Windows 依赖锁文件用于 Mac。安装出错时提供芯片架构、Python版本和完整报错，由组内统一处理。
+**当前未在真实 Mac 上验收。** 现有 torch 2.14.1 安装路线主要面向 Apple Silicon（`arm64`）；Intel Mac（`x86_64`）不能直接假定该版本有可用安装包，需要环境负责人另外确认兼容组合，发行文件见 [PyTorch 2.14.1](https://pypi.org/project/torch/2.14.1/#files)。不要复制 Windows 的 `.venv`，也不要把 Windows 依赖锁文件用于 Mac。安装出错时提供芯片架构、Python版本和完整报错，由组内统一处理。
 
 ## 七、做代码、规划或实验的同学看哪里
 

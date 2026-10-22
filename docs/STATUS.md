@@ -33,7 +33,7 @@ CNN模型排序能力较好，但冻结阈值仍漏掉13/63张异常图；像素
 
 已生成 `results/examples/bottle_examples.png`（四类各首图原图/GT/热图）、逐图report及 `results/bottle_patch/false_negatives.csv`（全部13漏检）。完整性复验检查292图、63掩码，并在metrics记录模型卡/评估代码哈希。
 
-浏览器检查覆盖DOM与空图友好错误、合成正常/异常图上传与热图/JSON、CSV对应最新图片、规则展开、黑图进入无法判定、真实bottle正常/破损两图上传与热图/JSON，以及390px视窗无整页横向溢出。图片实际解码检查通过，page_errors为空。仍记录两次Gradio `upload_progress?upload_id=undefined` 的404及请求中止日志；它们未阻断已验收上传/检测/下载，不能写成“控制台零错误”。这属于功能验收，不是业务处置准确率或长时间压力测试。
+浏览器检查覆盖DOM与空图友好错误、合成正常/异常图上传与热图/JSON、CSV对应最新图片、规则展开、黑图按强拒收证据判拒收、真实bottle正常/破损两图上传与热图/JSON，以及390px视窗无整页横向溢出。图片实际解码检查通过，page_errors为空。仍记录两次Gradio `upload_progress?upload_id=undefined` 的404及请求中止日志；它们未阻断已验收上传/检测/下载，不能写成“控制台零错误”。这属于功能验收，不是业务处置准确率或长时间压力测试。
 
 数据经 `foersben/mvtec-ad` 镜像 revision `c75b39616f84db43677bcc8228caaafaf5096d7f` 取得，357文件、156,570,806字节；已校验镜像LFS SHA256/大小，未校验原发布者完整归档哈希。清单SHA256为 `e91d0a6b4c17ebc1e9fa9be41dbd64e94278011067b73411d6f1e2805274217a`。
 

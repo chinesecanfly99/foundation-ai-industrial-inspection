@@ -13,7 +13,7 @@ cd industrial-inspection
 
 打开 [v0.1.0 下载页](https://github.com/chinesecanfly99/foundation-ai-industrial-inspection/releases/tag/v0.1.0)，下载 `demo-assets-v0.1.0.zip`，将其中的 `models`、`.cache`、`samples` 解压到当前项目根目录。然后双击 `首次安装_Windows.cmd`，安装结束后双击 `start_windows.cmd`。
 
-只想先检查界面时，可不下载模型附件：安装脚本会建立合成联调模型。真实 bottle 演示和模型评估仍需要对应模型。以后更新源码，在项目目录运行 `git pull --ff-only`；模型版本更新时另外更新附件。
+只想先检查界面时，可不下载模型附件：安装脚本会执行 `prepare-demo`，生成合成联调数据与 `synthetic_pixel` 模型。真实 bottle 演示和模型评估仍需要对应模型。以后更新源码，在项目目录运行 `git pull --ff-only`；模型版本更新时另外更新附件。
 
 Foundation of AI 小组项目初稿。输入一张产品照片，输出异常位置、异常分数、质量建议、触发规则及可下载记录。
 
@@ -60,12 +60,12 @@ flowchart LR
 | --- | --- | --- |
 | 像素基线 | 正常图 RGB 均值/标准差残差 | 容易理解，对位置和光照敏感 |
 | 局部特征模型 | 预训练 ResNet18 layer2/3、2048 项记忆库、最近邻距离 | 简化 PatchCore 风格，采用均匀采样，不是作者实现的完整复现 |
-| 阈值 | 正常校准图最大图像分数×1.05；像素 q0.995×1.05 | 不用测试图选择阈值，不保证工业误报上界 |
+| 阈值 | 正常校准图最大图像分数×1.05；像素 q0.995×1.05；通过面积门槛为校准 p90×1.2 且上限 0.005 | 不用测试图选择阈值，校准只能收紧，不保证工业误报上界 |
 | 图像分数 | 异常图最高 1% 像素分数的均值 | 分数不是缺陷概率 |
-| 规则 | 输入质量优先、临界复核、区域与面积、兜底复核 | `configs/quality_rules.json` 为教学策略，未获行业验证 |
+| 规则 | 强拒收证据优先、输入门控与画质门控、临界复核、区域与面积、兜底复核 | `configs/quality_rules.json` 为教学策略，未获行业验证 |
 | 演示 | Gradio，本机运行、延迟加载模型 | 上传、样例、热图、逐条规则、下载 |
 
-热图解释模型的视觉差异，规则记录解释处置建议；两者都不提供缺陷的物理成因诊断。固定区域仅为归一化演示矩形，不赋予未经标注的瓶口/瓶身语义。当前类别以外的产品及不同拍摄条件需要重新建模。
+热图解释模型的视觉差异，规则记录解释处置建议；两者都不提供缺陷的物理成因诊断。固定区域仅为归一化演示矩形，不赋予未经标注的瓶口/瓶身语义。模型只适用于固定工位、与训练图同样构图和光照的瓶子俯拍图；当前类别以外的产品及不同拍摄条件需要重新建模。
 
 ## 新电脑安装
 
@@ -76,7 +76,7 @@ powershell -ExecutionPolicy Bypass -File .\setup_windows.ps1
 .\start_windows.cmd
 ```
 
-脚本仅为本次运行放宽执行策略，不修改系统策略。使用官方 CPU 版 torch 2.6.0 / torchvision 0.21.0 和 Gradio 5.49.1。当前实测精确依赖见 `requirements/lock-windows-cpu.txt`；`results/environment.json` 保存实际版本。现有其他 Python 环境保持独立。
+脚本仅为本次运行放宽执行策略，不修改系统策略。当前依赖为 torch 2.14.1 / torchvision 0.29.1、Gradio 6.30.0、Pillow 12.3.0；Windows 旧锁文件（gradio 5.49.1 / torch 2.6.0+cpu）已移入 `requirements/history/lock-windows-cpu-v0.1.txt`，仅作历史记录、不得用于安装，需按 `requirements/base.txt` 重装。`results/environment.json` 保存本次实际版本。现有其他 Python 环境保持独立。
 
 macOS 提供 `bash setup_macos.sh` 和 `bash start_macos.command`，默认 CPU。**macOS 和第二台电脑尚未实机验收**。可选 GPU 路线需单独安装匹配的 torch/vision 与驱动后验证，不是当前 CPU 环境的必需项。
 
@@ -98,6 +98,8 @@ python scripts/download_bottle.py
 python -m industrial_inspection prepare --data-root data/raw/mvtec_ad --category bottle --output data/manifests/bottle.csv
 python -m industrial_inspection train --manifest data/manifests/bottle.csv --method pixel --model-dir models/bottle_pixel
 python -m industrial_inspection train --manifest data/manifests/bottle.csv --method patch --model-dir models/bottle_patch
+python -m industrial_inspection calibrate-policy --manifest data/manifests/bottle.csv --model-dir models/bottle_patch --output configs/calibration/bottle.json
+python -m industrial_inspection calibrate-policy --manifest data/manifests/bottle.csv --model-dir models/bottle_pixel --output configs/calibration/bottle.json
 python -m industrial_inspection evaluate --manifest data/manifests/bottle.csv --model-dir models/bottle_pixel --output results/bottle_pixel
 python -m industrial_inspection evaluate --manifest data/manifests/bottle.csv --model-dir models/bottle_patch --output results/bottle_patch
 ```
@@ -122,7 +124,7 @@ src/industrial_inspection/      数据、检测器、规则、推理、评估与
 configs/quality_rules.json     带版本的演示规则
 scripts/                       数据下载、浏览器验收等
 tests/                         数据隔离、检测器、规则和输入边界检查
-requirements/                  基础依赖、平台依赖和本机锁定版本
+requirements/                  基础依赖、平台依赖和本机锁定版本（历史快照在 requirements/history/）
 docs/                          完整执行规划、阶段任务、状态和报告
 data/manifests/                 CSV清单、内容hash和划分摘要
 models/<model>/                数值NPZ模型和JSON模型卡（不入Git）
