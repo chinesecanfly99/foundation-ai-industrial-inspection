@@ -154,3 +154,40 @@ def test_missing_data_and_invalid_split_parameters_are_actionable(tmp_path):
         build_manifest(tmp_path, "../bottle", tmp_path / "manifest.csv")
     with pytest.raises(ValueError, match="calibration_fraction"):
         build_manifest(tmp_path, "bottle", tmp_path / "manifest.csv", calibration_fraction=1)
+
+
+def test_exif_oriented_jpeg_matches_oriented_mask(tmp_path):
+    """An EXIF-rotated image must be compared against its oriented dimensions."""
+    from PIL import ImageOps
+
+    root = tmp_path / "data"
+    category = root / "oriented"
+    for relative in ("train/good", "test/good", "test/scratch", "ground_truth/scratch"):
+        (category / relative).mkdir(parents=True)
+    rng = np.random.default_rng(5)
+    for index in range(6):
+        Image.fromarray(rng.integers(0, 255, (40, 60, 3), dtype=np.uint8)).save(
+            category / "train" / "good" / f"normal_{index}.png")
+    for index in range(2):
+        Image.fromarray(rng.integers(0, 255, (40, 60, 3), dtype=np.uint8)).save(
+            category / "test" / "good" / f"good_{index}.png")
+    base = Image.fromarray(np.full((40, 60, 3), 200, dtype=np.uint8))
+    exif = Image.Exif()
+    exif[274] = 6  # rotate 90 degrees clockwise on display
+    exif_path = category / "test" / "scratch" / "oriented.jpg"
+    base.save(exif_path, exif=exif, quality=95)
+    oriented_size = ImageOps.exif_transpose(Image.open(exif_path)).size
+    assert oriented_size == (40, 60)
+    with Image.open(exif_path) as opened:
+        raw_size = opened.size
+    assert raw_size == (60, 40)
+    Image.new("L", oriented_size, 0).save(category / "ground_truth" / "scratch" / "oriented_mask.png")
+    mask = Image.open(category / "ground_truth" / "scratch" / "oriented_mask.png")
+    mask.paste(255, (5, 5, 20, 20))
+    mask.save(category / "ground_truth" / "scratch" / "oriented_mask.png")
+    manifest = tmp_path / "manifests" / "oriented.csv"
+    summary = build_manifest(root, "oriented", manifest)
+    assert summary["split_counts"]["test"] == 3
+    rows = read_manifest(manifest)
+    assert any(row["image_path"].endswith("oriented.jpg") and row["mask_path"].endswith("oriented_mask.png") for row in rows)
+    assert validate_dataset(manifest)["verified_masks"] == 1

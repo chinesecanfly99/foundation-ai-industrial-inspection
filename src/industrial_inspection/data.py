@@ -117,6 +117,7 @@ def build_manifest(
             if not expected_mask.is_file():
                 raise ValueError(f"Anomalous test image has no ground-truth mask: {expected_mask}")
             with Image.open(expected_mask) as mask:
+                mask = ImageOps.exif_transpose(mask)
                 mask.load()
                 if mask.size != size:
                     raise ValueError(f"Image and ground-truth mask dimensions differ: {path}")
@@ -264,6 +265,7 @@ def _validate_records(root: Path, records: list[dict[str, Any]]) -> dict[str, in
             if not mask_path.is_file():
                 raise FileNotFoundError(f"Ground-truth mask cannot be found: {mask_path}")
             with Image.open(mask_path) as mask:
+                mask = ImageOps.exif_transpose(mask)
                 mask.load()
                 if mask.size != size:
                     raise ValueError(f"Image and ground-truth mask dimensions differ: {path}")
