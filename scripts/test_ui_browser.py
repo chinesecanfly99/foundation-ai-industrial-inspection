@@ -32,10 +32,30 @@ def choose_model(page, model_id: str) -> None:
     assert control.input_value() == model_id
 
 
+def clear_upload(page) -> None:
+    """Click the image component's clear button (label depends on the UI locale)."""
+    buttons = page.locator("#inspection-input button")
+    count = buttons.count()
+    assert count >= 1, "the image component did not render a clear button"
+    tokens = ("remove image", "clear", "remove", "清除", "清空", "移除", "删除")
+    for index in range(count):
+        button = buttons.nth(index)
+        labels = " ".join(part for part in (
+            button.get_attribute("aria-label") or "",
+            button.get_attribute("title") or "",
+            button.text_content() or "",
+        ))
+        if any(token in labels.lower() for token in tokens):
+            button.click()
+            return
+    raise AssertionError("no clear button found on the image component")
+
+
 def validate_report(report: dict, model_id: str) -> None:
     required = {
         "decision", "label_zh", "score", "image_threshold",
-        "anomaly_area_ratio", "critical_overlap_ratio", "reasons", "trace",
+        "anomaly_area_ratio", "critical_area_ratio", "critical_overlap_ratio",
+        "brightness", "sharpness", "reasons", "trace",
         "model_id", "image_sha256", "policy_sha256",
     }
     assert required <= report.keys(), f"Report missing {required - report.keys()}"
@@ -45,11 +65,17 @@ def validate_report(report: dict, model_id: str) -> None:
     assert isinstance(report["trace"], list) and report["trace"]
     assert sum(bool(row.get("selected")) for row in report["trace"]) == 1
     assert "mask" not in report and "heatmap" not in report
-    for field in ("score", "image_threshold", "anomaly_area_ratio", "critical_overlap_ratio"):
+    for field in ("score", "image_threshold", "anomaly_area_ratio", "critical_area_ratio",
+                  "critical_overlap_ratio", "brightness", "sharpness",
+                  "alignment_ncc", "illumination_gain"):
         assert isinstance(report[field], (float, int)) and math.isfinite(report[field])
     assert report["image_threshold"] > 0
     assert 0 <= report["anomaly_area_ratio"] <= 1
     assert 0 <= report["critical_overlap_ratio"] <= 1
+    assert 0 <= report["critical_area_ratio"] <= 1
+    assert -1 <= report["alignment_ncc"] <= 1
+    assert report["illumination_gain"] >= 0
+    assert all(row.get("evidence") for row in report["trace"])
 
 
 def inspect_case(page, image_path: Path, case_name: str, model_id: str, results: Path, timeout: int) -> dict:
@@ -159,6 +185,17 @@ def main() -> int:
         page.get_by_text("请先上传图片，或从演示样例中选择一张。", exact=True).wait_for(state="visible", timeout=10_000)
         assert page.locator("#download-json").is_disabled()
         evidence["checks"].append("Empty image: friendly error and no download")
+        # Loading a demo sample must populate the image and invalidate any old result.
+        sample = page.locator("#sample-choice input")
+        assert sample.count() == 1
+        sample.click()
+        sample.fill("合成联调 / synthetic_good_0")
+        page.get_by_role("option", name="合成联调 / synthetic_good_0", exact=True).click()
+        page.locator("#inspection-input img").wait_for(state="visible", timeout=args.timeout_ms)
+        page.get_by_text("等待检测", exact=True).wait_for(state="visible", timeout=args.timeout_ms)
+        assert page.locator("#download-json").is_disabled()
+        evidence["checks"].append("Demo sample loads an image and invalidates previous results")
+
         choose_model(page, args.model)
         page.get_by_role("button", name="3 · 查看逐条规则与完整记录").click()
         page.locator("#inspection-json").wait_for(state="visible")
@@ -187,9 +224,31 @@ def main() -> int:
         evidence["checks"].append("Rule accordion opens and shows selected rule")
 
         black = inspect_case(page, black_path, "black", args.model, results, args.timeout_ms)
-        assert black["decision"] == "undetermined"
-        evidence["checks"].append("Black image routes to undetermined input-quality decision")
+        # A fully black image fails the input gate; when the anomaly area already forms strong reject evidence, the evidence-priority rule rejects it directly.
+        assert black["decision"] in {"undetermined", "reject"}, black["decision"]
+        evidence["checks"].append(f"Black image routes to {black['decision']} (input gate fails, evidence priority)")
         reports = {"normal": good, "anomaly": anomaly, "black": black}
+
+        # After clicking the image clear button, no old heatmap, decision, rule or download may remain.
+        clear_upload(page)
+        page.get_by_text("等待检测", exact=True).wait_for(state="visible", timeout=args.timeout_ms)
+        assert page.locator("#download-json").is_disabled()
+        assert page.locator("#download-csv").is_disabled()
+        assert not page.locator("#inspection-overlay img").count()
+        page.wait_for_function("() => !document.querySelector('#rule-trace')?.textContent.includes('命中并采用')", timeout=args.timeout_ms)
+        report_text = page.locator("#inspection-json").inner_text()
+        assert black["image_sha256"] not in report_text, report_text[:200]
+        evidence["checks"].append("Clearing the uploaded image removes heatmap, decision, rules and downloads")
+
+        # Changing the model must invalidate the previous image, decision, and downloads.
+        alternate = "bottle_pixel" if (project_root / "models" / "bottle_pixel" / "model_card.json").is_file() else None
+        if alternate:
+            choose_model(page, alternate)
+            page.get_by_text("等待检测", exact=True).wait_for(state="visible", timeout=args.timeout_ms)
+            assert page.locator("#download-json").is_disabled()
+            assert page.locator("#download-csv").is_disabled()
+            assert not page.locator("#inspection-overlay img").count()
+            evidence["checks"].append("Changing model invalidates previous decision and downloads")
         if args.include_bottle:
             bottle_samples = {
                 "bottle_good": project_root / "samples" / "bottle" / "good_000.png",
