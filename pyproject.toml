@@ -7,12 +7,13 @@ name = "industrial-inspection"
 version = "0.1.0"
 description = "Normal-only industrial anomaly localization and explainable quality decisions"
 requires-python = ">=3.11,<3.13"
-dependencies = ["numpy>=1.26,<3", "pillow>=10.4,<13", "opencv-python-headless>=4.10,<5", "scikit-learn>=1.5,<2", "requests>=2.32,<3"]
+dependencies = ["numpy>=1.26,<3", "pillow>=12.3,<13", "opencv-python-headless>=4.10,<5", "scikit-learn>=1.5,<2", "requests>=2.32,<3"]
 
+# Keep these three optional dependency groups on the same versions as requirements/base.txt so pyproject and the install scripts cannot drift apart.
 [project.optional-dependencies]
-ui = ["gradio==5.49.1", "fastapi==0.116.1", "starlette==0.47.3", "uvicorn==0.35.0", "anyio==4.10.0", "python-multipart==0.0.20"]
-test = ["pytest>=8,<9"]
-deep = ["torch==2.6.0", "torchvision==0.21.0"]
+ui = ["gradio==6.30.0", "fastapi==0.150.0", "starlette==1.9.0", "uvicorn==0.54.0", "anyio==4.15.1", "python-multipart==0.0.32"]
+test = ["pytest>=9.0.3,<10"]
+deep = ["torch==2.14.1", "torchvision==0.29.1"]
 
 [project.scripts]
 inspection = "industrial_inspection.cli:main"

@@ -1,4 +1,5 @@
-# Tested on Windows x64 / Python 3.11 / CPU; project installed separately.
+# History only, do not use for installation: the measured v0.1 combination for Windows x64 / Python 3.11 / CPU (Gradio 5.49.1, torch 2.6.0+cpu).
+# For the current install use requirements/base.txt and requirements/torch-cpu-windows.txt (driven by setup_windows.ps1); this file only keeps the version snapshot of that time.
 --extra-index-url https://download.pytorch.org/whl/cpu
 aiofiles==24.1.0
 annotated-doc==0.0.5
