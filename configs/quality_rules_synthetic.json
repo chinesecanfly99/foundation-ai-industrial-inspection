@@ -1,0 +1,13 @@
+{
+  "version": "synthetic-demo-policy-v1",
+  "product_category": "synthetic",
+  "description": "教学示范策略：合成垫圈中央矩形为联调关注区，沿用原教学门槛；仅验证软件流程，不适用于真实产品质量决策。",
+  "critical_roi": [0.2, 0.2, 0.8, 0.8],
+  "review_margin": 0.1,
+  "min_anomaly_area": 0.005,
+  "reject_area": 0.06,
+  "critical_overlap": 0.2,
+  "min_brightness": 15,
+  "max_brightness": 245,
+  "min_sharpness": 3.0
+}

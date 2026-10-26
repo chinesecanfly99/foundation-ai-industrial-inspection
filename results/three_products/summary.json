@@ -1,0 +1,185 @@
+{
+  "created_at": "2026-10-26T12:33:53.998805+08:00",
+  "complete": true,
+  "datasets": [
+    {
+      "category": "bottle",
+      "label": "瓶口",
+      "images": 292,
+      "splits": {
+        "train": 167,
+        "calibration": 42,
+        "test": 83
+      },
+      "test_labels": {
+        "0": 20,
+        "1": 63
+      },
+      "manifest_sha256": "e91d0a6b4c17ebc1e9fa9be41dbd64e94278011067b73411d6f1e2805274217a"
+    },
+    {
+      "category": "metal_nut",
+      "label": "金属螺母",
+      "images": 335,
+      "splits": {
+        "train": 176,
+        "calibration": 44,
+        "test": 115
+      },
+      "test_labels": {
+        "0": 22,
+        "1": 93
+      },
+      "manifest_sha256": "d388e7f897f5f90c3aa8a2723fc3cac3e0d316aa1c07426f716ec7828911373d"
+    },
+    {
+      "category": "tile",
+      "label": "瓷砖表面",
+      "images": 347,
+      "splits": {
+        "train": 184,
+        "calibration": 46,
+        "test": 117
+      },
+      "test_labels": {
+        "0": 33,
+        "1": 84
+      },
+      "manifest_sha256": "531a4172e03d23a9c48cf32f040f8d58e31583e62338a9483112d9ba5df0c188"
+    }
+  ],
+  "models": [
+    {
+      "category": "bottle",
+      "product": "瓶口",
+      "method": "pixel",
+      "model": "bottle_pixel",
+      "n_test": 83,
+      "image_auroc": 0.9674603174603174,
+      "precision": 1.0,
+      "recall": 0.7619047619047619,
+      "f1": 0.8648648648648649,
+      "tn": 20,
+      "fp": 0,
+      "fn": 15,
+      "tp": 48,
+      "pixel_auroc_128": 0.8918794090986757,
+      "mean_anomaly_iou_128": 0.25073556339647307,
+      "inference_median_ms": 195.0254999101162
+    },
+    {
+      "category": "bottle",
+      "product": "瓶口",
+      "method": "patch",
+      "model": "bottle_patch",
+      "n_test": 83,
+      "image_auroc": 0.9920634920634921,
+      "precision": 1.0,
+      "recall": 0.7936507936507936,
+      "f1": 0.8849557522123894,
+      "tn": 20,
+      "fp": 0,
+      "fn": 13,
+      "tp": 50,
+      "pixel_auroc_128": 0.9728575204123676,
+      "mean_anomaly_iou_128": 0.35719856730739047,
+      "inference_median_ms": 225.3900000359863
+    },
+    {
+      "category": "metal_nut",
+      "product": "金属螺母",
+      "method": "pixel",
+      "model": "metal_nut_pixel",
+      "n_test": 115,
+      "image_auroc": 0.5356793743890518,
+      "precision": 0.9655172413793104,
+      "recall": 0.3010752688172043,
+      "f1": 0.45901639344262296,
+      "tn": 21,
+      "fp": 1,
+      "fn": 65,
+      "tp": 28,
+      "pixel_auroc_128": 0.7216089435037439,
+      "mean_anomaly_iou_128": 0.05923666252439716,
+      "inference_median_ms": 120.85890001617372
+    },
+    {
+      "category": "metal_nut",
+      "product": "金属螺母",
+      "method": "patch",
+      "model": "metal_nut_patch",
+      "n_test": 115,
+      "image_auroc": 0.9232649071358748,
+      "precision": 1.0,
+      "recall": 0.6881720430107527,
+      "f1": 0.8152866242038217,
+      "tn": 22,
+      "fp": 0,
+      "fn": 29,
+      "tp": 64,
+      "pixel_auroc_128": 0.9757816087637137,
+      "mean_anomaly_iou_128": 0.3964710454960153,
+      "inference_median_ms": 146.44729997962713
+    },
+    {
+      "category": "tile",
+      "product": "瓷砖表面",
+      "method": "pixel",
+      "model": "tile_pixel",
+      "n_test": 117,
+      "image_auroc": 0.902958152958153,
+      "precision": 1.0,
+      "recall": 0.2261904761904762,
+      "f1": 0.36893203883495146,
+      "tn": 33,
+      "fp": 0,
+      "fn": 65,
+      "tp": 19,
+      "pixel_auroc_128": 0.605705154208869,
+      "mean_anomaly_iou_128": 0.09583333306517273,
+      "inference_median_ms": 184.82539989054203
+    },
+    {
+      "category": "tile",
+      "product": "瓷砖表面",
+      "method": "patch",
+      "model": "tile_patch",
+      "n_test": 117,
+      "image_auroc": 1.0,
+      "precision": 1.0,
+      "recall": 0.9404761904761905,
+      "f1": 0.9693251533742331,
+      "tn": 33,
+      "fp": 0,
+      "fn": 5,
+      "tp": 79,
+      "pixel_auroc_128": 0.9235053577771206,
+      "mean_anomaly_iou_128": 0.3360444012313309,
+      "inference_median_ms": 197.56799982860684
+    }
+  ],
+  "stale_records": [],
+  "completed_model_count": 6,
+  "macro_category_count": {
+    "pixel": 3,
+    "patch": 3
+  },
+  "total_real_images": 974,
+  "distinct_test_images": 315,
+  "display_samples": {
+    "bottle": 20,
+    "metal_nut": 25,
+    "tile": 30
+  },
+  "macro_image_auroc": {
+    "pixel": 0.8020326149358407,
+    "patch": 0.9717761330664557
+  },
+  "policy_sha256": {
+    "bottle": "cf18c0bfbbc13c4153a03746cf7f390d2e709ab0ea19e07e327c42c3b5f1990b",
+    "metal_nut": "47aab35d19fc2d9f850051281c1941fe534b5d38cc28f152bf981049f276502e",
+    "tile": "50f9a5a2bf1d01f23e4f68e04d3f9b8a1d158c489e370ed772d92435c5023c6d"
+  },
+  "protocol": "Each category has separate normal-only fitting/calibration, two models, and its complete original test set. No test threshold tuning. Pixel evaluation is pooled at 128x128, not official full-resolution MVTec scoring. Quality rules have no independently validated business labels.",
+  "scope": "Three-category course prototype; synthetic examples excluded from every reported detection metric."
+}

@@ -1,0 +1,36 @@
+{
+  "model": "metal_nut_pixel",
+  "method": "pixel_reference",
+  "dataset_source": "mvtec_ad/metal_nut",
+  "data_validation": {
+    "verified_images": 335,
+    "verified_masks": 93
+  },
+  "model_card_sha256": "e135d575ce7ee592e031e67df331569815c7511f9d2ac033623ca31cae6b634a",
+  "evaluation_code_sha256": "3c9eb927b7531ae32790973bf7eb40d5f617c37910b0eb6425ce9d9cd9bd8004",
+  "manifest_sha256": "d388e7f897f5f90c3aa8a2723fc3cac3e0d316aa1c07426f716ec7828911373d",
+  "n_test": 115,
+  "n_normal": 22,
+  "n_anomaly": 93,
+  "image_auroc": 0.5356793743890518,
+  "image_average_precision": 0.8698360408043468,
+  "precision": 0.9655172413793104,
+  "recall": 0.3010752688172043,
+  "f1": 0.45901639344262296,
+  "confusion": {
+    "tn": 21,
+    "fp": 1,
+    "fn": 65,
+    "tp": 28
+  },
+  "pixel_auroc_128": 0.7216089435037439,
+  "mean_anomaly_dice_128": 0.10089725358102143,
+  "mean_anomaly_iou_128": 0.05923666252439716,
+  "inference_median_ms": 120.85890001617372,
+  "inference_p95_ms": 140.88660005945712,
+  "warmup_ms": 129.6417999546975,
+  "device": "cpu",
+  "protocol": "Frozen normal-calibration thresholds; all held-out test images; pooled pixel AUROC at 128x128, NOT official full-resolution MVTec evaluation or AUPRO. No quality-decision ground truth.",
+  "threshold_selection": "Normal calibration images only. Test data never changes thresholds.",
+  "synthetic_only": false
+}

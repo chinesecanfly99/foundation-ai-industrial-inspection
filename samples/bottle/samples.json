@@ -1,0 +1,174 @@
+{
+  "category": "bottle",
+  "selection": "First N filenames in each original test defect directory; no model-based selection",
+  "per_type": 5,
+  "sample_count": 20,
+  "defect_counts": {
+    "broken_large": 5,
+    "broken_small": 5,
+    "contamination": 5,
+    "good": 5
+  },
+  "samples": [
+    {
+      "sample_path": "bottle/broken_large_000.png",
+      "source_path": "bottle/test/broken_large/000.png",
+      "category": "bottle",
+      "defect_type": "broken_large",
+      "label": 1,
+      "file_sha256": "11a691a06a33dd78c5fcab6a822caa48c0d72f27f660e19f5abd9b5aa392b0eb"
+    },
+    {
+      "sample_path": "bottle/broken_large_001.png",
+      "source_path": "bottle/test/broken_large/001.png",
+      "category": "bottle",
+      "defect_type": "broken_large",
+      "label": 1,
+      "file_sha256": "b5e6fd5f3f9ac5310f4fecc37f64d42eaa3326d3d3b327369d2d789752189a0f"
+    },
+    {
+      "sample_path": "bottle/broken_large_002.png",
+      "source_path": "bottle/test/broken_large/002.png",
+      "category": "bottle",
+      "defect_type": "broken_large",
+      "label": 1,
+      "file_sha256": "249813c6bccb58b9de711a6b7248f4fd8ba4136364cfad2e0577769db91353c2"
+    },
+    {
+      "sample_path": "bottle/broken_large_003.png",
+      "source_path": "bottle/test/broken_large/003.png",
+      "category": "bottle",
+      "defect_type": "broken_large",
+      "label": 1,
+      "file_sha256": "b4797ce35dd407629e29dd199cd6e497f0a706a1ddd72ace226f30858d3199c4"
+    },
+    {
+      "sample_path": "bottle/broken_large_004.png",
+      "source_path": "bottle/test/broken_large/004.png",
+      "category": "bottle",
+      "defect_type": "broken_large",
+      "label": 1,
+      "file_sha256": "ede2360ddfaba9c13112b6159f5fd3342226203719ba9f067c2ff16e3d4690e0"
+    },
+    {
+      "sample_path": "bottle/broken_small_000.png",
+      "source_path": "bottle/test/broken_small/000.png",
+      "category": "bottle",
+      "defect_type": "broken_small",
+      "label": 1,
+      "file_sha256": "05b96e1102fba8cc19bf60e17d33a0830247df2bbba56cae3df100336392941e"
+    },
+    {
+      "sample_path": "bottle/broken_small_001.png",
+      "source_path": "bottle/test/broken_small/001.png",
+      "category": "bottle",
+      "defect_type": "broken_small",
+      "label": 1,
+      "file_sha256": "bc60260af053f2f84f71550dda6f2d88c9c8e427109a56249f0dc60e30bc9759"
+    },
+    {
+      "sample_path": "bottle/broken_small_002.png",
+      "source_path": "bottle/test/broken_small/002.png",
+      "category": "bottle",
+      "defect_type": "broken_small",
+      "label": 1,
+      "file_sha256": "e605efdbf20478f09084f3026eaa96b91d9d1e7bc113cbe8fb700f2bbcc2763e"
+    },
+    {
+      "sample_path": "bottle/broken_small_003.png",
+      "source_path": "bottle/test/broken_small/003.png",
+      "category": "bottle",
+      "defect_type": "broken_small",
+      "label": 1,
+      "file_sha256": "c97b387cdafd8df6d1834dcd4bb284cb784969a5416dc067f6f2476592c1ee57"
+    },
+    {
+      "sample_path": "bottle/broken_small_004.png",
+      "source_path": "bottle/test/broken_small/004.png",
+      "category": "bottle",
+      "defect_type": "broken_small",
+      "label": 1,
+      "file_sha256": "6f57501c4ae23aac51f06c7ea4916d8977cf84664832cc7c542447624bd9c142"
+    },
+    {
+      "sample_path": "bottle/contamination_000.png",
+      "source_path": "bottle/test/contamination/000.png",
+      "category": "bottle",
+      "defect_type": "contamination",
+      "label": 1,
+      "file_sha256": "fe2e96a8cba624ace02985481197ee8ab112d2a2faa4b79f137ace2c452eb4ea"
+    },
+    {
+      "sample_path": "bottle/contamination_001.png",
+      "source_path": "bottle/test/contamination/001.png",
+      "category": "bottle",
+      "defect_type": "contamination",
+      "label": 1,
+      "file_sha256": "2ddf5d0d53b2dc3d13286af69d668e9b572a360a87309bb91a4682dde8f2311a"
+    },
+    {
+      "sample_path": "bottle/contamination_002.png",
+      "source_path": "bottle/test/contamination/002.png",
+      "category": "bottle",
+      "defect_type": "contamination",
+      "label": 1,
+      "file_sha256": "905880d6f1f7c33cce414116beae1bda241efff97ba78647e7c2b5d25a94dd05"
+    },
+    {
+      "sample_path": "bottle/contamination_003.png",
+      "source_path": "bottle/test/contamination/003.png",
+      "category": "bottle",
+      "defect_type": "contamination",
+      "label": 1,
+      "file_sha256": "023c4e62fbe0b7f408245e85b8fc60259d826dedee67fdc5a41655b7fa494e4a"
+    },
+    {
+      "sample_path": "bottle/contamination_004.png",
+      "source_path": "bottle/test/contamination/004.png",
+      "category": "bottle",
+      "defect_type": "contamination",
+      "label": 1,
+      "file_sha256": "8def2401278eb433c1a2fa0a78c79abfeea7a4d0b363e637e51c39cef34c073c"
+    },
+    {
+      "sample_path": "bottle/good_000.png",
+      "source_path": "bottle/test/good/000.png",
+      "category": "bottle",
+      "defect_type": "good",
+      "label": 0,
+      "file_sha256": "9e7bfe658efe9b6db2607a96405b4ac6880936eaf93b89c85bcd311122ceb57b"
+    },
+    {
+      "sample_path": "bottle/good_001.png",
+      "source_path": "bottle/test/good/001.png",
+      "category": "bottle",
+      "defect_type": "good",
+      "label": 0,
+      "file_sha256": "a45aba86ef3e1ef8dbd95ca56abeb63f576fcd2bbd040ba748a1410bb70d6d78"
+    },
+    {
+      "sample_path": "bottle/good_002.png",
+      "source_path": "bottle/test/good/002.png",
+      "category": "bottle",
+      "defect_type": "good",
+      "label": 0,
+      "file_sha256": "281e0b0dada22effec4fee5b09bef9a54feaef9d8d717aeb7947aa499ab9a1f8"
+    },
+    {
+      "sample_path": "bottle/good_003.png",
+      "source_path": "bottle/test/good/003.png",
+      "category": "bottle",
+      "defect_type": "good",
+      "label": 0,
+      "file_sha256": "08c6a6cbeecb25f84c1a8a6fbc1437228980076075058550eedd2f7e1d172978"
+    },
+    {
+      "sample_path": "bottle/good_004.png",
+      "source_path": "bottle/test/good/004.png",
+      "category": "bottle",
+      "defect_type": "good",
+      "label": 0,
+      "file_sha256": "22e8a84b84435aa6e67266529d6a2f3b7a29f89e4701fd0a969031e517a12dea"
+    }
+  ]
+}

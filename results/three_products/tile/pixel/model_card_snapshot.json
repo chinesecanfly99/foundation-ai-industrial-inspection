@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "model_id": "pixel_reference",
+  "method": "pixel_reference",
+  "image_size": 128,
+  "seed": 42,
+  "training_count": 184,
+  "calibration_count": 46,
+  "image_threshold": 2.4864949107170107,
+  "pixel_threshold": 2.182814562320709,
+  "score_definition": "mean_of_top_1_percent_pixels",
+  "calibration": {
+    "source": "held_out_normal_images_only",
+    "image_statistic": "maximum_calibration_image_score",
+    "pixel_quantile": 0.995,
+    "margin_multiplier": 1.05,
+    "minimum_threshold": 1e-06,
+    "limitation": "Normal-only thresholds do not establish defect recall or a production false-alarm guarantee."
+  },
+  "artifact_format": "numeric_npz_allow_pickle_false",
+  "std_floor": 0.035,
+  "backbone": null,
+  "source": "Project baseline: per-pixel RGB standardized residual.",
+  "limitations": [
+    "Requires reasonably aligned images and stable viewpoint.",
+    "Texture or lighting shifts can produce false alarms."
+  ],
+  "artifact_sha256": "41ccf4b82e7f57e7feb6f2f02dd83fd6026337dbfc10b19c5804aae2ba522e4b",
+  "dataset_source": "mvtec_ad/tile",
+  "manifest_sha256": "531a4172e03d23a9c48cf32f040f8d58e31583e62338a9483112d9ba5df0c188",
+  "manifest": "F:/Codex_file/Foudationai.groupwork/data/manifests/tile.csv",
+  "fit_seconds": 35.63,
+  "device": "cpu",
+  "source_sha256": {
+    "detectors.py": "79dee31df163e1e30c7670fc1e5f44a0b50b856f076ca80d49aa1aa063a321a3",
+    "data.py": "d2475f1e9506ffa74dbcfbd1228c8b153aa8a84c9ba00beb4e6408d640dd6dd8",
+    "cli.py": "b6f94c4a81065a9594d79ff829043730b3564806bfec275f516584baf453438c"
+  },
+  "scope": "Single category, aligned inspection images. Quality policy is illustrative and not independently validated."
+}

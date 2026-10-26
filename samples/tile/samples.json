@@ -1,0 +1,256 @@
+{
+  "category": "tile",
+  "selection": "First N filenames in each original test defect directory; no model-based selection",
+  "per_type": 5,
+  "sample_count": 30,
+  "defect_counts": {
+    "crack": 5,
+    "glue_strip": 5,
+    "good": 5,
+    "gray_stroke": 5,
+    "oil": 5,
+    "rough": 5
+  },
+  "samples": [
+    {
+      "sample_path": "tile/crack_000.png",
+      "source_path": "tile/test/crack/000.png",
+      "category": "tile",
+      "defect_type": "crack",
+      "label": 1,
+      "file_sha256": "d10be1f6ec065f83d54c03b4093d7d87dfcc77617d8eb0df9f5a053aece4becf"
+    },
+    {
+      "sample_path": "tile/crack_001.png",
+      "source_path": "tile/test/crack/001.png",
+      "category": "tile",
+      "defect_type": "crack",
+      "label": 1,
+      "file_sha256": "3800ee4d98148c859eb56bd5a9350ce6be768dc24fcd2203e3e36e3414defb5a"
+    },
+    {
+      "sample_path": "tile/crack_002.png",
+      "source_path": "tile/test/crack/002.png",
+      "category": "tile",
+      "defect_type": "crack",
+      "label": 1,
+      "file_sha256": "6dbe8d621a2a2d24ec5a3fd03d034063858e3007e1d5e1bb9f8440cbc91846cc"
+    },
+    {
+      "sample_path": "tile/crack_003.png",
+      "source_path": "tile/test/crack/003.png",
+      "category": "tile",
+      "defect_type": "crack",
+      "label": 1,
+      "file_sha256": "59dc8ce1dc39774120b61e3e1d670d4b198a16c3dfdca58b13f2d9a9b2ceb4b2"
+    },
+    {
+      "sample_path": "tile/crack_004.png",
+      "source_path": "tile/test/crack/004.png",
+      "category": "tile",
+      "defect_type": "crack",
+      "label": 1,
+      "file_sha256": "2514d77178ab82111517e4616e0acffd937dcd6e637b61d5f4876e05060fa3b8"
+    },
+    {
+      "sample_path": "tile/glue_strip_000.png",
+      "source_path": "tile/test/glue_strip/000.png",
+      "category": "tile",
+      "defect_type": "glue_strip",
+      "label": 1,
+      "file_sha256": "789bf3426655aed432ea611d9c62354d6a43d13efb0acaacd27a49de851e65f6"
+    },
+    {
+      "sample_path": "tile/glue_strip_001.png",
+      "source_path": "tile/test/glue_strip/001.png",
+      "category": "tile",
+      "defect_type": "glue_strip",
+      "label": 1,
+      "file_sha256": "cb9bffe1fa32c62cec0afcf88fa17add4483b16fa2ce1b17bbd62256c576f0a3"
+    },
+    {
+      "sample_path": "tile/glue_strip_002.png",
+      "source_path": "tile/test/glue_strip/002.png",
+      "category": "tile",
+      "defect_type": "glue_strip",
+      "label": 1,
+      "file_sha256": "f2735e60b0d37cb4b5bd6e8f4cf2b3b2f2d76c0bbab3880914ec56a444425fba"
+    },
+    {
+      "sample_path": "tile/glue_strip_003.png",
+      "source_path": "tile/test/glue_strip/003.png",
+      "category": "tile",
+      "defect_type": "glue_strip",
+      "label": 1,
+      "file_sha256": "ed60f426f6404c6b8c3dd7ba126a2320c1ab9442dbaa3e475d12a8be630b1cee"
+    },
+    {
+      "sample_path": "tile/glue_strip_004.png",
+      "source_path": "tile/test/glue_strip/004.png",
+      "category": "tile",
+      "defect_type": "glue_strip",
+      "label": 1,
+      "file_sha256": "025fb362cbf1ca6077adee8e7b100bfb100746c0a84b6a70b840aa47697b0f10"
+    },
+    {
+      "sample_path": "tile/good_000.png",
+      "source_path": "tile/test/good/000.png",
+      "category": "tile",
+      "defect_type": "good",
+      "label": 0,
+      "file_sha256": "179ff21a9d65e9e6371c6383ffa970adfa04502725a3c4d654e08d8377c0b781"
+    },
+    {
+      "sample_path": "tile/good_001.png",
+      "source_path": "tile/test/good/001.png",
+      "category": "tile",
+      "defect_type": "good",
+      "label": 0,
+      "file_sha256": "770946f93f0ccd8a7595954b0861876c697729cbe05e9fafc57d0f9e8cba5ec8"
+    },
+    {
+      "sample_path": "tile/good_002.png",
+      "source_path": "tile/test/good/002.png",
+      "category": "tile",
+      "defect_type": "good",
+      "label": 0,
+      "file_sha256": "ad5e3490a4383604d6be5597342eb6236060280ebe16f29fc7d4b641413b4ce3"
+    },
+    {
+      "sample_path": "tile/good_003.png",
+      "source_path": "tile/test/good/003.png",
+      "category": "tile",
+      "defect_type": "good",
+      "label": 0,
+      "file_sha256": "56791af1addff97add7f104c229198ac686ec47f4e55fff88ace22d1c9764ce3"
+    },
+    {
+      "sample_path": "tile/good_004.png",
+      "source_path": "tile/test/good/004.png",
+      "category": "tile",
+      "defect_type": "good",
+      "label": 0,
+      "file_sha256": "55c5b09f1468bdcdcfe6bcd006ffb18fe57c03cbf7f297dc613c27c9a4a529b7"
+    },
+    {
+      "sample_path": "tile/gray_stroke_000.png",
+      "source_path": "tile/test/gray_stroke/000.png",
+      "category": "tile",
+      "defect_type": "gray_stroke",
+      "label": 1,
+      "file_sha256": "687ee96b4b356dfa87e49b78a807dcdf026f80705801d6e670578648c5d3bba2"
+    },
+    {
+      "sample_path": "tile/gray_stroke_001.png",
+      "source_path": "tile/test/gray_stroke/001.png",
+      "category": "tile",
+      "defect_type": "gray_stroke",
+      "label": 1,
+      "file_sha256": "e6d931df7005c0e958ec4da16c606546d77e25e41e37f2b83f8135b74770ff26"
+    },
+    {
+      "sample_path": "tile/gray_stroke_002.png",
+      "source_path": "tile/test/gray_stroke/002.png",
+      "category": "tile",
+      "defect_type": "gray_stroke",
+      "label": 1,
+      "file_sha256": "63d54aa8081dcbbf8dd2de8e0bba5696d83f09df06d9d325335ed4d26eafa3fe"
+    },
+    {
+      "sample_path": "tile/gray_stroke_003.png",
+      "source_path": "tile/test/gray_stroke/003.png",
+      "category": "tile",
+      "defect_type": "gray_stroke",
+      "label": 1,
+      "file_sha256": "5b7247a73d2d0f58410fa3dd777f8c43fc5dc7ae9a35c49512e8d9abf459973c"
+    },
+    {
+      "sample_path": "tile/gray_stroke_004.png",
+      "source_path": "tile/test/gray_stroke/004.png",
+      "category": "tile",
+      "defect_type": "gray_stroke",
+      "label": 1,
+      "file_sha256": "d723b9c45531c84562f7c22946a64c365805ef1d2b91827ff6532422547e17b2"
+    },
+    {
+      "sample_path": "tile/oil_000.png",
+      "source_path": "tile/test/oil/000.png",
+      "category": "tile",
+      "defect_type": "oil",
+      "label": 1,
+      "file_sha256": "cce758df17a18b3d60e54b367bec27639dd48d83cfee1f7546d80058188ba130"
+    },
+    {
+      "sample_path": "tile/oil_001.png",
+      "source_path": "tile/test/oil/001.png",
+      "category": "tile",
+      "defect_type": "oil",
+      "label": 1,
+      "file_sha256": "8d47f96cd4437c4848454bd60b46def1a7c470b5ee9e842891f02a346de744d2"
+    },
+    {
+      "sample_path": "tile/oil_002.png",
+      "source_path": "tile/test/oil/002.png",
+      "category": "tile",
+      "defect_type": "oil",
+      "label": 1,
+      "file_sha256": "af4711cdd10c0164949362d4133654eec065a2ba8c34c671209f4c633b38b653"
+    },
+    {
+      "sample_path": "tile/oil_003.png",
+      "source_path": "tile/test/oil/003.png",
+      "category": "tile",
+      "defect_type": "oil",
+      "label": 1,
+      "file_sha256": "3738ab51cea0f00439b1263219f138c04fb925c2d12e835990f9608ddf88b7de"
+    },
+    {
+      "sample_path": "tile/oil_004.png",
+      "source_path": "tile/test/oil/004.png",
+      "category": "tile",
+      "defect_type": "oil",
+      "label": 1,
+      "file_sha256": "313d7c96b4653b2057c739ead59d4d55771af945d6b8278edb91ac5efa10f8fe"
+    },
+    {
+      "sample_path": "tile/rough_000.png",
+      "source_path": "tile/test/rough/000.png",
+      "category": "tile",
+      "defect_type": "rough",
+      "label": 1,
+      "file_sha256": "02e34713dbf8db192267e62b44134b555e419c13b2a1d24460257e76a7a8155d"
+    },
+    {
+      "sample_path": "tile/rough_001.png",
+      "source_path": "tile/test/rough/001.png",
+      "category": "tile",
+      "defect_type": "rough",
+      "label": 1,
+      "file_sha256": "5508d71470f59e96183a8035fb90d63f050f3324e4884ef03f856528a4107d13"
+    },
+    {
+      "sample_path": "tile/rough_002.png",
+      "source_path": "tile/test/rough/002.png",
+      "category": "tile",
+      "defect_type": "rough",
+      "label": 1,
+      "file_sha256": "92293a662b469d481fc6ee6c57e933b167affe61d82245f24ce0ff17c706bc86"
+    },
+    {
+      "sample_path": "tile/rough_003.png",
+      "source_path": "tile/test/rough/003.png",
+      "category": "tile",
+      "defect_type": "rough",
+      "label": 1,
+      "file_sha256": "d73047c162e651440cad7224e66394235920f9d28d2e2e1f664edbdfc901e471"
+    },
+    {
+      "sample_path": "tile/rough_004.png",
+      "source_path": "tile/test/rough/004.png",
+      "category": "tile",
+      "defect_type": "rough",
+      "label": 1,
+      "file_sha256": "9b85431679c66802c9d2294a775c5a904660d2387f3b8470b24a8af9ec2e46e7"
+    }
+  ]
+}

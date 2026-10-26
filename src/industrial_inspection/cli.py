@@ -66,7 +66,7 @@ def main():
     predict = sub.add_parser("predict")
     predict.add_argument("--image", type=Path, required=True)
     predict.add_argument("--model-dir", type=Path, required=True)
-    predict.add_argument("--rules", type=Path, default=Path("configs/quality_rules.json"))
+    predict.add_argument("--rules", type=Path, default=None, help="可选自定义规则；默认按模型卡产品类别自动选择项目内教学策略")
     predict.add_argument("--output", type=Path, default=Path("results/prediction"))
     env = sub.add_parser("check-env")
     env.add_argument("--output", type=Path, default=Path("results/environment.json"))
@@ -101,7 +101,10 @@ def main():
         result = evaluate(args.manifest, args.model_dir, args.output, args.device)
     elif args.command == "predict":
         from .pipeline import inspect_image
-        image, result = inspect_image(Image.open(args.image), args.model_dir, args.rules)
+        try:
+            image, result = inspect_image(Image.open(args.image), args.model_dir, args.rules)
+        except ValueError as exc:
+            parser.error(str(exc))
         args.output.mkdir(parents=True, exist_ok=True)
         image.save(args.output / "overlay.png")
         save_json(args.output / "report.json", result)

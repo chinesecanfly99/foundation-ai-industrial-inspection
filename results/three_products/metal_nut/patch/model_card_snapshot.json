@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "model_id": "patch_memory_resnet18",
+  "method": "patch_memory",
+  "image_size": 128,
+  "seed": 42,
+  "training_count": 176,
+  "calibration_count": 44,
+  "image_threshold": 0.10550107955932618,
+  "pixel_threshold": 0.09783166274428368,
+  "score_definition": "mean_of_top_1_percent_pixels",
+  "calibration": {
+    "source": "held_out_normal_images_only",
+    "image_statistic": "maximum_calibration_image_score",
+    "pixel_quantile": 0.995,
+    "margin_multiplier": 1.05,
+    "minimum_threshold": 1e-06,
+    "limitation": "Normal-only thresholds do not establish defect recall or a production false-alarm guarantee."
+  },
+  "artifact_format": "numeric_npz_allow_pickle_false",
+  "memory_size": 2048,
+  "actual_memory_size": 2048,
+  "backbone": "torchvision.resnet18",
+  "weights": "ResNet18_Weights.IMAGENET1K_V1",
+  "feature_layers": [
+    "layer2",
+    "layer3"
+  ],
+  "feature_dimension": 384,
+  "sampling": "seeded_uniform_random_priority_without_replacement",
+  "distance": "euclidean_divided_by_sqrt_feature_dimension",
+  "source": "https://github.com/amazon-science/patchcore-inspection",
+  "implementation_note": "Simplified PatchCore-style teaching model; not an official PatchCore reproduction.",
+  "limitations": [
+    "Uses ResNet18 rather than the official benchmark backbone.",
+    "Uses uniform sampling rather than greedy coreset selection.",
+    "Omits official image-score neighborhood reweighting."
+  ],
+  "artifact_sha256": "cfa1580ad6adae2aa14e88f2defc455f645d3f1cf0a3b8848f40a88a9f676f03",
+  "dataset_source": "mvtec_ad/metal_nut",
+  "manifest_sha256": "d388e7f897f5f90c3aa8a2723fc3cac3e0d316aa1c07426f716ec7828911373d",
+  "manifest": "F:/Codex_file/Foudationai.groupwork/data/manifests/metal_nut.csv",
+  "fit_seconds": 28.468,
+  "device": "cpu",
+  "source_sha256": {
+    "detectors.py": "79dee31df163e1e30c7670fc1e5f44a0b50b856f076ca80d49aa1aa063a321a3",
+    "data.py": "d2475f1e9506ffa74dbcfbd1228c8b153aa8a84c9ba00beb4e6408d640dd6dd8",
+    "cli.py": "b6f94c4a81065a9594d79ff829043730b3564806bfec275f516584baf453438c"
+  },
+  "scope": "Single category, aligned inspection images. Quality policy is illustrative and not independently validated."
+}

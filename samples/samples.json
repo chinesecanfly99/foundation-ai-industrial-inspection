@@ -1,0 +1,649 @@
+{
+  "schema_version": 1,
+  "selection": "File name ordering only; no model result selection",
+  "categories": {
+    "bottle": {
+      "category": "bottle",
+      "selection": "First N filenames in each original test defect directory; no model-based selection",
+      "per_type": 5,
+      "sample_count": 20,
+      "defect_counts": {
+        "broken_large": 5,
+        "broken_small": 5,
+        "contamination": 5,
+        "good": 5
+      }
+    },
+    "metal_nut": {
+      "category": "metal_nut",
+      "selection": "First N filenames in each original test defect directory; no model-based selection",
+      "per_type": 5,
+      "sample_count": 25,
+      "defect_counts": {
+        "bent": 5,
+        "color": 5,
+        "flip": 5,
+        "good": 5,
+        "scratch": 5
+      }
+    },
+    "tile": {
+      "category": "tile",
+      "selection": "First N filenames in each original test defect directory; no model-based selection",
+      "per_type": 5,
+      "sample_count": 30,
+      "defect_counts": {
+        "crack": 5,
+        "glue_strip": 5,
+        "good": 5,
+        "gray_stroke": 5,
+        "oil": 5,
+        "rough": 5
+      }
+    }
+  },
+  "sample_count": 75,
+  "samples": [
+    {
+      "sample_path": "bottle/broken_large_000.png",
+      "source_path": "bottle/test/broken_large/000.png",
+      "category": "bottle",
+      "defect_type": "broken_large",
+      "label": 1,
+      "file_sha256": "11a691a06a33dd78c5fcab6a822caa48c0d72f27f660e19f5abd9b5aa392b0eb"
+    },
+    {
+      "sample_path": "bottle/broken_large_001.png",
+      "source_path": "bottle/test/broken_large/001.png",
+      "category": "bottle",
+      "defect_type": "broken_large",
+      "label": 1,
+      "file_sha256": "b5e6fd5f3f9ac5310f4fecc37f64d42eaa3326d3d3b327369d2d789752189a0f"
+    },
+    {
+      "sample_path": "bottle/broken_large_002.png",
+      "source_path": "bottle/test/broken_large/002.png",
+      "category": "bottle",
+      "defect_type": "broken_large",
+      "label": 1,
+      "file_sha256": "249813c6bccb58b9de711a6b7248f4fd8ba4136364cfad2e0577769db91353c2"
+    },
+    {
+      "sample_path": "bottle/broken_large_003.png",
+      "source_path": "bottle/test/broken_large/003.png",
+      "category": "bottle",
+      "defect_type": "broken_large",
+      "label": 1,
+      "file_sha256": "b4797ce35dd407629e29dd199cd6e497f0a706a1ddd72ace226f30858d3199c4"
+    },
+    {
+      "sample_path": "bottle/broken_large_004.png",
+      "source_path": "bottle/test/broken_large/004.png",
+      "category": "bottle",
+      "defect_type": "broken_large",
+      "label": 1,
+      "file_sha256": "ede2360ddfaba9c13112b6159f5fd3342226203719ba9f067c2ff16e3d4690e0"
+    },
+    {
+      "sample_path": "bottle/broken_small_000.png",
+      "source_path": "bottle/test/broken_small/000.png",
+      "category": "bottle",
+      "defect_type": "broken_small",
+      "label": 1,
+      "file_sha256": "05b96e1102fba8cc19bf60e17d33a0830247df2bbba56cae3df100336392941e"
+    },
+    {
+      "sample_path": "bottle/broken_small_001.png",
+      "source_path": "bottle/test/broken_small/001.png",
+      "category": "bottle",
+      "defect_type": "broken_small",
+      "label": 1,
+      "file_sha256": "bc60260af053f2f84f71550dda6f2d88c9c8e427109a56249f0dc60e30bc9759"
+    },
+    {
+      "sample_path": "bottle/broken_small_002.png",
+      "source_path": "bottle/test/broken_small/002.png",
+      "category": "bottle",
+      "defect_type": "broken_small",
+      "label": 1,
+      "file_sha256": "e605efdbf20478f09084f3026eaa96b91d9d1e7bc113cbe8fb700f2bbcc2763e"
+    },
+    {
+      "sample_path": "bottle/broken_small_003.png",
+      "source_path": "bottle/test/broken_small/003.png",
+      "category": "bottle",
+      "defect_type": "broken_small",
+      "label": 1,
+      "file_sha256": "c97b387cdafd8df6d1834dcd4bb284cb784969a5416dc067f6f2476592c1ee57"
+    },
+    {
+      "sample_path": "bottle/broken_small_004.png",
+      "source_path": "bottle/test/broken_small/004.png",
+      "category": "bottle",
+      "defect_type": "broken_small",
+      "label": 1,
+      "file_sha256": "6f57501c4ae23aac51f06c7ea4916d8977cf84664832cc7c542447624bd9c142"
+    },
+    {
+      "sample_path": "bottle/contamination_000.png",
+      "source_path": "bottle/test/contamination/000.png",
+      "category": "bottle",
+      "defect_type": "contamination",
+      "label": 1,
+      "file_sha256": "fe2e96a8cba624ace02985481197ee8ab112d2a2faa4b79f137ace2c452eb4ea"
+    },
+    {
+      "sample_path": "bottle/contamination_001.png",
+      "source_path": "bottle/test/contamination/001.png",
+      "category": "bottle",
+      "defect_type": "contamination",
+      "label": 1,
+      "file_sha256": "2ddf5d0d53b2dc3d13286af69d668e9b572a360a87309bb91a4682dde8f2311a"
+    },
+    {
+      "sample_path": "bottle/contamination_002.png",
+      "source_path": "bottle/test/contamination/002.png",
+      "category": "bottle",
+      "defect_type": "contamination",
+      "label": 1,
+      "file_sha256": "905880d6f1f7c33cce414116beae1bda241efff97ba78647e7c2b5d25a94dd05"
+    },
+    {
+      "sample_path": "bottle/contamination_003.png",
+      "source_path": "bottle/test/contamination/003.png",
+      "category": "bottle",
+      "defect_type": "contamination",
+      "label": 1,
+      "file_sha256": "023c4e62fbe0b7f408245e85b8fc60259d826dedee67fdc5a41655b7fa494e4a"
+    },
+    {
+      "sample_path": "bottle/contamination_004.png",
+      "source_path": "bottle/test/contamination/004.png",
+      "category": "bottle",
+      "defect_type": "contamination",
+      "label": 1,
+      "file_sha256": "8def2401278eb433c1a2fa0a78c79abfeea7a4d0b363e637e51c39cef34c073c"
+    },
+    {
+      "sample_path": "bottle/good_000.png",
+      "source_path": "bottle/test/good/000.png",
+      "category": "bottle",
+      "defect_type": "good",
+      "label": 0,
+      "file_sha256": "9e7bfe658efe9b6db2607a96405b4ac6880936eaf93b89c85bcd311122ceb57b"
+    },
+    {
+      "sample_path": "bottle/good_001.png",
+      "source_path": "bottle/test/good/001.png",
+      "category": "bottle",
+      "defect_type": "good",
+      "label": 0,
+      "file_sha256": "a45aba86ef3e1ef8dbd95ca56abeb63f576fcd2bbd040ba748a1410bb70d6d78"
+    },
+    {
+      "sample_path": "bottle/good_002.png",
+      "source_path": "bottle/test/good/002.png",
+      "category": "bottle",
+      "defect_type": "good",
+      "label": 0,
+      "file_sha256": "281e0b0dada22effec4fee5b09bef9a54feaef9d8d717aeb7947aa499ab9a1f8"
+    },
+    {
+      "sample_path": "bottle/good_003.png",
+      "source_path": "bottle/test/good/003.png",
+      "category": "bottle",
+      "defect_type": "good",
+      "label": 0,
+      "file_sha256": "08c6a6cbeecb25f84c1a8a6fbc1437228980076075058550eedd2f7e1d172978"
+    },
+    {
+      "sample_path": "bottle/good_004.png",
+      "source_path": "bottle/test/good/004.png",
+      "category": "bottle",
+      "defect_type": "good",
+      "label": 0,
+      "file_sha256": "22e8a84b84435aa6e67266529d6a2f3b7a29f89e4701fd0a969031e517a12dea"
+    },
+    {
+      "sample_path": "metal_nut/bent_000.png",
+      "source_path": "metal_nut/test/bent/000.png",
+      "category": "metal_nut",
+      "defect_type": "bent",
+      "label": 1,
+      "file_sha256": "602cceb099d5aa10a416f31cd6370ef9d8c810118f4ada9dbc9c28e91a889e0b"
+    },
+    {
+      "sample_path": "metal_nut/bent_001.png",
+      "source_path": "metal_nut/test/bent/001.png",
+      "category": "metal_nut",
+      "defect_type": "bent",
+      "label": 1,
+      "file_sha256": "ae7c350ae8e255673a77779ac1abdbd7e6eb13ceb31524f9e8b642850ca42bba"
+    },
+    {
+      "sample_path": "metal_nut/bent_002.png",
+      "source_path": "metal_nut/test/bent/002.png",
+      "category": "metal_nut",
+      "defect_type": "bent",
+      "label": 1,
+      "file_sha256": "1c2b6502aec101f372d1eb62991894ecaedbb6721a438930ee8aaaaa2c32c60f"
+    },
+    {
+      "sample_path": "metal_nut/bent_003.png",
+      "source_path": "metal_nut/test/bent/003.png",
+      "category": "metal_nut",
+      "defect_type": "bent",
+      "label": 1,
+      "file_sha256": "61a12376dbda815080604c73261d9e1d53abd207d41c6998b02f5db0a6de297b"
+    },
+    {
+      "sample_path": "metal_nut/bent_004.png",
+      "source_path": "metal_nut/test/bent/004.png",
+      "category": "metal_nut",
+      "defect_type": "bent",
+      "label": 1,
+      "file_sha256": "2696d775ee2d0fe55cdd6ad75f437f9a7e12b782c3df116ccdda43fd2fc2fd43"
+    },
+    {
+      "sample_path": "metal_nut/color_000.png",
+      "source_path": "metal_nut/test/color/000.png",
+      "category": "metal_nut",
+      "defect_type": "color",
+      "label": 1,
+      "file_sha256": "0baf957a972988323713a48fdf85c5e93cd3f21ac3d829095c13f703e6aed14b"
+    },
+    {
+      "sample_path": "metal_nut/color_001.png",
+      "source_path": "metal_nut/test/color/001.png",
+      "category": "metal_nut",
+      "defect_type": "color",
+      "label": 1,
+      "file_sha256": "cc71de463f69646b944cf0d1eda8a878a876fdcc060dc726f26e78180aa7bedb"
+    },
+    {
+      "sample_path": "metal_nut/color_002.png",
+      "source_path": "metal_nut/test/color/002.png",
+      "category": "metal_nut",
+      "defect_type": "color",
+      "label": 1,
+      "file_sha256": "e01376acf91c157c7ad41463bf771b07e72990bcf30e59b431d5a7718c0b7549"
+    },
+    {
+      "sample_path": "metal_nut/color_003.png",
+      "source_path": "metal_nut/test/color/003.png",
+      "category": "metal_nut",
+      "defect_type": "color",
+      "label": 1,
+      "file_sha256": "a6be7216d6c9ee801ef9cc2cf0f6fb8d1221ef094378e5381b6bfdac1fb20432"
+    },
+    {
+      "sample_path": "metal_nut/color_004.png",
+      "source_path": "metal_nut/test/color/004.png",
+      "category": "metal_nut",
+      "defect_type": "color",
+      "label": 1,
+      "file_sha256": "4443ec9e57407e3710711790ecc73187a9cbff96c4f981c12ce77ea57a5683c0"
+    },
+    {
+      "sample_path": "metal_nut/flip_000.png",
+      "source_path": "metal_nut/test/flip/000.png",
+      "category": "metal_nut",
+      "defect_type": "flip",
+      "label": 1,
+      "file_sha256": "86ee9fac2a1ea560536782de2122ce44f24dce115b3d9e7f4b5d87f57b40e773"
+    },
+    {
+      "sample_path": "metal_nut/flip_001.png",
+      "source_path": "metal_nut/test/flip/001.png",
+      "category": "metal_nut",
+      "defect_type": "flip",
+      "label": 1,
+      "file_sha256": "9d18b72d0a301c93682c758e91f81648576a8d27f7940894d3d6859dc31bc5cc"
+    },
+    {
+      "sample_path": "metal_nut/flip_002.png",
+      "source_path": "metal_nut/test/flip/002.png",
+      "category": "metal_nut",
+      "defect_type": "flip",
+      "label": 1,
+      "file_sha256": "663dc37246c611dfd39e89d04fbe44eeb43bab8f247905b7dfa426667a4d4fab"
+    },
+    {
+      "sample_path": "metal_nut/flip_003.png",
+      "source_path": "metal_nut/test/flip/003.png",
+      "category": "metal_nut",
+      "defect_type": "flip",
+      "label": 1,
+      "file_sha256": "3fc65b5a9fb842357ab67952cef7e6126e261c4cfd996fbc32df08ee20acfdb4"
+    },
+    {
+      "sample_path": "metal_nut/flip_004.png",
+      "source_path": "metal_nut/test/flip/004.png",
+      "category": "metal_nut",
+      "defect_type": "flip",
+      "label": 1,
+      "file_sha256": "157f2a7a1e8bedfad8ac91236155483b98260fc64828917d338aac4961db4578"
+    },
+    {
+      "sample_path": "metal_nut/good_000.png",
+      "source_path": "metal_nut/test/good/000.png",
+      "category": "metal_nut",
+      "defect_type": "good",
+      "label": 0,
+      "file_sha256": "d7ca543f04733fb91ac02e18d0fbf06dcff554a1b1ad754173c42d10bb026bb6"
+    },
+    {
+      "sample_path": "metal_nut/good_001.png",
+      "source_path": "metal_nut/test/good/001.png",
+      "category": "metal_nut",
+      "defect_type": "good",
+      "label": 0,
+      "file_sha256": "d521ac790c921c26e635de69bab126d290def0c6674b961b4cb359a0bd8b8b01"
+    },
+    {
+      "sample_path": "metal_nut/good_002.png",
+      "source_path": "metal_nut/test/good/002.png",
+      "category": "metal_nut",
+      "defect_type": "good",
+      "label": 0,
+      "file_sha256": "c915621335f2a306db55f3206c2a25c1ff31f4b1c6415b9717a5d5da9ec9ca78"
+    },
+    {
+      "sample_path": "metal_nut/good_003.png",
+      "source_path": "metal_nut/test/good/003.png",
+      "category": "metal_nut",
+      "defect_type": "good",
+      "label": 0,
+      "file_sha256": "fb910df812448b4afe02ed8319ca1f6a41551b2715117b67a8b20aca97de20e2"
+    },
+    {
+      "sample_path": "metal_nut/good_004.png",
+      "source_path": "metal_nut/test/good/004.png",
+      "category": "metal_nut",
+      "defect_type": "good",
+      "label": 0,
+      "file_sha256": "f34d30f06f6969c8dbdaa0ab6efb3b040316b6c1e809086f89990b50ab3c9a6e"
+    },
+    {
+      "sample_path": "metal_nut/scratch_000.png",
+      "source_path": "metal_nut/test/scratch/000.png",
+      "category": "metal_nut",
+      "defect_type": "scratch",
+      "label": 1,
+      "file_sha256": "1e5637c3409d05709eae62c7254f38900afa296902b1626e5902a5a2a4095f3d"
+    },
+    {
+      "sample_path": "metal_nut/scratch_001.png",
+      "source_path": "metal_nut/test/scratch/001.png",
+      "category": "metal_nut",
+      "defect_type": "scratch",
+      "label": 1,
+      "file_sha256": "9d0fb31fac7ab42ddce02f5d1fd27940b04dfb10e28a1ab76c7ce010ba7bd772"
+    },
+    {
+      "sample_path": "metal_nut/scratch_002.png",
+      "source_path": "metal_nut/test/scratch/002.png",
+      "category": "metal_nut",
+      "defect_type": "scratch",
+      "label": 1,
+      "file_sha256": "7af3ba2320c1e556b9cef658ab7cdc8fb4deed8d47046e88bedca416963dd10d"
+    },
+    {
+      "sample_path": "metal_nut/scratch_003.png",
+      "source_path": "metal_nut/test/scratch/003.png",
+      "category": "metal_nut",
+      "defect_type": "scratch",
+      "label": 1,
+      "file_sha256": "6ec49b4d1404f52c50ecc53162af16abcba436efa61b08c222aeb23f7d04d57d"
+    },
+    {
+      "sample_path": "metal_nut/scratch_004.png",
+      "source_path": "metal_nut/test/scratch/004.png",
+      "category": "metal_nut",
+      "defect_type": "scratch",
+      "label": 1,
+      "file_sha256": "6e8859b3ec5ebf7b119e3beeed11e9c49ebe30fb2f5a4bfaacbd59de51ca44ce"
+    },
+    {
+      "sample_path": "tile/crack_000.png",
+      "source_path": "tile/test/crack/000.png",
+      "category": "tile",
+      "defect_type": "crack",
+      "label": 1,
+      "file_sha256": "d10be1f6ec065f83d54c03b4093d7d87dfcc77617d8eb0df9f5a053aece4becf"
+    },
+    {
+      "sample_path": "tile/crack_001.png",
+      "source_path": "tile/test/crack/001.png",
+      "category": "tile",
+      "defect_type": "crack",
+      "label": 1,
+      "file_sha256": "3800ee4d98148c859eb56bd5a9350ce6be768dc24fcd2203e3e36e3414defb5a"
+    },
+    {
+      "sample_path": "tile/crack_002.png",
+      "source_path": "tile/test/crack/002.png",
+      "category": "tile",
+      "defect_type": "crack",
+      "label": 1,
+      "file_sha256": "6dbe8d621a2a2d24ec5a3fd03d034063858e3007e1d5e1bb9f8440cbc91846cc"
+    },
+    {
+      "sample_path": "tile/crack_003.png",
+      "source_path": "tile/test/crack/003.png",
+      "category": "tile",
+      "defect_type": "crack",
+      "label": 1,
+      "file_sha256": "59dc8ce1dc39774120b61e3e1d670d4b198a16c3dfdca58b13f2d9a9b2ceb4b2"
+    },
+    {
+      "sample_path": "tile/crack_004.png",
+      "source_path": "tile/test/crack/004.png",
+      "category": "tile",
+      "defect_type": "crack",
+      "label": 1,
+      "file_sha256": "2514d77178ab82111517e4616e0acffd937dcd6e637b61d5f4876e05060fa3b8"
+    },
+    {
+      "sample_path": "tile/glue_strip_000.png",
+      "source_path": "tile/test/glue_strip/000.png",
+      "category": "tile",
+      "defect_type": "glue_strip",
+      "label": 1,
+      "file_sha256": "789bf3426655aed432ea611d9c62354d6a43d13efb0acaacd27a49de851e65f6"
+    },
+    {
+      "sample_path": "tile/glue_strip_001.png",
+      "source_path": "tile/test/glue_strip/001.png",
+      "category": "tile",
+      "defect_type": "glue_strip",
+      "label": 1,
+      "file_sha256": "cb9bffe1fa32c62cec0afcf88fa17add4483b16fa2ce1b17bbd62256c576f0a3"
+    },
+    {
+      "sample_path": "tile/glue_strip_002.png",
+      "source_path": "tile/test/glue_strip/002.png",
+      "category": "tile",
+      "defect_type": "glue_strip",
+      "label": 1,
+      "file_sha256": "f2735e60b0d37cb4b5bd6e8f4cf2b3b2f2d76c0bbab3880914ec56a444425fba"
+    },
+    {
+      "sample_path": "tile/glue_strip_003.png",
+      "source_path": "tile/test/glue_strip/003.png",
+      "category": "tile",
+      "defect_type": "glue_strip",
+      "label": 1,
+      "file_sha256": "ed60f426f6404c6b8c3dd7ba126a2320c1ab9442dbaa3e475d12a8be630b1cee"
+    },
+    {
+      "sample_path": "tile/glue_strip_004.png",
+      "source_path": "tile/test/glue_strip/004.png",
+      "category": "tile",
+      "defect_type": "glue_strip",
+      "label": 1,
+      "file_sha256": "025fb362cbf1ca6077adee8e7b100bfb100746c0a84b6a70b840aa47697b0f10"
+    },
+    {
+      "sample_path": "tile/good_000.png",
+      "source_path": "tile/test/good/000.png",
+      "category": "tile",
+      "defect_type": "good",
+      "label": 0,
+      "file_sha256": "179ff21a9d65e9e6371c6383ffa970adfa04502725a3c4d654e08d8377c0b781"
+    },
+    {
+      "sample_path": "tile/good_001.png",
+      "source_path": "tile/test/good/001.png",
+      "category": "tile",
+      "defect_type": "good",
+      "label": 0,
+      "file_sha256": "770946f93f0ccd8a7595954b0861876c697729cbe05e9fafc57d0f9e8cba5ec8"
+    },
+    {
+      "sample_path": "tile/good_002.png",
+      "source_path": "tile/test/good/002.png",
+      "category": "tile",
+      "defect_type": "good",
+      "label": 0,
+      "file_sha256": "ad5e3490a4383604d6be5597342eb6236060280ebe16f29fc7d4b641413b4ce3"
+    },
+    {
+      "sample_path": "tile/good_003.png",
+      "source_path": "tile/test/good/003.png",
+      "category": "tile",
+      "defect_type": "good",
+      "label": 0,
+      "file_sha256": "56791af1addff97add7f104c229198ac686ec47f4e55fff88ace22d1c9764ce3"
+    },
+    {
+      "sample_path": "tile/good_004.png",
+      "source_path": "tile/test/good/004.png",
+      "category": "tile",
+      "defect_type": "good",
+      "label": 0,
+      "file_sha256": "55c5b09f1468bdcdcfe6bcd006ffb18fe57c03cbf7f297dc613c27c9a4a529b7"
+    },
+    {
+      "sample_path": "tile/gray_stroke_000.png",
+      "source_path": "tile/test/gray_stroke/000.png",
+      "category": "tile",
+      "defect_type": "gray_stroke",
+      "label": 1,
+      "file_sha256": "687ee96b4b356dfa87e49b78a807dcdf026f80705801d6e670578648c5d3bba2"
+    },
+    {
+      "sample_path": "tile/gray_stroke_001.png",
+      "source_path": "tile/test/gray_stroke/001.png",
+      "category": "tile",
+      "defect_type": "gray_stroke",
+      "label": 1,
+      "file_sha256": "e6d931df7005c0e958ec4da16c606546d77e25e41e37f2b83f8135b74770ff26"
+    },
+    {
+      "sample_path": "tile/gray_stroke_002.png",
+      "source_path": "tile/test/gray_stroke/002.png",
+      "category": "tile",
+      "defect_type": "gray_stroke",
+      "label": 1,
+      "file_sha256": "63d54aa8081dcbbf8dd2de8e0bba5696d83f09df06d9d325335ed4d26eafa3fe"
+    },
+    {
+      "sample_path": "tile/gray_stroke_003.png",
+      "source_path": "tile/test/gray_stroke/003.png",
+      "category": "tile",
+      "defect_type": "gray_stroke",
+      "label": 1,
+      "file_sha256": "5b7247a73d2d0f58410fa3dd777f8c43fc5dc7ae9a35c49512e8d9abf459973c"
+    },
+    {
+      "sample_path": "tile/gray_stroke_004.png",
+      "source_path": "tile/test/gray_stroke/004.png",
+      "category": "tile",
+      "defect_type": "gray_stroke",
+      "label": 1,
+      "file_sha256": "d723b9c45531c84562f7c22946a64c365805ef1d2b91827ff6532422547e17b2"
+    },
+    {
+      "sample_path": "tile/oil_000.png",
+      "source_path": "tile/test/oil/000.png",
+      "category": "tile",
+      "defect_type": "oil",
+      "label": 1,
+      "file_sha256": "cce758df17a18b3d60e54b367bec27639dd48d83cfee1f7546d80058188ba130"
+    },
+    {
+      "sample_path": "tile/oil_001.png",
+      "source_path": "tile/test/oil/001.png",
+      "category": "tile",
+      "defect_type": "oil",
+      "label": 1,
+      "file_sha256": "8d47f96cd4437c4848454bd60b46def1a7c470b5ee9e842891f02a346de744d2"
+    },
+    {
+      "sample_path": "tile/oil_002.png",
+      "source_path": "tile/test/oil/002.png",
+      "category": "tile",
+      "defect_type": "oil",
+      "label": 1,
+      "file_sha256": "af4711cdd10c0164949362d4133654eec065a2ba8c34c671209f4c633b38b653"
+    },
+    {
+      "sample_path": "tile/oil_003.png",
+      "source_path": "tile/test/oil/003.png",
+      "category": "tile",
+      "defect_type": "oil",
+      "label": 1,
+      "file_sha256": "3738ab51cea0f00439b1263219f138c04fb925c2d12e835990f9608ddf88b7de"
+    },
+    {
+      "sample_path": "tile/oil_004.png",
+      "source_path": "tile/test/oil/004.png",
+      "category": "tile",
+      "defect_type": "oil",
+      "label": 1,
+      "file_sha256": "313d7c96b4653b2057c739ead59d4d55771af945d6b8278edb91ac5efa10f8fe"
+    },
+    {
+      "sample_path": "tile/rough_000.png",
+      "source_path": "tile/test/rough/000.png",
+      "category": "tile",
+      "defect_type": "rough",
+      "label": 1,
+      "file_sha256": "02e34713dbf8db192267e62b44134b555e419c13b2a1d24460257e76a7a8155d"
+    },
+    {
+      "sample_path": "tile/rough_001.png",
+      "source_path": "tile/test/rough/001.png",
+      "category": "tile",
+      "defect_type": "rough",
+      "label": 1,
+      "file_sha256": "5508d71470f59e96183a8035fb90d63f050f3324e4884ef03f856528a4107d13"
+    },
+    {
+      "sample_path": "tile/rough_002.png",
+      "source_path": "tile/test/rough/002.png",
+      "category": "tile",
+      "defect_type": "rough",
+      "label": 1,
+      "file_sha256": "92293a662b469d481fc6ee6c57e933b167affe61d82245f24ce0ff17c706bc86"
+    },
+    {
+      "sample_path": "tile/rough_003.png",
+      "source_path": "tile/test/rough/003.png",
+      "category": "tile",
+      "defect_type": "rough",
+      "label": 1,
+      "file_sha256": "d73047c162e651440cad7224e66394235920f9d28d2e2e1f664edbdfc901e471"
+    },
+    {
+      "sample_path": "tile/rough_004.png",
+      "source_path": "tile/test/rough/004.png",
+      "category": "tile",
+      "defect_type": "rough",
+      "label": 1,
+      "file_sha256": "9b85431679c66802c9d2294a775c5a904660d2387f3b8470b24a8af9ec2e46e7"
+    }
+  ],
+  "note": "Original test images remain test-only; samples are copies for UI demonstration, not extra evaluation records."
+}

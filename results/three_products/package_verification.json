@@ -1,0 +1,90 @@
+{
+  "archive": "F:\\Codex_file\\Foudationai.groupwork\\deliverables\\demo-assets-v0.2.0.zip",
+  "archive_entries": 107,
+  "bytes": 105178715,
+  "manifest_files_verified": 106,
+  "manifest_sha256": "0699a1fcde3413f573b0ccb9384e7f5988a043bb2e7c380b02e3d25893b8798c",
+  "manifest_sha256_ok": true,
+  "offline_smoke": {
+    "case_count": 7,
+    "cases": [
+      {
+        "decision": "pass",
+        "image_sha256": "691f833e45a45263eb0aa84b7462214a0acd0e1eb57b4f7b32310d89d6cb5e44",
+        "latency_ms": 2033.74,
+        "model_id": "bottle_patch",
+        "policy_name": "quality_rules.json",
+        "product_category": "bottle",
+        "score": 0.0530223473906517
+      },
+      {
+        "decision": "review",
+        "image_sha256": "691f833e45a45263eb0aa84b7462214a0acd0e1eb57b4f7b32310d89d6cb5e44",
+        "latency_ms": 189.5,
+        "model_id": "bottle_pixel",
+        "policy_name": "quality_rules.json",
+        "product_category": "bottle",
+        "score": 3.201402425765991
+      },
+      {
+        "decision": "pass",
+        "image_sha256": "0762f7954da017799370b7f87214f36492926f99e6e96c1fa1ccd4610bb95a29",
+        "latency_ms": 305.08,
+        "model_id": "metal_nut_patch",
+        "policy_name": "quality_rules_metal_nut.json",
+        "product_category": "metal_nut",
+        "score": 0.08453527837991714
+      },
+      {
+        "decision": "pass",
+        "image_sha256": "0762f7954da017799370b7f87214f36492926f99e6e96c1fa1ccd4610bb95a29",
+        "latency_ms": 132.25,
+        "model_id": "metal_nut_pixel",
+        "policy_name": "quality_rules_metal_nut.json",
+        "product_category": "metal_nut",
+        "score": 2.455235481262207
+      },
+      {
+        "decision": "pass",
+        "image_sha256": "67432276404478de54f7c4a15bfa0ccee61ca0f2d0b4fa4423f419a275eb0fb6",
+        "latency_ms": 395.76,
+        "model_id": "tile_patch",
+        "policy_name": "quality_rules_tile.json",
+        "product_category": "tile",
+        "score": 0.06440690904855728
+      },
+      {
+        "decision": "pass",
+        "image_sha256": "67432276404478de54f7c4a15bfa0ccee61ca0f2d0b4fa4423f419a275eb0fb6",
+        "latency_ms": 224.9,
+        "model_id": "tile_pixel",
+        "policy_name": "quality_rules_tile.json",
+        "product_category": "tile",
+        "score": 1.8867536783218384
+      },
+      {
+        "decision": "pass",
+        "image_sha256": "321c3c747cf9416917cac63a8414552a08a64d90b27829b8d364bb3f2e365458",
+        "latency_ms": 57.02,
+        "model_id": "synthetic_pixel",
+        "policy_name": "quality_rules_synthetic.json",
+        "product_category": "synthetic",
+        "score": 0.41441214084625244
+      }
+    ],
+    "network_attempts": [],
+    "network_disabled": true,
+    "original_project_asset_reads": [],
+    "passed": true,
+    "raw_data_present": false,
+    "source_import_verified_in_isolated_directory": true,
+    "source_root": "<isolated>/src",
+    "torch_home": "<isolated>/.cache/torch",
+    "warnings": ""
+  },
+  "reproducible_double_build": true,
+  "sha256": "faa82d2228abb7b2f2803e14ed89d5e286a13758c5886d7b81e2bcf482f07d98",
+  "verified_utc": "2026-10-26T09:04:19.864684+00:00",
+  "version": "v0.2.0",
+  "zip_crc_ok": true
+}

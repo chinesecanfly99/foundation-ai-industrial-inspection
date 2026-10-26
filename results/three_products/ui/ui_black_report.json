@@ -1,0 +1,67 @@
+{
+  "score": 0.18657931685447693,
+  "image_threshold": 0.07856392264366151,
+  "pixel_threshold": 0.07171882688999176,
+  "anomaly_area_ratio": 1.0,
+  "critical_overlap_ratio": 1.0,
+  "brightness": 0.0,
+  "sharpness": 0.0,
+  "decision": "undetermined",
+  "label_zh": "无法判定",
+  "reasons": [
+    "图像亮度或清晰度未满足输入要求，请重新拍摄。"
+  ],
+  "trace": [
+    {
+      "rule": "R1",
+      "condition": true,
+      "selected": true,
+      "suggestion": "无法判定",
+      "reason": "图像亮度或清晰度未满足输入要求，请重新拍摄。"
+    },
+    {
+      "rule": "R2",
+      "condition": false,
+      "selected": false,
+      "suggestion": "通过",
+      "reason": "分数低于复核区间，预测异常面积较小。"
+    },
+    {
+      "rule": "R3",
+      "condition": false,
+      "selected": false,
+      "suggestion": "人工复核",
+      "reason": "分数接近阈值或存在局部可疑区域，建议人工复核。"
+    },
+    {
+      "rule": "R4",
+      "condition": true,
+      "selected": false,
+      "suggestion": "拒收建议",
+      "reason": "明显异常涉及示范关键区域或超过面积上限。"
+    },
+    {
+      "rule": "R5",
+      "condition": true,
+      "selected": false,
+      "suggestion": "人工复核",
+      "reason": "异常证据不足以自动通过或拒收，建议人工复核。"
+    }
+  ],
+  "policy_version": "tile-demo-policy-v1",
+  "model_id": "tile_patch",
+  "model_method": "patch_memory",
+  "dataset_source": "mvtec_ad/tile",
+  "product_category": "tile",
+  "product_label": "瓷砖表面",
+  "policy_name": "quality_rules_tile.json",
+  "policy_description": "教学示范策略：瓷砖全图为纹理表面示范关注区；区域与门槛未经工厂专家验证，未使用异常测试结果调参，不构成瓷砖出厂质量标准。",
+  "policy_sha256": "50f9a5a2bf1d01f23e4f68e04d3f9b8a1d158c489e370ed772d92435c5023c6d",
+  "image_sha256": "3381de4ca9f3a477f25989dfc8b744e7916046b7aa369f61a9a2f7dc0963ec9e",
+  "image_size": [
+    256,
+    256
+  ],
+  "notice": "分数不是概率；热图表示视觉差异，规则解释质量建议，不解释缺陷物理成因。仅适用于模型对应类别和拍摄条件。",
+  "latency_ms": 30.65
+}

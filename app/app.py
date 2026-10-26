@@ -23,6 +23,9 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT / "src") not in sys.path:
     sys.path.insert(0, str(ROOT / "src"))
 
+from industrial_inspection.catalog import PRODUCTS, REAL_PRODUCTS, policy_path_for_product, product_id_from_card
+from app.upload_cache import install_windows_upload_cache_fix
+
 MAX_PIXELS = 16_000_000
 MAX_DIMENSION = 6000
 DECISIONS = {
@@ -79,6 +82,8 @@ CSS = """
 def _model_cards(project_root: Path) -> dict[str, dict[str, Any]]:
     cards = {}
     for card_path in sorted((project_root / "models").glob("*/model_card.json")):
+        if not (card_path.parent / "model.npz").is_file():
+            continue
         try:
             card = json.loads(card_path.read_text(encoding="utf-8"))
             if isinstance(card, dict):
@@ -89,8 +94,22 @@ def _model_cards(project_root: Path) -> dict[str, dict[str, Any]]:
     return cards
 
 
-def _default_model(cards: dict[str, dict[str, Any]]) -> str | None:
-    return next((name for name in ("bottle_patch", "synthetic_pixel") if name in cards), next(iter(cards), None))
+def _product_models(cards: dict[str, dict[str, Any]], product_id: str) -> list[str]:
+    """Only offer artifacts whose model card agrees with the selected product."""
+    return [name for name in PRODUCTS[product_id]["model_ids"]
+            if name in cards and product_id_from_card(cards[name]) == product_id]
+
+
+def _default_model(cards: dict[str, dict[str, Any]], product_id: str = "bottle") -> str | None:
+    return next(iter(_product_models(cards, product_id)), None)
+
+
+def _model_choices(cards: dict[str, dict[str, Any]], product_id: str) -> list[tuple[str, str]]:
+    label = PRODUCTS[product_id]["label"]
+    return [(("合成垫圈流程测试模型" if product_id == "synthetic" else
+              f"特征记忆主模型 · {label}（ResNet18）" if name.endswith("_patch") else
+              f"像素对比基线 · {label}"), name)
+            for name in _product_models(cards, product_id)]
 
 
 def _model_info(model_id: str | None, project_root: Path) -> str:
@@ -98,19 +117,85 @@ def _model_info(model_id: str | None, project_root: Path) -> str:
     if not model_id or model_id not in cards:
         return "尚未找到模型。请先按 README 完成样例准备与模型训练，然后点击刷新模型。"
     card = cards[model_id]
-    source = card.get("dataset_source", card.get("data_source", card.get("dataset", "来源见模型卡")))
-    method = card.get("method", card.get("model_method", card.get("detector_type", "方法见模型卡")))
-    is_synthetic = "synthetic" in str(source).lower() or model_id.startswith("synthetic")
-    note = "合成样例模型：只验证流程，不能代表真实工业性能。" if is_synthetic else "请使用对应产品、相近拍摄条件的图片；真实测试结果见独立评估记录。"
-    return f"**当前模型：** `{model_id}` · **数据：** {html.escape(str(source))} · **方法：** {html.escape(str(method))}  \n{note}"
+    product_id = product_id_from_card(card)
+    if product_id is None:
+        return "模型卡未注明受支持的产品类别，暂不在页面中提供此模型。"
+    if product_id == "synthetic":
+        method = "人工合成垫圈的像素对比，仅检查上传、热图、规则和下载流程。"
+    elif card.get("method") == "patch_memory":
+        method = "主模型：用预训练 ResNet18 提取局部特征，与正常样本的特征库比较，定位视觉异常。"
+    else:
+        method = "像素基线：比较正常图片各位置的颜色统计，便于与主模型对比；对位置和光照更敏感。"
+    counts = ""
+    if isinstance(card.get("training_count"), int) and isinstance(card.get("calibration_count"), int):
+        counts = f" 正常建模 {card['training_count']} 张，正常校准 {card['calibration_count']} 张。"
+    return f"**当前类别：{PRODUCTS[product_id]['label']}** · `{model_id}`  \n{method}{counts}  \n请使用该类别和相近拍摄条件的图片；模型输出异常位置与分数，不自动判断缺陷名称。"
 
 
-def _sample_paths(project_root: Path) -> dict[str, Path]:
-    paths = {}
-    for folder, title in (("demo", "合成联调"), ("bottle", "MVTec bottle")):
-        for path in sorted((project_root / "samples" / folder).glob("*.png")):
-            paths[f"{title} / {path.stem}"] = path
-    return paths
+def _sample_paths(project_root: Path, product_id: str = "bottle") -> dict[str, Path]:
+    folder = project_root / "samples" / PRODUCTS[product_id]["sample_dir"]
+    return {path.stem: path for path in sorted(folder.glob("*.png"))}
+
+
+def _sample_choices(project_root: Path, product_id: str) -> list[tuple[str, str]]:
+    paths = _sample_paths(project_root, product_id)
+    labels = PRODUCTS[product_id]["defect_labels"]
+    choices = []
+    for stem in paths:
+        defect, _, number = stem.rpartition("_")
+        if product_id == "synthetic":
+            defect = defect.removeprefix("synthetic_")
+        choices.append((f"{labels.get(defect, defect)} · 样例 {number}", stem))
+    return sorted(choices, key=lambda pair: (not pair[1].startswith(("good_", "synthetic_good_")), pair[1]))
+
+
+def _load_picture(path: Path | None) -> Image.Image | None:
+    if path is None:
+        return None
+    try:
+        with Image.open(path) as picture:
+            return picture.convert("RGB").copy()
+    except (OSError, ValueError):
+        return None
+
+
+def _product_info(product_id: str, project_root: Path) -> str:
+    product = PRODUCTS[product_id]
+    count = len(_sample_paths(project_root, product_id))
+    note = "仅用于软件流程检查。" if product_id == "synthetic" else "样例名称来自数据集标注，不是模型识别出的缺陷类别。"
+    return f"{product['description']} 当前可选 **{count} 张样例**。{note}"
+
+
+def _policy_info(product_id: str, project_root: Path) -> str:
+    try:
+        policy = json.loads(policy_path_for_product(project_root, product_id).read_text(encoding="utf-8"))
+        description = str(policy.get("description", "课程演示规则"))
+    except (OSError, ValueError):
+        description = "尚未找到对应规则，请先完成该类别的准备。"
+    return f"**当前规则：{PRODUCTS[product_id]['label']}。** {description}  \n黄色框表示本类别配置的关键区域；阈值与区域尚需业务人员独立验证。"
+
+
+def _clear_results():
+    return (None, '<div class="decision-card"><h2>等待检测</h2><p>图片或模型已更新，请点击“开始检测”。</p></div>',
+            "", "", [], None, gr.update(value=None, interactive=False), gr.update(value=None, interactive=False))
+
+
+def _failed_results(message: str):
+    cleared = list(_clear_results())
+    cleared[1] = ('<div class="decision-card decision-undetermined"><h2>检测未完成</h2>'
+                  f'<p>{html.escape(message)}</p></div>')
+    return tuple(cleared)
+
+
+def _load_sample_for_ui(chosen_sample: str | None, chosen_product: str, current_model: str | None, project_root: Path):
+    paths = _sample_paths(project_root, chosen_product)
+    picture = _load_picture(paths.get(chosen_sample))
+    if chosen_sample and picture is None:
+        gr.Warning("这个样例暂时无法读取，已清除旧图片和报告；请刷新样例或上传一张图片。")
+    available = _model_cards(project_root)
+    chosen_model = current_model if current_model in _product_models(available, chosen_product) else _default_model(available, chosen_product)
+    return (picture, gr.update(choices=_model_choices(available, chosen_product), value=chosen_model),
+            _model_info(chosen_model, project_root), *_clear_results())
 
 
 def _safe_json(value: Any) -> Any:
@@ -182,8 +267,12 @@ def inspect_for_ui(image: Image.Image | None, model_id: str | None, project_root
         raise gr.Error("图片读取失败，请上传 PNG 或 JPEG 图片。")
     if image.width * image.height > MAX_PIXELS or max(image.size) > MAX_DIMENSION:
         raise gr.Error("图片过大。请将长边缩至 6000 像素以内，且总像素不超过 1600 万。")
-    if not model_id or model_id not in _model_cards(project_root):
+    cards = _model_cards(project_root)
+    if not model_id or model_id not in cards:
         raise gr.Error("没有可用模型。请先完成模型训练，再刷新模型列表。")
+    product_id = product_id_from_card(cards[model_id])
+    if product_id is None or model_id not in _product_models(cards, product_id):
+        raise gr.Error("模型卡未匹配已支持的产品类别，请使用对应产品的模型。")
     model_dir = project_root / "models" / model_id
     try:
         from industrial_inspection.pipeline import inspect_image
@@ -191,7 +280,7 @@ def inspect_for_ui(image: Image.Image | None, model_id: str | None, project_root
         overlay, report = inspect_image(
             ImageOps.exif_transpose(image).convert("RGB"),
             model_dir,
-            project_root / "configs" / "quality_rules.json",
+            policy_path_for_product(project_root, product_id),
         )
         safe_report = _safe_json(report)
         export_dir = project_root / "results" / "ui_exports" / uuid.uuid4().hex
@@ -223,32 +312,75 @@ def inspect_for_ui(image: Image.Image | None, model_id: str | None, project_root
     )
 
 
+def _run_for_ui(image: Image.Image | None, model_id: str | None, project_root: Path):
+    """Recover expected user errors while preserving inspect_for_ui's API."""
+    try:
+        return inspect_for_ui(image, model_id, project_root)
+    except gr.Error as exc:
+        message = str(exc.message)
+        gr.Warning(message)
+        return _failed_results(message)
+
+
+
+def _run_selected_for_ui(image: Image.Image | None, model_id: str | None,
+                         chosen_product: str, chosen_sample: str | None, project_root: Path):
+    """Reject a half-loaded selection before generating a report for its image."""
+    try:
+        cards = _model_cards(project_root)
+        if chosen_product not in PRODUCTS or (model_id in cards and
+                product_id_from_card(cards[model_id]) != chosen_product):
+            raise gr.Error("产品和模型仍在切换，请等待加载完成后重新检测。")
+        if chosen_sample and isinstance(image, Image.Image):
+            expected = _load_picture(_sample_paths(project_root, chosen_product).get(chosen_sample))
+            if expected is None:
+                raise gr.Error("所选样例尚未加载，请刷新样例后重新检测。")
+            actual = ImageOps.exif_transpose(image).convert("RGB")
+            expected.thumbnail((1024, 1024))
+            actual.thumbnail((1024, 1024))
+            if actual.size != expected.size or actual.tobytes() != expected.tobytes():
+                raise gr.Error("图片与所选样例仍未同步，请等待加载完成后重新检测。")
+        return _run_for_ui(image, model_id, project_root)
+    except gr.Error as exc:
+        message = str(exc.message)
+        gr.Warning(message)
+        return _failed_results(message)
+
+
 def create_app(project_root: Path | None = None) -> gr.Blocks:
+    install_windows_upload_cache_fix()
     project_root = (project_root or ROOT).resolve()
     cards = _model_cards(project_root)
-    selected = _default_model(cards)
-    samples = _sample_paths(project_root)
+    product_id = "bottle"
+    selected = _default_model(cards, product_id)
+    initial_choices = _sample_choices(project_root, product_id)
+    initial_sample = initial_choices[0][1] if initial_choices else None
+    initial_image = _load_picture(_sample_paths(project_root, product_id).get(initial_sample))
     # System fonts keep startup usable offline.
     theme = gr.themes.Default(primary_hue="teal", secondary_hue="blue", neutral_hue="slate", font=["Arial", "Microsoft YaHei", "sans-serif"], font_mono=["Consolas", "Courier New", "monospace"])
     with gr.Blocks(title="工业异常定位 · 质量决策", theme=theme, css=CSS, analytics_enabled=False, delete_cache=(3600, 86400)) as demo:
         gr.HTML(
             '<div class="project-hero"><div class="project-eyebrow">FOUNDATION OF AI · GROUP PROJECT</div>'
             '<h1>工业异常定位与可解释质量决策</h1>'
-            '<p>查看异常在哪里，理解质量规则为什么触发，再决定通过、复核或拒收。</p></div>'
+            '<p>瓶口、金属螺母、瓷砖表面：查看异常位置，理解质量规则，再决定通过、复核或拒收。</p></div>'
         )
         gr.HTML(
-            '<div class="project-note">课程原型 · 合成样例仅用于流程联调；真实工业性能以独立测试集评估为准。'
-            '异常分数不是概率，热图显示模型关注的异常位置，不推断缺陷的物理原因。</div>'
+            '<div class="project-note">课程原型 · 每类产品使用各自模型和规则。'
+            '异常分数不是概率，热图显示视觉差异；检测结果不推断缺陷的物理原因。真实性能以独立测试集评估为准。</div>'
         )
         with gr.Row(equal_height=False):
             with gr.Column(scale=5, min_width=320):
-                gr.Markdown("### 1 · 选择图片与模型")
-                input_image = gr.Image(label="待检图片", type="pil", sources=["upload"], height=350, format="png", elem_id="inspection-input", placeholder="上传产品图片，或在下方选择演示样例")
-                sample = gr.Dropdown(label="演示样例", choices=list(samples), value=None, info="选择样例后自动载入图片，并匹配可用模型。", elem_id="sample-choice")
+                gr.Markdown("### 1 · 选择产品、图片与模型")
+                product = gr.Dropdown(label="产品类别", choices=[(PRODUCTS[name]["label"], name) for name in REAL_PRODUCTS], value=product_id, elem_id="product-choice", interactive=True)
+                product_info = gr.Markdown(_product_info(product_id, project_root), elem_id="product-description")
+                input_image = gr.Image(value=initial_image, label="待检图片", type="pil", sources=["upload"], height=350, format="png", elem_id="inspection-input", placeholder="上传对应产品图片，或在下方选择演示样例")
+                sample = gr.Dropdown(label="演示样例", choices=initial_choices, value=initial_sample, info="按数据集类别显示中文名称；编号不同代表不同图片。上传自定义图片后会清除样例选择。", elem_id="sample-choice", interactive=True)
                 with gr.Row():
-                    model = gr.Dropdown(label="检测模型", choices=list(cards), value=selected, scale=4, elem_id="model-choice")
-                    refresh = gr.Button("刷新模型", scale=1, min_width=90)
+                    model = gr.Dropdown(label="检测模型", choices=_model_choices(cards, product_id), value=selected, scale=4, elem_id="model-choice", interactive=True)
+                    refresh = gr.Button("刷新模型与样例", scale=1, min_width=110, elem_id="refresh-models")
                 model_info = gr.Markdown(_model_info(selected, project_root), elem_id="model-description")
+                with gr.Accordion("高级 · 开发流程检查", open=False):
+                    show_synthetic = gr.Checkbox(label="显示合成垫圈流程测试", value=False, info="开启后在产品列表中增加合成联调。它不属于三类真实工业数据。", elem_id="show-synthetic")
                 detect = gr.Button("开始检测", variant="primary", size="lg", elem_id="inspect-button")
             with gr.Column(scale=6, min_width=320):
                 gr.Markdown("### 2 · 查看异常与决策")
@@ -257,37 +389,93 @@ def create_app(project_root: Path | None = None) -> gr.Blocks:
                 metrics = gr.HTML("", elem_id="inspection-metrics")
                 reasons = gr.HTML("", elem_id="inspection-reasons")
         with gr.Accordion("3 · 查看逐条规则与完整记录", open=False):
-            gr.Markdown("规则阈值和关键区域是课程演示配置，需要业务人员独立标注后才能评估决策正确率。")
+            policy_info = gr.Markdown(_policy_info(product_id, project_root), elem_id="policy-description")
             trace = gr.Dataframe(headers=["规则", "触发 / 检查结果", "说明"], datatype=["str", "str", "str"], type="array", interactive=False, wrap=True, label="规则检查记录", elem_id="rule-trace")
             full_report = gr.JSON(label="本次检测报告", elem_id="inspection-json")
         with gr.Row():
             json_download = gr.DownloadButton("下载 JSON 报告", interactive=False, elem_id="download-json")
             csv_download = gr.DownloadButton("下载 CSV 摘要", interactive=False, elem_id="download-csv")
-        gr.Markdown("**演示方法：** 先检测正常样例，再检测局部异常样例，比较热图、异常面积与触发规则；低质量图片应进入复核或无法判定。结果只针对本次选择的模型和配置。")
+        gr.Markdown("**报告用途：** CSV 是当前这一张图片的一行摘要，便于用 Excel 汇总实验；JSON 保存完整指标、产品和模型信息及逐条规则，便于复核。热图可在图片区域单独下载。")
+        gr.Markdown("**演示方法：** 每类先看正常样例，再看各类异常，比较热图与规则；可切换主模型和像素基线对比。低质量图片应进入复核或无法判定。切换产品、图片或模型后需重新检测。")
 
-        def run(image, model_id):
-            return inspect_for_ui(image, model_id, project_root)
+        results = [output_image, decision, metrics, reasons, trace, full_report, json_download, csv_download]
+        controls = [input_image, product, sample, model, refresh, show_synthetic, detect]
 
-        def refresh_models(current):
-            new_cards = _model_cards(project_root)
-            chosen = current if current in new_cards else _default_model(new_cards)
-            return gr.Dropdown(choices=list(new_cards), value=chosen), _model_info(chosen, project_root)
+        def run(image, model_id, chosen_product, chosen_sample):
+            return _run_selected_for_ui(image, model_id, chosen_product, chosen_sample, project_root)
 
-        def load_sample(label, current_model):
-            path = samples.get(label)
-            if path is None:
-                return None, gr.skip(), gr.skip()
-            with Image.open(path) as picture:
-                loaded = picture.convert("RGB").copy()
+        def select_product(chosen_product, current_model=None):
+            if chosen_product not in PRODUCTS:
+                chosen_product = "bottle"
             available = _model_cards(project_root)
-            preference = ("synthetic_pixel",) if path.parent.name == "demo" else ("bottle_patch", "bottle_pixel")
-            chosen = next((name for name in preference if name in available), current_model)
-            return loaded, gr.Dropdown(choices=list(available), value=chosen), _model_info(chosen, project_root)
+            valid_models = _product_models(available, chosen_product)
+            chosen_model = current_model if current_model in valid_models else _default_model(available, chosen_product)
+            sample_choices = _sample_choices(project_root, chosen_product)
+            chosen_sample = sample_choices[0][1] if sample_choices else None
+            picture = _load_picture(_sample_paths(project_root, chosen_product).get(chosen_sample))
+            return (picture, gr.update(choices=sample_choices, value=chosen_sample),
+                    gr.update(choices=_model_choices(available, chosen_product), value=chosen_model),
+                    _model_info(chosen_model, project_root), _product_info(chosen_product, project_root),
+                    _policy_info(chosen_product, project_root), *_clear_results())
 
-        detect.click(run, inputs=[input_image, model], outputs=[output_image, decision, metrics, reasons, trace, full_report, json_download, csv_download], api_name="inspect", concurrency_limit=1)
-        model.change(lambda name: _model_info(name, project_root), inputs=model, outputs=model_info, queue=False)
-        refresh.click(refresh_models, inputs=model, outputs=[model, model_info], queue=False, api_name=False)
-        sample.change(load_sample, inputs=[sample, model], outputs=[input_image, model, model_info], queue=False, api_name=False)
+        selection_outputs = [input_image, sample, model, model_info, product_info, policy_info, *results]
+
+        def load_sample(chosen_sample, chosen_product, current_model):
+            return _load_sample_for_ui(chosen_sample, chosen_product, current_model, project_root)
+
+        def toggle_synthetic(enabled, current_product):
+            choices = [*REAL_PRODUCTS, *(["synthetic"] if enabled else [])]
+            chosen_product = current_product if current_product in choices else "bottle"
+            return (gr.update(choices=[(PRODUCTS[name]["label"], name) for name in choices], value=chosen_product),
+                    *select_product(chosen_product))
+
+        def begin_run():
+            cleared = list(_clear_results())
+            cleared[1] = '<div class="decision-card"><h2>正在检测</h2><p>完成后可查看热图、规则和本次报告。</p></div>'
+            return (*[gr.update(interactive=False) for _ in controls], *cleared)
+
+        def begin_selection():
+            cleared = list(_clear_results())
+            cleared[1] = '<div class="decision-card"><h2>正在加载</h2><p>正在更新产品、样例和模型，请稍候。</p></div>'
+            return (*[gr.update(interactive=False) for _ in controls], *cleared)
+
+        def unlock_controls():
+            return [gr.update(interactive=True) for _ in controls]
+
+        # Product/sample loads and inference share one queue. A late load cannot
+        # overwrite an in-flight inspection, and a half-loaded click is checked
+        # against the product and sample content before any report is produced.
+        queue_options = {"concurrency_id": "inspection-selection", "concurrency_limit": 1}
+        start = detect.click(begin_run, outputs=[*controls, *results], queue=False, api_name=False)
+        inference = start.then(run, inputs=[input_image, model, product, sample], outputs=results,
+                               api_name=False, **queue_options)
+        inference.then(unlock_controls, outputs=controls, queue=False, api_name=False)
+
+        def bind_selection(event, callback, inputs, outputs):
+            loading = event(begin_selection, outputs=[*controls, *results], queue=False,
+                            api_name=False, trigger_mode="always_last")
+            loaded = loading.then(callback, inputs=inputs, outputs=outputs, api_name=False, **queue_options)
+            loaded.then(unlock_controls, outputs=controls, queue=False, api_name=False)
+
+        # Programmatic updates already load their own image and must not start
+        # another selection callback. Only a human input enters these chains.
+        bind_selection(product.input, select_product, product, selection_outputs)
+        bind_selection(sample.input, load_sample, [sample, product, model],
+                       [input_image, model, model_info, *results])
+        bind_selection(refresh.click, select_product, [product, model], selection_outputs)
+        bind_selection(show_synthetic.input, toggle_synthetic, [show_synthetic, product],
+                       [product, *selection_outputs])
+        bind_selection(model.input, lambda name: (_model_info(name, project_root), *_clear_results()),
+                       model, [model_info, *results])
+        input_image.change(_clear_results, outputs=results, queue=False, api_name=False)
+        input_image.upload(lambda: (gr.update(value=None), *_clear_results()), outputs=[sample, *results], queue=False, api_name=False)
+        input_image.clear(lambda: (gr.update(value=None), *_clear_results()), outputs=[sample, *results], queue=False, api_name=False)
+
+        # Preserve the existing two-input API for integrations. Visible UI runs
+        # use the additional product/sample consistency check above.
+        api_inspect = gr.Button(visible=False)
+        api_inspect.click(lambda image, model_id: _run_for_ui(image, model_id, project_root),
+                          inputs=[input_image, model], outputs=results, api_name="inspect", **queue_options)
     return demo.queue(max_size=8, default_concurrency_limit=1)
 
 

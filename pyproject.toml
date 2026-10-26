@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "industrial-inspection"
-version = "0.1.0"
+version = "0.2.0"
 description = "Normal-only industrial anomaly localization and explainable quality decisions"
 requires-python = ">=3.11,<3.13"
 dependencies = ["numpy>=1.26,<3", "pillow>=10.4,<13", "opencv-python-headless>=4.10,<5", "scikit-learn>=1.5,<2", "requests>=2.32,<3"]

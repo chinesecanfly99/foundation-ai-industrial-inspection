@@ -1,0 +1,13 @@
+{
+  "version": "tile-demo-policy-v1",
+  "product_category": "tile",
+  "description": "教学示范策略：瓷砖全图为纹理表面示范关注区；区域与门槛未经工厂专家验证，未使用异常测试结果调参，不构成瓷砖出厂质量标准。",
+  "critical_roi": [0.0, 0.0, 1.0, 1.0],
+  "review_margin": 0.1,
+  "min_anomaly_area": 0.005,
+  "reject_area": 0.06,
+  "critical_overlap": 0.2,
+  "min_brightness": 15,
+  "max_brightness": 245,
+  "min_sharpness": 3.0
+}

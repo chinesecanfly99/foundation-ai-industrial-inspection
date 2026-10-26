@@ -1,0 +1,13 @@
+{
+  "version": "metal-nut-demo-policy-v1",
+  "product_category": "metal_nut",
+  "description": "教学示范策略：金属螺母图像中央矩形为示范关注区，不代表螺母真实功能部位；区域与门槛未经工厂专家验证，未使用异常测试结果调参。",
+  "critical_roi": [0.2, 0.2, 0.8, 0.8],
+  "review_margin": 0.1,
+  "min_anomaly_area": 0.005,
+  "reject_area": 0.06,
+  "critical_overlap": 0.2,
+  "min_brightness": 15,
+  "max_brightness": 245,
+  "min_sharpness": 3.0
+}

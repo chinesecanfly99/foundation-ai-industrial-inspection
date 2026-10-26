@@ -1,12 +1,14 @@
-﻿# 工业异常检测项目｜组员运行说明
+# 工业异常检测项目｜组员运行说明
 
 项目：Foundation of AI 小组作业——工业异常定位与可解释质量决策  
-交接日期：2026-10-20  
-原型版本：v0.1.0；本交接包补充组员运行说明与安装入口。
+三类扩展说明日期：2026-10-26；首轮单瓶口交接日期：2026-10-20。
+本轮本地资产：`demo-assets-v0.2.0.zip`，包含三类各两个模型与合成联调模型；远程 v0.1.0 仍只有旧瓶口/合成资产。
 
 ## 先看这几句
 
-**完整转发包：先完整解压，再安装依赖，然后启动网页，模型已在包内。GitHub 克隆：获取源码后另下模型附件。两种方式演示都不需要重新训练或下载完整数据。**
+**三类演示需要本轮更新源码与对应模型资产。** 先完整解压，再安装依赖，然后启动网页；已有资产不需要重新训练或下载完整数据。历史 v0.1.0 转发包与远程模型附件不能代替本轮三类资产。
+
+先读 [README_演示.md](README_演示.md)，了解产品、样例、模型对照与导出用途。正常使用先选产品，再选中文样例；三类为瓶口、金属螺母、瓷砖表面，合成样例默认隐藏。
 
 - Windows 路线已在原电脑验证；组员新电脑仍需按下文验收。
 - 使用 64 位 Python 3.11，默认 CPU。演示无需配置 CUDA、显卡或 Anaconda。
@@ -27,9 +29,11 @@ git clone https://github.com/chinesecanfly99/foundation-ai-industrial-inspection
 cd industrial-inspection
 ```
 
-随后在浏览器打开 **https://github.com/chinesecanfly99/foundation-ai-industrial-inspection/releases/tag/v0.1.0**，下载 `demo-assets-v0.1.0.zip`，将其中的 `models`、`.cache` 和 `samples` 解压到刚克隆的 `industrial-inspection` 根目录。确认不是多套一层同名文件夹，再按下文安装和启动。
+本轮三类修改以本机为准，不能假定远程已同步。先确认源码含 `src/industrial_inspection/catalog.py`、三类选择页面和 `README_演示.md`；如仍是旧版本，请组内提供更新源码或等待同步。另接收本地转发的 **`deliverables/demo-assets-v0.2.0.zip`**，将ZIP全部内容（包括 `models`、`.cache`、`samples`、`configs` 与资产清单）解压合并到更新后的项目根目录，不要多套一层同名文件夹，再按下文安装。
 
-不装 Git 也可在仓库页面选择 Code → Download ZIP，再另外解压模型附件。仓库下载的源码ZIP不自带模型；它与前面单独转发的完整交接包不同。
+**https://github.com/chinesecanfly99/foundation-ai-industrial-inspection/releases/tag/v0.1.0** 的 `demo-assets-v0.1.0.zip` 仍只有瓶口与合成联调，不含螺母和瓷砖；三类模型尚不能按此旧链接下载。没有新资产时，可按第七节重建。本文不表示新 Release 已发布或源码已推送。
+
+不装 Git 也可下载源码ZIP或接收本轮更新源码，再另外解压对应模型资产。普通仓库源码ZIP不自带模型；它与历史完整交接包不同。
 
 今后更新代码，在项目目录执行：
 
@@ -41,12 +45,16 @@ git pull --ff-only
 
 ## 一、收到的文件怎么用
 
-完整解压 ZIP 到自己的目录，例如 `D:\AIGroup\`。解压后应看到：
+源码与三类资产合并到自己的目录，例如 `D:\AIGroup\industrial-inspection`。实际项目结构应包含：
+
+**项目根目录**指同时包含 `pyproject.toml`、`app`、`src` 和启动脚本的文件夹。GitHub下载源码ZIP可能解压成 `foundation-ai-industrial-inspection-main`，以这个实际文件夹为准；资产解压后应直接出现 `<项目根>/models/bottle_patch`、`<项目根>/.cache/torch`、`<项目根>/samples/tile`，不能变成 `<项目根>/demo-assets-v0.2.0/models`。
 
 ```text
-README_组员运行.md
-README_组员运行.txt
-industrial-inspection/              ← 实际项目目录
+industrial-inspection/              ← 实际项目根目录，文件夹名称可不同
+    pyproject.toml
+    README_组员运行.md
+    README_组员运行.txt
+    README_演示.md
     首次安装_Windows.cmd
     setup_windows.ps1
     start_windows.cmd
@@ -54,18 +62,28 @@ industrial-inspection/              ← 实际项目目录
     src/
     configs/
     requirements/
-    models/                        ← 3个已拟合模型
+    models/                        ← 6个真实模型＋1个合成联调模型
     .cache/torch/hub/checkpoints/   ← 官方ResNet18骨干缓存
     samples/                       ← 可直接演示的图片
     docs/                          ← 执行规划、分工、报告初稿
-    results/                       ← 原电脑的实验与验收记录
-可选_Git历史/
-    industrial-inspection.bundle   ← 继续开发时恢复Git历史
+    results/                       ← 如另附则为原电脑记录，非自己电脑新测结果
 ```
+
+历史完整交接包若另带 `可选_Git历史/industrial-inspection.bundle`，只作旧快照备用，不属于本轮模型资产，也不保证包含三类更新。
 
 不要直接在微信预览或压缩软件内部双击运行。保留 `models`、`samples` 和以点开头的 `.cache` 文件夹；Mac 的 Finder 默认可能隐藏 `.cache`。
 
-本包不带原电脑的 `.venv`，安装脚本会为每台电脑新建环境。完整的292张原始工业图片也不在包里，只有重新评估或训练时才需下载。
+模型资产包不带原电脑的 `.venv` 和完整原始工业数据；每台电脑新建环境，只有重新训练或完整评估时才需下载数据。旧 `可选_Git历史` bundle 只是历史快照，不保证含本轮三类修改。
+
+### 资产完整性
+
+本轮 `demo-assets-v0.2.0.zip` 为105,178,715字节，SHA256为：
+
+```text
+faa82d2228abb7b2f2803e14ed89d5e286a13758c5886d7b81e2bcf482f07d98
+```
+
+在ZIP所在文件夹运行 `Get-FileHash -Algorithm SHA256 .\demo-assets-v0.2.0.zip` 可核对下载是否完整。解压后的 `DEMO_ASSETS_MANIFEST.json` 列出每个资产文件的长度和SHA256。原电脑已校验CRC、106个文件哈希与重复构建一致性，并在禁网隔离目录验证7个模型后端推理；这不代替你的电脑验收。
 
 ## 二、Windows 首次安装
 
@@ -122,16 +140,16 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\setup_windows.ps1
 
 ## 四、怎么完成一次演示
 
-1. 在“演示样例”选择 `MVTec bottle / good_000`，模型应为 `bottle_patch`。
-2. 点击“开始检测”，等待热图和质量建议。第一次载入 CNN 可能比后续慢。
-3. 换 `broken_large_000` 再检测，对比异常位置、分数与面积。
-4. 展开“逐条规则与完整记录”，查看采用了哪条规则。
-5. 点击“下载 JSON 报告”或“下载 CSV 摘要”，检查下载内容是否对应刚才的图片。
-6. 可上传自己的 PNG/JPEG；模型目前只对相近拍摄条件的瓶类图片有研究依据。
+1. 在“产品类别”选择瓶口，再选正常样例，默认主模型为 `bottle_patch`。
+2. 点击“开始检测”，等待热图和建议。首次载入主模型可能较慢。
+3. 换破损样例再次检测，对比位置、分数与面积；也展示实际漏检/困难案例。
+4. 切换金属螺母和瓷砖，分别展示正常及缺陷图，确认模型分别为 `metal_nut_patch`、`tile_patch`。
+5. 同一图片可切换该类像素基线对照；比较各自分数与各自阈值，不能只比较分数大小。
+6. 展开逐条规则，下载 JSON/CSV，并核对产品、模型、图片标识对应当前输入。
 
-合成样例会自动选 `synthetic_pixel`，仅用于联调。固定真实样例中，正常图应显示“通过”，大破损图应显示“拒收建议”；这只是演示检查，不是对任意图片的保证。
+CSV 当前一次一图一行，适合 Excel 对比；JSON 含详细事实、规则轨迹和版本/校验信息。两者不含热图图片，热图用组件下载入口保存。完整批量测试表由 `evaluate` 生成。更完整讲解见 [README_演示.md](README_演示.md)。
 
-演示前先用包内样例确认流程，再尝试其他图片。检测分数不是概率；质量规则仍是教学策略。
+合成样例默认隐藏，开启高级选项后使用 `synthetic_pixel`，仅联调。系统不自动命名缺陷，菜单名称来自数据集标签。输入质量不合格可显示“无法判定”。不保证任意正常图通过或缺陷图拒收，分数不是概率，质量规则未经业务验证。上传自有图片应选择对应类别与相近拍摄条件。
 
 ## 五、常见问题
 
@@ -142,7 +160,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\setup_windows.ps1
 | 下载依赖超时、连接失败 | 保留报错，检查网络后重试安装；不要随意混换 torch/torchvision 版本 |
 | 页面打不开 | 等启动完成，确认窗口未关闭，并使用启动日志中的端口；本项目不需要登录外部服务 |
 | 7860已被占用 | 如果自己的项目已在运行，直接用它；否则按下方命令换7861，不结束无关进程 |
-| 找不到模型或想下载骨干权重 | 确认完整解压，并保留 `models` 和 `.cache/torch/hub/checkpoints/resnet18-f37072fd.pth`；不要仅转发源码文件夹 |
+| 找不到模型或想下载骨干权重 | 确认完整解压，并保留 `models` 和 `.cache/torch/hub/checkpoints/resnet18-f37072fd.pth`；不要仅转发源码文件夹。若设置过 `TORCH_HOME`，将它指向本项目 `.cache/torch`，或取消该变量后重新启动 |
 | 提示缺包，但明明装过 | 使用项目 `.venv` 的解释器或启动脚本；不要混用系统 Python、其他项目环境 |
 | DLL载入失败或WinError126 | 保存完整错误交给环境负责人。若报错确认缺少微软VC++运行库，再按 [微软官方文档](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170) 安装匹配的x64运行库 |
 | 黑图显示“无法判定” | 属于输入质量门控的预期行为；换清晰、曝光正常的图片 |
@@ -187,23 +205,34 @@ bash start_macos.command
 | 报告初稿 | `docs/report_draft.md` |
 | 数据、检测、规则和评估 | `src/industrial_inspection/` |
 | 界面 | `app/app.py` |
-| 规则参数 | `configs/quality_rules.json` |
+| 规则参数 | `configs/quality_rules*.json`，按模型来源自动匹配类别 |
+| 三类扩展规划 | `docs/10_三类扩展执行规划.md` |
+| 演示操作与报告说明 | `README_演示.md` |
 
-查看真实测试结果用 `results/bottle_pixel/` 与 `results/bottle_patch/`。这些是原电脑历史结果，不是当前组员电脑新测出的成绩。安装脚本会生成本机环境记录和合成联调数据；正式复验请使用新的输出目录，保留原始ZIP。
+三类当前结果以 `results/three_products/summary.json` 与各类评估目录为准。`results/bottle_pixel/` 和 `results/bottle_patch/` 是2026-10-20首轮历史；原电脑记录不是当前组员电脑新测成绩。安装脚本会生成本机环境记录和合成联调数据；复验用新输出目录，保留正式资产原件。
 
-只有需要重跑完整83张测试时，才在项目目录下载数据并建立清单：
+需要重新训练或完整测试时，从项目根目录激活环境，并分别下载三个类别。下例会更新指定清单和模型；请先保留正式版本：
 
 ```powershell
-.\.venv\Scripts\python.exe scripts/download_bottle.py
-.\.venv\Scripts\python.exe -m industrial_inspection prepare --data-root data/raw/mvtec_ad --category bottle --output data/manifests/bottle.csv
-.\.venv\Scripts\python.exe -m industrial_inspection evaluate --manifest data/manifests/bottle.csv --model-dir models/bottle_patch --output results/my_run/bottle_patch
+.\.venv\Scripts\Activate.ps1
+python scripts/download_bottle.py
+python scripts/download_mvtec.py --category metal_nut
+python scripts/download_mvtec.py --category tile
+foreach ($product in @("bottle", "metal_nut", "tile")) {
+    python -m industrial_inspection prepare --data-root data/raw/mvtec_ad --category $product --output "data/manifests/$product.csv"
+    python -m industrial_inspection train --manifest "data/manifests/$product.csv" --method pixel --model-dir "models/${product}_pixel"
+    python -m industrial_inspection train --manifest "data/manifests/$product.csv" --method patch --model-dir "models/${product}_patch"
+    python -m industrial_inspection evaluate --manifest "data/manifests/$product.csv" --model-dir "models/${product}_pixel" --output "results/my_run/${product}_pixel"
+    python -m industrial_inspection evaluate --manifest "data/manifests/$product.csv" --model-dir "models/${product}_patch" --output "results/my_run/${product}_patch"
+}
+python scripts/prepare_samples.py --categories bottle metal_nut tile --per-type 5
 ```
 
-下载约157 MB，只获取 MVTec AD bottle。数据来自公开镜像，已记录原始发布方、版本和镜像哈希；原数据采用 [CC BY-NC-SA 4.0](https://www.mvtec.com/research-teaching/datasets/mvtec-ad)，用于非商业课程研究。模型阈值不应根据独立测试结果反复调整。
+三个类别分别获取，下载大小以脚本记录为准。数据来自固定 revision 公开镜像，图像/掩码核对镜像LFS哈希和大小，不等于原发布者完整归档校验。原数据采用 [CC BY-NC-SA 4.0](https://www.mvtec.com/research-teaching/datasets/mvtec-ad)，用于非商业课程研究。每类仅使用正常图拟合/校准，不依据独立异常测试结果调整阈值或规则。
 
 ## 八、可选：恢复 Git 历史后继续开发
 
-**通过 GitHub 克隆的同学可跳过本节，克隆目录已经有Git历史。** 本节仅供使用完整转发包但暂时无法连接GitHub的同学：包中源码目录没有 `.git`，离线历史另放在 `可选_Git历史/industrial-inspection.bundle`。
+**通过 GitHub 克隆的同学可跳过本节，克隆目录已经有Git历史。** 本节仅适用于另收到历史完整交接包及 `可选_Git历史/industrial-inspection.bundle` 的同学；本轮模型资产包不含Git历史。历史bundle不保证有三类更新，不能用它替代本轮源码。
 
 已安装 Git 的同学，在演示项目 `industrial-inspection` 文件夹打开 PowerShell，恢复到旁边的新目录：
 
@@ -224,8 +253,9 @@ Copy-Item -LiteralPath .\.cache -Destination ..\industrial-inspection-git -Recur
 
 - [ ] 包已完整解压，模型和 `.cache` 存在。
 - [ ] 运行的是本机创建的Python3.11环境。
-- [ ] 网页可打开，正常和大破损样例能生成热图。
+- [ ] 网页可打开，瓶口、螺母、瓷砖的正常与缺陷样例均能生成热图。
+- [ ] 产品切换后模型/样例匹配该类，旧输入与报告不残留；合成样例默认隐藏。
 - [ ] 规则记录可展开，JSON/CSV能下载且对应当前图片。
 - [ ] 记录自己的系统、芯片/Python版本、运行是否成功；失败时保留完整报错。
 
-本包已在原电脑完成33项自动测试与9项浏览器功能检查；这不替代每台组员电脑的上述验收。当前仍为课程项目初稿，独立业务标注、扰动/消融、新电脑与Mac验证、最终报告和PPT仍待小组继续完成。
+本轮本机93项自动测试通过（0失败/错误/跳过，25.244秒），证据为 `results/three_products/tests.xml`。本机真实浏览器17项功能检查通过（`results/three_products/ui/ui_smoke.json`），覆盖三类正常/缺陷、主模型与基线、热图和下载、切换及错误恢复、合成联调和390px窄屏。详情见 `docs/STATUS.md`；首轮2026-10-20的33项测试、9项浏览器检查仅代表旧版，不替代各电脑验收。独立业务标注、扰动/消融、新电脑/Mac验证、最终报告和PPT仍待继续完成。
