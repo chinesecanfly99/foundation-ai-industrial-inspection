@@ -9,7 +9,7 @@
 
 代码更新后，先停止当前服务，再用同一配置重新启动。页面先选**瓶口、金属螺母、瓷砖表面**，再选中文样例；默认使用该类特征记忆主模型，也可切换像素基线对照。合成垫圈默认隐藏，只用于高级联调。完整步骤、样例含义和 CSV/JSON 用途见 [README_演示.md](README_演示.md)。
 
-每类需要自己的模型与阈值，本轮共6个真实模型和1个合成模型。本机文件与三类资产通过 `deliverables/demo-assets-v0.2.0.zip` 交接；GitHub v0.1.0 旧附件不含螺母、瓷砖，也不能由本机更新推断远程已同步。不要只复制源码后假定模型都在。
+每类需要自己的模型与阈值，本轮共6个真实模型和1个合成模型。三类源码已同步GitHub，配套资产从 [v0.2.0 Release](https://github.com/chinesecanfly99/foundation-ai-industrial-inspection/releases/tag/v0.2.0) 下载；原电脑也保留 `deliverables/demo-assets-v0.2.0.zip`。将ZIP全部内容解压合并到项目根目录。v0.1.0旧附件不含螺母、瓷砖，普通Git源码也不自带模型。
 
 另一个运行配置 **Env Check** 会检查当前环境，不会启动网页服务。
 

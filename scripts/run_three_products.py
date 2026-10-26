@@ -3,12 +3,11 @@ from __future__ import annotations
 
 import argparse
 import csv
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 import hashlib
 import json
 from pathlib import Path
 import sys
-from zoneinfo import ZoneInfo
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
@@ -82,7 +81,7 @@ def write_summary(root: Path, output: Path) -> dict:
     complete = len(rows) == len(REAL_PRODUCTS) * 2 and len(datasets) == len(REAL_PRODUCTS)
     macro_counts = {method: sum(item["method"] == method for item in rows) for method in ("pixel", "patch")}
     summary = {
-        "created_at": datetime.now(ZoneInfo("Asia/Shanghai")).isoformat(),
+        "created_at": datetime.now(timezone(timedelta(hours=8))).isoformat(),
         "complete": complete, "datasets": datasets, "models": rows, "stale_records": stale_records,
         "completed_model_count": len(rows), "macro_category_count": macro_counts,
         "total_real_images": sum(item["images"] for item in datasets),

@@ -24,7 +24,8 @@
 | 三类模型和完整评估 | 六模型全部完成315张独立test各自协议评估，`results/three_products/summary.json` 为complete=true、6个有效模型、stale_records为空；每图分别由该类两模型评估，不把630次预测当630个不同样本 |
 | 新三类浏览器功能验收 | `results/three_products/ui/ui_smoke.json`：passed=true，17项功能检查，2026-10-26 17:04:53 UTC+8完成；12次单图记录，三类主模型正常/缺陷及各类像素基线、JSON/CSV一致、快速切换、空/小/黑图、高级合成与390px窄屏通过 |
 | 三类演示文档 | `README_演示.md`；说明产品、样例、模型对照、单图CSV与详细JSON、失败案例 |
-| 交接资产 | 本地 `deliverables/demo-assets-v0.2.0.zip`：105,178,715字节，CRC、106文件SHA256、重复构建一致性通过；来源记录为 `results/three_products/package_verification.json`。远程发布仍待确认，v0.1.0仅旧瓶口/合成 |
+| 交接资产 | 本地 `deliverables/demo-assets-v0.2.0.zip`：105,178,715字节，CRC、106文件SHA256、重复构建一致性通过；来源记录为 `results/three_products/package_verification.json`。[v0.2.0 Release](https://github.com/chinesecanfly99/foundation-ai-industrial-inspection/releases/tag/v0.2.0) 已公开发布，远程附件大小及SHA256与本机一致；v0.1.0为旧瓶口/合成 |
+| GitHub源码同步 | 三类功能已推送main，发布提交为 [45cd4c7](https://github.com/chinesecanfly99/foundation-ai-industrial-inspection/commit/45cd4c79f180d413b8741648df3fa9fb62f96d94)；后续说明修订见main。远程CI结果单独查看 [Actions](https://github.com/chinesecanfly99/foundation-ai-industrial-inspection/actions)，不由本机测试通过推断 |
 | 隔离离线后端复演 | 复制源码至新目录、无raw数据，禁用网络并禁止读取原项目资产；7模型全部单图推理通过，0网络尝试，模型/策略对应正确。该项不等于新电脑或整页断网验收 |
 
 资产ZIP SHA256：`faa82d2228abb7b2f2803e14ed89d5e286a13758c5886d7b81e2bcf482f07d98`。

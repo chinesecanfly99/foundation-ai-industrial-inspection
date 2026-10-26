@@ -3,7 +3,7 @@
 **Industrial Anomaly Localization and Explainable Quality Decision Support**
 
 课程：Foundation of AI / CDS521（正式课程名、组号、成员与格式待核对）  
-文档状态：2026-10-26三类扩展初稿。六模型已对三类315张独立测试图完成评估，数据与结果核对自 `results/three_products/summary.json`（complete=true、6有效模型）；本轮93项自动测试、17项浏览器功能检查与资产隔离后端禁网推理已通过；远程发布状态以STATUS最终证据为准。2026-10-20单瓶口首轮数据与83图成绩保留为历史。规则业务有效性、扰动/消融、新电脑和最终课程提交尚未完成。
+文档状态：2026-10-26三类扩展初稿。六模型已对三类315张独立测试图完成评估，数据与结果核对自 `results/three_products/summary.json`（complete=true、6有效模型）；本轮93项自动测试、17项浏览器功能检查与资产隔离后端禁网推理已通过；源码已推送GitHub，配套 [v0.2.0资产](https://github.com/chinesecanfly99/foundation-ai-industrial-inspection/releases/tag/v0.2.0) 已发布，远程大小和SHA256与本机一致；远程CI另行查看，不等同本机测试。2026-10-20单瓶口首轮数据与83图成绩保留为历史。规则业务有效性、扰动/消融、新电脑和最终课程提交尚未完成。
 
 ## 摘要
 

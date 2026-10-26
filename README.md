@@ -11,9 +11,9 @@ git clone https://github.com/chinesecanfly99/foundation-ai-industrial-inspection
 cd industrial-inspection
 ```
 
-**本轮三类扩展以本机文件为准，不表示 GitHub 已同步。** 所获取源码应包含 `catalog.py`、三类选择页面与 `README_演示.md`。本轮本地转发资产为 `deliverables/demo-assets-v0.2.0.zip`；将ZIP全部内容（包括 `models`、`.cache`、`samples`、`configs` 与资产清单）解压合并到对应更新版本的项目根目录，再双击 `首次安装_Windows.cmd`，安装结束后双击 `start_windows.cmd`。资产包不包含环境与完整原始数据。
+**三类扩展源码已同步到公开仓库，配套 [v0.2.0 Release](https://github.com/chinesecanfly99/foundation-ai-industrial-inspection/releases/tag/v0.2.0) 已发布。** 克隆或更新源码后，下载 [demo-assets-v0.2.0.zip](https://github.com/chinesecanfly99/foundation-ai-industrial-inspection/releases/download/v0.2.0/demo-assets-v0.2.0.zip)；将ZIP全部内容（包括 `models`、`.cache`、`samples`、`configs` 与资产清单）解压合并到项目根目录，再双击 `首次安装_Windows.cmd`，安装结束后双击 `start_windows.cmd`。资产包不包含环境与完整原始数据；原电脑也保留 `deliverables/demo-assets-v0.2.0.zip`。
 
-[v0.1.0 下载页](https://github.com/chinesecanfly99/foundation-ai-industrial-inspection/releases/tag/v0.1.0) 的 `demo-assets-v0.1.0.zip` **仍只有瓶口与合成联调资产，不能完成三类演示**。尚未获得新资产包时，可按下文下载数据并重建模型；不要假定三类模型已发布为远程 Release。
+[v0.1.0 历史版本](https://github.com/chinesecanfly99/foundation-ai-industrial-inspection/releases/tag/v0.1.0) 的旧附件只有瓶口与合成联调资产，不能完成三类演示；本轮请使用v0.2.0。也可按下文下载数据并重建模型。
 
 本轮资产包已完成CRC及106个文件的SHA256校验，重复构建一致；在复制源码、无原始数据且禁止网络的隔离目录中，7个模型均完成后端单图推理。记录见 `results/three_products/package_verification.json`。这不等于第二台电脑或整个网页断网验收。
 

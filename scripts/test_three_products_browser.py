@@ -3,13 +3,12 @@ from __future__ import annotations
 
 import argparse
 import csv
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 import json
 import math
 from pathlib import Path
 import re
 import traceback
-from zoneinfo import ZoneInfo
 
 from PIL import Image
 from playwright.sync_api import expect, sync_playwright
@@ -66,7 +65,7 @@ def main() -> int:
     root = args.root.resolve()
     output = args.output.resolve() if args.output else root / "results/three_products/ui"
     output.mkdir(parents=True, exist_ok=True)
-    evidence = {"started_at": datetime.now(ZoneInfo("Asia/Shanghai")).isoformat(), "url": args.base_url,
+    evidence = {"started_at": datetime.now(timezone(timedelta(hours=8))).isoformat(), "url": args.base_url,
                 "passed": False, "checks": [], "cases": {}, "page_errors": [], "http_errors": [],
                 "request_failures": [], "console_errors": [], "scope": "Functional browser acceptance; detector performance is evaluated separately on all held-out images."}
     browser, page, playwright = None, None, None
@@ -223,7 +222,7 @@ def main() -> int:
             browser.close()
         if playwright is not None:
             playwright.stop()
-        evidence["finished_at"] = datetime.now(ZoneInfo("Asia/Shanghai")).isoformat()
+        evidence["finished_at"] = datetime.now(timezone(timedelta(hours=8))).isoformat()
         (output / "ui_smoke.json").write_text(json.dumps(evidence, ensure_ascii=False, indent=2), encoding="utf-8")
     print(json.dumps({"passed": evidence["passed"], "checks": len(evidence["checks"]), "error": evidence.get("error")}, ensure_ascii=False))
     return 0 if evidence["passed"] else 1

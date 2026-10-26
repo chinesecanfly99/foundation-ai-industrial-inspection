@@ -2,7 +2,7 @@
 
 项目：Foundation of AI 小组作业——工业异常定位与可解释质量决策  
 三类扩展说明日期：2026-10-26；首轮单瓶口交接日期：2026-10-20。
-本轮本地资产：`demo-assets-v0.2.0.zip`，包含三类各两个模型与合成联调模型；远程 v0.1.0 仍只有旧瓶口/合成资产。
+当前版本：[v0.2.0](https://github.com/chinesecanfly99/foundation-ai-industrial-inspection/releases/tag/v0.2.0)，源码已同步，模型资产可直接下载；包含三类各两个模型与合成联调模型。v0.1.0为历史瓶口版本。
 
 ## 先看这几句
 
@@ -29,9 +29,9 @@ git clone https://github.com/chinesecanfly99/foundation-ai-industrial-inspection
 cd industrial-inspection
 ```
 
-本轮三类修改以本机为准，不能假定远程已同步。先确认源码含 `src/industrial_inspection/catalog.py`、三类选择页面和 `README_演示.md`；如仍是旧版本，请组内提供更新源码或等待同步。另接收本地转发的 **`deliverables/demo-assets-v0.2.0.zip`**，将ZIP全部内容（包括 `models`、`.cache`、`samples`、`configs` 与资产清单）解压合并到更新后的项目根目录，不要多套一层同名文件夹，再按下文安装。
+本轮三类源码已同步到仓库，含 `src/industrial_inspection/catalog.py`、三类选择页面和 `README_演示.md`。从 [v0.2.0 Release](https://github.com/chinesecanfly99/foundation-ai-industrial-inspection/releases/tag/v0.2.0) 下载 [demo-assets-v0.2.0.zip](https://github.com/chinesecanfly99/foundation-ai-industrial-inspection/releases/download/v0.2.0/demo-assets-v0.2.0.zip)（也可接收同名本地转发包），将ZIP全部内容（包括 `models`、`.cache`、`samples`、`configs` 与资产清单）解压合并到项目根目录，不要多套一层同名文件夹，再按下文安装。
 
-**https://github.com/chinesecanfly99/foundation-ai-industrial-inspection/releases/tag/v0.1.0** 的 `demo-assets-v0.1.0.zip` 仍只有瓶口与合成联调，不含螺母和瓷砖；三类模型尚不能按此旧链接下载。没有新资产时，可按第七节重建。本文不表示新 Release 已发布或源码已推送。
+[v0.1.0历史版本](https://github.com/chinesecanfly99/foundation-ai-industrial-inspection/releases/tag/v0.1.0) 的旧附件只有瓶口与合成联调，不含螺母和瓷砖；本轮请使用v0.2.0。需要自行重建时按第七节执行。
 
 不装 Git 也可下载源码ZIP或接收本轮更新源码，再另外解压对应模型资产。普通仓库源码ZIP不自带模型；它与历史完整交接包不同。
 
