@@ -13,6 +13,16 @@ import uuid
 from pathlib import Path
 from typing import Any
 
+ROOT = Path(__file__).resolve().parents[1]
+os.environ["TORCH_HOME"] = str(ROOT / ".cache" / "torch")
+os.environ["GRADIO_TEMP_DIR"] = str(ROOT / ".cache" / "gradio")
+_scratch = ROOT / ".cache" / "upload_tmp"
+_scratch.mkdir(parents=True, exist_ok=True)
+for _name in ("TMP", "TEMP", "TMPDIR"):
+    os.environ[_name] = str(_scratch)
+import tempfile
+tempfile.tempdir = str(_scratch)
+
 # Keep local presentation independent of online analytics and downloaded fonts.
 os.environ.setdefault("GRADIO_ANALYTICS_ENABLED", "False")
 
@@ -25,6 +35,14 @@ if str(ROOT / "src") not in sys.path:
 
 from industrial_inspection.catalog import PRODUCTS, REAL_PRODUCTS, policy_path_for_product, product_id_from_card
 from app.upload_cache import install_windows_upload_cache_fix
+from app.localization import locale, localize_report, localized_products, locale_startup_js
+from app.workflow_ui import build_workflow_tabs
+from industrial_inspection.workflow import InspectionStore
+
+LANGUAGE = 'zh'
+PRODUCTS = localized_products(LANGUAGE)
+TEXT = locale(LANGUAGE)["ui"]
+
 
 MAX_PIXELS = 16_000_000
 MAX_DIMENSION = 6000
@@ -170,6 +188,7 @@ def _policy_info(product_id: str, project_root: Path) -> str:
     try:
         policy = json.loads(policy_path_for_product(project_root, product_id).read_text(encoding="utf-8"))
         description = str(policy.get("description", "课程演示规则"))
+        description = locale(LANGUAGE)["policies"].get(product_id, description)
     except (OSError, ValueError):
         description = "尚未找到对应规则，请先完成该类别的准备。"
     return f"**当前规则：{PRODUCTS[product_id]['label']}。** {description}  \n黄色框表示本类别配置的关键区域；阈值与区域尚需业务人员独立验证。"
@@ -282,7 +301,9 @@ def inspect_for_ui(image: Image.Image | None, model_id: str | None, project_root
             model_dir,
             policy_path_for_product(project_root, product_id),
         )
-        safe_report = _safe_json(report)
+        safe_report = localize_report(_safe_json(report), LANGUAGE)
+        safe_report = InspectionStore(project_root).save(safe_report, image, overlay, source="single",
+            filename=image.info.get("inspection_filename", "uploaded_image.png"))
         export_dir = project_root / "results" / "ui_exports" / uuid.uuid4().hex
         export_dir.mkdir(parents=True, exist_ok=False)
         json_path = export_dir / "inspection_report.json"
@@ -340,6 +361,8 @@ def _run_selected_for_ui(image: Image.Image | None, model_id: str | None,
             actual.thumbnail((1024, 1024))
             if actual.size != expected.size or actual.tobytes() != expected.tobytes():
                 raise gr.Error("图片与所选样例仍未同步，请等待加载完成后重新检测。")
+        if isinstance(image, Image.Image):
+            image.info["inspection_filename"] = f"{chosen_sample}.png" if chosen_sample else "uploaded_image.png"
         return _run_for_ui(image, model_id, project_root)
     except gr.Error as exc:
         message = str(exc.message)
@@ -358,7 +381,12 @@ def create_app(project_root: Path | None = None) -> gr.Blocks:
     initial_image = _load_picture(_sample_paths(project_root, product_id).get(initial_sample))
     # System fonts keep startup usable offline.
     theme = gr.themes.Default(primary_hue="teal", secondary_hue="blue", neutral_hue="slate", font=["Arial", "Microsoft YaHei", "sans-serif"], font_mono=["Consolas", "Courier New", "monospace"])
-    with gr.Blocks(title="工业异常定位 · 质量决策", theme=theme, css=CSS, analytics_enabled=False, delete_cache=(3600, 86400)) as demo:
+    with gr.Blocks(title="工业异常定位 · 质量决策", theme=theme, css=CSS, js=locale_startup_js(LANGUAGE), analytics_enabled=False, delete_cache=(3600, 86400)) as demo:
+        language_toggle = gr.Button(TEXT["switch"], elem_id="language-toggle", size="sm")
+        language_toggle.click(fn=None, js="() => { window.location.assign('/en/'); return []; }", queue=False, api_name=False)
+        gr.Markdown(TEXT["switch_note"], elem_id="language-note")
+        if (project_root / "EN_LOCAL_ONLY.txt").exists():
+            gr.Markdown('此处为独立的本地项目副本，记录与原项目分开保存。')
         gr.HTML(
             '<div class="project-hero"><div class="project-eyebrow">FOUNDATION OF AI · GROUP PROJECT</div>'
             '<h1>工业异常定位与可解释质量决策</h1>'
@@ -368,35 +396,38 @@ def create_app(project_root: Path | None = None) -> gr.Blocks:
             '<div class="project-note">课程原型 · 每类产品使用各自模型和规则。'
             '异常分数不是概率，热图显示视觉差异；检测结果不推断缺陷的物理原因。真实性能以独立测试集评估为准。</div>'
         )
-        with gr.Row(equal_height=False):
-            with gr.Column(scale=5, min_width=320):
-                gr.Markdown("### 1 · 选择产品、图片与模型")
-                product = gr.Dropdown(label="产品类别", choices=[(PRODUCTS[name]["label"], name) for name in REAL_PRODUCTS], value=product_id, elem_id="product-choice", interactive=True)
-                product_info = gr.Markdown(_product_info(product_id, project_root), elem_id="product-description")
-                input_image = gr.Image(value=initial_image, label="待检图片", type="pil", sources=["upload"], height=350, format="png", elem_id="inspection-input", placeholder="上传对应产品图片，或在下方选择演示样例")
-                sample = gr.Dropdown(label="演示样例", choices=initial_choices, value=initial_sample, info="按数据集类别显示中文名称；编号不同代表不同图片。上传自定义图片后会清除样例选择。", elem_id="sample-choice", interactive=True)
+        with gr.Tabs(elem_id="inspection-tabs"):
+            with gr.Tab(TEXT["single"], elem_id="single-tab"):
+                with gr.Row(equal_height=False):
+                    with gr.Column(scale=5, min_width=320):
+                        gr.Markdown("### 1 · 选择产品、图片与模型")
+                        product = gr.Dropdown(label="产品类别", choices=[(PRODUCTS[name]["label"], name) for name in REAL_PRODUCTS], value=product_id, elem_id="product-choice", interactive=True)
+                        product_info = gr.Markdown(_product_info(product_id, project_root), elem_id="product-description")
+                        input_image = gr.Image(value=initial_image, label="待检图片", type="pil", sources=["upload"], height=350, format="png", elem_id="inspection-input", placeholder="上传对应产品图片，或在下方选择演示样例")
+                        sample = gr.Dropdown(label="演示样例", choices=initial_choices, value=initial_sample, info="按数据集类别显示中文名称；编号不同代表不同图片。上传自定义图片后会清除样例选择。", elem_id="sample-choice", interactive=True)
+                        with gr.Row():
+                            model = gr.Dropdown(label="检测模型", choices=_model_choices(cards, product_id), value=selected, scale=4, elem_id="model-choice", interactive=True)
+                            refresh = gr.Button("刷新模型与样例", scale=1, min_width=110, elem_id="refresh-models")
+                        model_info = gr.Markdown(_model_info(selected, project_root), elem_id="model-description")
+                        with gr.Accordion("高级 · 开发流程检查", open=False):
+                            show_synthetic = gr.Checkbox(label="显示合成垫圈流程测试", value=False, info="开启后在产品列表中增加合成联调。它不属于三类真实工业数据。", elem_id="show-synthetic")
+                        detect = gr.Button("开始检测", variant="primary", size="lg", elem_id="inspect-button")
+                    with gr.Column(scale=6, min_width=320):
+                        gr.Markdown("### 2 · 查看异常与决策")
+                        output_image = gr.Image(label="异常热图叠加 · 颜色越暖，异常响应越高", type="pil", interactive=False, height=350, format="png", elem_id="inspection-overlay")
+                        decision = gr.HTML('<div class="decision-card"><h2>等待检测</h2><p>选择一张图片，点击“开始检测”。</p></div>', elem_id="quality-decision")
+                        metrics = gr.HTML("", elem_id="inspection-metrics")
+                        reasons = gr.HTML("", elem_id="inspection-reasons")
+                with gr.Accordion("3 · 查看逐条规则与完整记录", open=False):
+                    policy_info = gr.Markdown(_policy_info(product_id, project_root), elem_id="policy-description")
+                    trace = gr.Dataframe(headers=["规则", "触发 / 检查结果", "说明"], datatype=["str", "str", "str"], type="array", interactive=False, wrap=True, label="规则检查记录", elem_id="rule-trace")
+                    full_report = gr.JSON(label="本次检测报告", elem_id="inspection-json")
                 with gr.Row():
-                    model = gr.Dropdown(label="检测模型", choices=_model_choices(cards, product_id), value=selected, scale=4, elem_id="model-choice", interactive=True)
-                    refresh = gr.Button("刷新模型与样例", scale=1, min_width=110, elem_id="refresh-models")
-                model_info = gr.Markdown(_model_info(selected, project_root), elem_id="model-description")
-                with gr.Accordion("高级 · 开发流程检查", open=False):
-                    show_synthetic = gr.Checkbox(label="显示合成垫圈流程测试", value=False, info="开启后在产品列表中增加合成联调。它不属于三类真实工业数据。", elem_id="show-synthetic")
-                detect = gr.Button("开始检测", variant="primary", size="lg", elem_id="inspect-button")
-            with gr.Column(scale=6, min_width=320):
-                gr.Markdown("### 2 · 查看异常与决策")
-                output_image = gr.Image(label="异常热图叠加 · 颜色越暖，异常响应越高", type="pil", interactive=False, height=350, format="png", elem_id="inspection-overlay")
-                decision = gr.HTML('<div class="decision-card"><h2>等待检测</h2><p>选择一张图片，点击“开始检测”。</p></div>', elem_id="quality-decision")
-                metrics = gr.HTML("", elem_id="inspection-metrics")
-                reasons = gr.HTML("", elem_id="inspection-reasons")
-        with gr.Accordion("3 · 查看逐条规则与完整记录", open=False):
-            policy_info = gr.Markdown(_policy_info(product_id, project_root), elem_id="policy-description")
-            trace = gr.Dataframe(headers=["规则", "触发 / 检查结果", "说明"], datatype=["str", "str", "str"], type="array", interactive=False, wrap=True, label="规则检查记录", elem_id="rule-trace")
-            full_report = gr.JSON(label="本次检测报告", elem_id="inspection-json")
-        with gr.Row():
-            json_download = gr.DownloadButton("下载 JSON 报告", interactive=False, elem_id="download-json")
-            csv_download = gr.DownloadButton("下载 CSV 摘要", interactive=False, elem_id="download-csv")
-        gr.Markdown("**报告用途：** CSV 是当前这一张图片的一行摘要，便于用 Excel 汇总实验；JSON 保存完整指标、产品和模型信息及逐条规则，便于复核。热图可在图片区域单独下载。")
-        gr.Markdown("**演示方法：** 每类先看正常样例，再看各类异常，比较热图与规则；可切换主模型和像素基线对比。低质量图片应进入复核或无法判定。切换产品、图片或模型后需重新检测。")
+                    json_download = gr.DownloadButton("下载 JSON 报告", interactive=False, elem_id="download-json")
+                    csv_download = gr.DownloadButton("下载 CSV 摘要", interactive=False, elem_id="download-csv")
+                gr.Markdown("**报告用途：** CSV 是当前这一张图片的一行摘要，便于用 Excel 汇总实验；JSON 保存完整指标、产品和模型信息及逐条规则，便于复核。热图可在图片区域单独下载。")
+                gr.Markdown("**演示方法：** 每类先看正常样例，再看各类异常，比较热图与规则；可切换主模型和像素基线对比。低质量图片应进入复核或无法判定。切换产品、图片或模型后需重新检测。")
+            build_workflow_tabs(project_root, LANGUAGE)
 
         results = [output_image, decision, metrics, reasons, trace, full_report, json_download, csv_download]
         controls = [input_image, product, sample, model, refresh, show_synthetic, detect]
@@ -493,7 +524,9 @@ def main() -> None:
         if host not in exclusions:
             exclusions.append(host)
     os.environ["NO_PROXY"] = os.environ["no_proxy"] = ",".join(exclusions)
-    create_app().launch(server_name=args.host, server_port=args.port, share=False, inbrowser=False, show_error=False, show_api=False, max_file_size="20mb", enable_monitoring=False, ssr_mode=False)
+    from app.alt_ui import create_app as create_alternate_app
+    from app.server import launch
+    launch(create_app(), create_alternate_app(), default_language=LANGUAGE, host=args.host, port=args.port)
 
 
 if __name__ == "__main__":

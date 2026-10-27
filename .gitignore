@@ -19,3 +19,10 @@ deliverables/
 results/ui_server_stdout.log
 results/ui_server_stderr.log
 results/ui_failure*
+
+# Private local inspections and human review events
+results/workflow/
+
+results/workflow_tests.xml
+
+results/workflow_verification/

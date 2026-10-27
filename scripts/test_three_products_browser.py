@@ -11,7 +11,7 @@ import re
 import traceback
 
 from PIL import Image
-from playwright.sync_api import expect, sync_playwright
+from playwright.sync_api import expect, sync_playwright, TimeoutError as BrowserTimeout
 from industrial_inspection.catalog import PRODUCTS, REAL_PRODUCTS
 from test_ui_browser import inspect_case
 
@@ -82,7 +82,12 @@ def main() -> int:
         page.on("console", lambda msg: evidence["console_errors"].append(msg.text) if msg.type == "error" else None)
         page.on("response", lambda response: evidence["http_errors"].append({"status": response.status, "url": response.url}) if response.status >= 400 else None)
         page.on("requestfailed", lambda request: evidence["request_failures"].append({"url": request.url, "failure": request.failure}))
-        page.goto(args.base_url, wait_until="networkidle")
+        page.goto(args.base_url, wait_until="domcontentloaded")
+        try:
+            page.wait_for_load_state("networkidle", timeout=3000)
+        except BrowserTimeout:
+            # Workflow State intentionally maintains a long-poll heartbeat.
+            page.locator("#inspect-button").wait_for(state="visible")
         page.screenshot(path=str(output / "initial.png"), full_page=True)
         (output / "dom_recon.json").write_text(json.dumps({"buttons": page.get_by_role("button").all_text_contents(),
             "inputs": page.locator("input").evaluate_all("els => els.map(el => ({type:el.type,value:el.value}))")}, ensure_ascii=False, indent=2), encoding="utf-8")

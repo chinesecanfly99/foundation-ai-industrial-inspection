@@ -1,3 +1,6 @@
+
+新版流程与 PPT 演示见 [README_WORKFLOW.md](README_WORKFLOW.md)；验收记录见 [WORKFLOW_VERIFICATION.md](WORKFLOW_VERIFICATION.md)。
+
 # 三类工业异常检测｜演示操作
 
 本项目用正常样本建立视觉参考，寻找新图中偏离正常外观的位置，再用教学规则给出处置建议。真实类别为**瓶口、金属螺母、瓷砖表面**。
