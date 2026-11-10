@@ -22,11 +22,11 @@ def _load_model(path: str, modified: int):
 def inspect_image(image: Image.Image | np.ndarray, model_dir: Path, config_path: Path | None = None) -> tuple[Image.Image, dict]:
     start = time.perf_counter()
     if image is None:
-        raise ValueError("请先上传图片")
+        raise ValueError("Upload an image first.")
     if not isinstance(image, Image.Image):
         image = Image.fromarray(np.asarray(image, dtype=np.uint8))
     if min(image.size) < 32 or image.width * image.height > 20_000_000:
-        raise ValueError("图片至少32×32像素且不超过2000万像素")
+        raise ValueError("Images must be at least 32 x 32 pixels and contain no more than 20 million pixels.")
     image = ImageOps.exif_transpose(image).convert("RGB")
     # Limit working resolution, preserve aspect ratio; model has its own resize.
     image.thumbnail((1024, 1024))
@@ -38,7 +38,7 @@ def inspect_image(image: Image.Image | np.ndarray, model_dir: Path, config_path:
     project_root = Path(__file__).resolve().parents[2]
     if config_path is None:
         if product_id is None:
-            raise ValueError("模型卡的 dataset_source 不是已支持的产品类别，无法自动选择质量策略；请显式指定 --rules 配置文件。")
+            raise ValueError("The model card dataset_source is not a supported product category; specify --rules explicitly to select a policy file.")
         config_path = policy_path_for_product(project_root, product_id)
     config_path = Path(config_path).resolve()
     # Legacy bottle policy predates product_category metadata. Its registered
@@ -46,15 +46,15 @@ def inspect_image(image: Image.Image | np.ndarray, model_dir: Path, config_path:
     registered_category = next((category for category in PRODUCTS
                                 if config_path == policy_path_for_product(project_root, category).resolve()), None)
     if registered_category is not None and registered_category != product_id:
-        raise ValueError(f"内置质量策略类别 {registered_category} 与模型类别 {product_id or '未知'} 不一致，请选择该产品对应的模型和策略。")
+        raise ValueError(f"Built-in policy category {registered_category} does not match model category {product_id or 'unknown'}; select the matching product model and policy.")
     policy_bytes = Path(config_path).read_bytes()
     policy = json.loads(policy_bytes)
     policy_category = policy.get("product_category")
     if policy_category is not None and policy_category != product_id:
-        raise ValueError(f"质量策略类别 {policy_category} 与模型类别 {product_id or '未知'} 不一致，请选择该产品对应的模型和策略。")
+        raise ValueError(f"Policy category {policy_category} does not match model category {product_id or 'unknown'}; select the matching product model and policy.")
     x0, y0, x1, y1 = policy["critical_roi"]
     if not 0 <= x0 < x1 <= 1 or not 0 <= y0 < y1 <= 1:
-        raise ValueError("关键区域必须为0到1的合法归一化矩形")
+        raise ValueError("The critical region must be a valid normalized rectangle with coordinates between 0 and 1.")
     model = _load_model(str(model_dir), card_path.stat().st_mtime_ns)
     prediction = model.predict(rgb)
     heat = np.asarray(prediction.heatmap, dtype=np.float32)
@@ -74,13 +74,14 @@ def inspect_image(image: Image.Image | np.ndarray, model_dir: Path, config_path:
               "model_method": card.get("method", type(model).__name__),
               "dataset_source": card.get("dataset_source", "unknown"),
               "product_category": product_id or "unknown",
-              "product_label": PRODUCTS[product_id]["label"] if product_id else "自定义类别",
+              "product_label": PRODUCTS[product_id]["label"] if product_id else "Custom category",
               "policy_name": Path(config_path).name,
-              "policy_description": policy.get("description", "自定义质量策略"),
+              "policy_description": policy.get("description", "Custom quality policy"),
               "policy_sha256": hashlib.sha256(policy_bytes).hexdigest(),
               "image_sha256": hashlib.sha256(rgb.tobytes()).hexdigest(),
               "image_size": list(image.size),
-              "notice": "分数不是概率；热图表示视觉差异，规则解释质量建议，不解释缺陷物理成因。仅适用于模型对应类别和拍摄条件。"}
+              "language": "en", "edition": "English - Local Only",
+              "notice": "The score is not a probability. The heatmap shows visual differences, while the rules explain the quality recommendation rather than the physical cause of a defect. Use only the model product category and comparable imaging conditions."}
     # Color scale is fixed relative to calibration threshold, not min/max per image.
     normalized = np.clip(heat / max(prediction.pixel_threshold * 2, 1e-8), 0, 1)
     color = cv2.applyColorMap((normalized * 255).astype(np.uint8), cv2.COLORMAP_JET)[:, :, ::-1]

@@ -1,8 +1,13 @@
 {
   "version": "metal-nut-demo-policy-v1",
   "product_category": "metal_nut",
-  "description": "教学示范策略：金属螺母图像中央矩形为示范关注区，不代表螺母真实功能部位；区域与门槛未经工厂专家验证，未使用异常测试结果调参。",
-  "critical_roi": [0.2, 0.2, 0.8, 0.8],
+  "description": "Teaching policy using a central rectangular demonstration region for metal nut images. It does not identify an actual functional nut component. The region and thresholds have not been validated by factory specialists and were not tuned using anomalous test results.",
+  "critical_roi": [
+    0.2,
+    0.2,
+    0.8,
+    0.8
+  ],
   "review_margin": 0.1,
   "min_anomaly_area": 0.005,
   "reject_area": 0.06,

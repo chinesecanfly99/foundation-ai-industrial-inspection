@@ -19,6 +19,9 @@ def save(path,data,digest=None):
 
 expected={'bottle_patch':'82a62f71f0acb36cdb178452cb7595f4475fa626789fc42656b81e8e0a99cbb8',
           'bottle_pixel':'b5fdb04651fd98d245de32406178953b48a1db54491f64abd9fae8045824fc21',
+          'metal_nut_patch':'cfa1580ad6adae2aa14e88f2defc455f645d3f1cf0a3b8848f40a88a9f676f03',
+          'metal_nut_pixel':'779266e6d73f8f57f772c09ef49a6805f1e2973b5bb1f94e4f3b07aa681f98aa',
+          'synthetic_pixel':'509aeb0f67b74c5d98dcd8f91985b3853aae675a36d104bc02b36b0ad6056415',
           'tile_patch':'2c26fb958ca2951daecd77cfb422a53dc077d4309892d741e079ea73ee934e05',
           'tile_pixel':'41ccf4b82e7f57e7feb6f2f02dd83fd6026337dbfc10b19c5804aae2ba522e4b'}
 

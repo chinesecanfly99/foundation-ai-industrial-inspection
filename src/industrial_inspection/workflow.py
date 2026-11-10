@@ -20,6 +20,7 @@ import zipfile
 from PIL import Image, ImageEnhance, ImageFilter, ImageOps, UnidentifiedImageError
 
 from .catalog import PRODUCTS, REAL_PRODUCTS, product_id_from_card
+from .workspace import results_dir
 
 MAX_BATCH_FILES = 20
 MAX_FILE_BYTES = 20 * 1024 * 1024
@@ -67,7 +68,7 @@ def write_csv(path: Path, rows: list[dict], fields: list[str]) -> Path:
 class InspectionStore:
     def __init__(self, project_root: Path):
         self.root = Path(project_root).resolve()
-        self.folder = self.root / "results" / "workflow"
+        self.folder = results_dir(self.root) / "workflow"
         self.folder.mkdir(parents=True, exist_ok=True)
         self.database = self.folder / "inspections.sqlite3"
         with closing(self.connect()) as connection:

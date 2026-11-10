@@ -1,8 +1,13 @@
 {
   "version": "tile-demo-policy-v1",
   "product_category": "tile",
-  "description": "教学示范策略：瓷砖全图为纹理表面示范关注区；区域与门槛未经工厂专家验证，未使用异常测试结果调参，不构成瓷砖出厂质量标准。",
-  "critical_roi": [0.0, 0.0, 1.0, 1.0],
+  "description": "Teaching policy using the entire tile image as the demonstration texture region. The region and thresholds have not been validated by factory specialists or tuned using anomalous test results. This is not a tile production quality standard.",
+  "critical_roi": [
+    0.0,
+    0.0,
+    1.0,
+    1.0
+  ],
   "review_margin": 0.1,
   "min_anomaly_area": 0.005,
   "reject_area": 0.06,

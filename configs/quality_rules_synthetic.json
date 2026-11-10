@@ -1,8 +1,13 @@
 {
   "version": "synthetic-demo-policy-v1",
   "product_category": "synthetic",
-  "description": "教学示范策略：合成垫圈中央矩形为联调关注区，沿用原教学门槛；仅验证软件流程，不适用于真实产品质量决策。",
-  "critical_roi": [0.2, 0.2, 0.8, 0.8],
+  "description": "Teaching policy using a central rectangular region for synthetic washer software checks. It retains the original teaching thresholds and is not applicable to real product quality decisions.",
+  "critical_roi": [
+    0.2,
+    0.2,
+    0.8,
+    0.8
+  ],
   "review_margin": 0.1,
   "min_anomaly_area": 0.005,
   "reject_area": 0.06,

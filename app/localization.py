@@ -51,7 +51,7 @@ def locale_startup_js(language):
     if len(modules)!=1:raise RuntimeError('Use the pinned Gradio 5.49.1 frontend assets')
     url=json.dumps('./assets/'+modules[0].name)
     target=json.dumps('en' if language=='en' else 'zh-CN')
-    names=json.dumps({k:locale(language)['ui'][v] for k,v in {'compare':'compare','challenge':'challenge','daily':'daily','batch':'batch','history':'history'}.items()})
+    names=json.dumps({k:locale(language)['ui'][v] for k,v in {'challenge':'challenge','batch':'batch','history':'history'}.items()})
     return f'''async () => {{
         const locale = await import(new URL({url}, document.baseURI).href);
         locale.e({target});
@@ -59,11 +59,13 @@ def locale_startup_js(language):
         const wanted = names[new URL(location.href).searchParams.get("demo")];
         if (wanted) {{
             let attempts = 0;
+            const findTab = name => [...document.querySelectorAll('[role="tab"]')].find(el => el.offsetParent !== null && el.textContent.trim() === name);
             const selectTab = () => {{
-                const tab = [...document.querySelectorAll('[role="tab"]')].find(el => el.offsetParent !== null && el.textContent.trim() === wanted);
-                if (tab) {{ tab.click(); tab.scrollIntoView({{block: "start"}}); }}
-                else if (++attempts < 40) setTimeout(selectTab, 50);
+                const tab = findTab(wanted);
+                const hydrated = document.readyState === 'complete' && document.querySelector('#inspection-input input[type="file"], #inspection-input img');
+                if (tab && (hydrated || attempts >= 35)) {{ tab.click(); return; }}
+                if (++attempts < 40) setTimeout(selectTab, 100);
             }};
-            selectTab();
+            setTimeout(selectTab, 700);
         }}
     }}'''
