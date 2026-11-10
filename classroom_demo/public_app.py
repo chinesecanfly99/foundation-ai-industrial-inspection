@@ -10,6 +10,7 @@ import uuid
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, Response
 from PIL import Image
+from app.localization import localize_report
 from industrial_inspection.pipeline import inspect_image
 from industrial_inspection.workflow import transform_image
 
@@ -67,6 +68,7 @@ def run(case:str, brightness: float = Query(.1, ge=.1, le=1.8), blur: float = Qu
         rows=[]
         for name,method,image in outputs:
             overlay,report=inspect_image(image,ROOT/'models'/f'{product}_{method}')
+            report = localize_report(report, 'en')
             rows.append({'name':name,'image':encode(image.copy()),'overlay':encode(overlay.copy()),'report':report})
         result = {'id':uuid.uuid4().hex[:8], 'case':case, 'rows':rows}
         if case == 'bottle':

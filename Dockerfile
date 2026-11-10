@@ -6,8 +6,9 @@ COPY src ./src
 COPY configs/quality_rules.json configs/quality_rules_tile.json ./configs/
 COPY samples/tile/crack_000.png ./samples/tile/crack_000.png
 COPY samples/bottle/broken_large_000.png ./samples/bottle/broken_large_000.png
+COPY app/localization.py ./app/localization.py
+COPY app/locales/en.json ./app/locales/en.json
 COPY classroom_demo/public_app.py classroom_demo/index.html classroom_demo/fetch_assets.py ./
 RUN python fetch_assets.py
 USER 10001
 CMD ["sh","-c","exec uvicorn public_app:app --host 0.0.0.0 --port ${PORT:-10000} --workers 1 --limit-concurrency 16"]
-
