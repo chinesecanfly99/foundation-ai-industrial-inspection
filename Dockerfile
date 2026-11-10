@@ -19,4 +19,4 @@ COPY --from=assets /build/feature_backbone.onnx ./
 COPY --from=assets /build/models ./models
 RUN mkdir .cache && chown 10001 .cache
 USER 10001
-CMD ["sh","-c","exec uvicorn classroom_demo.cloud_service:app --host 0.0.0.0 --port ${PORT:-10000} --workers 1 --limit-concurrency 40 --no-access-log"]
+CMD ["sh","-c","exec uvicorn classroom_demo.cloud_service:app --host 0.0.0.0 --port ${PORT:-10000} --workers 1 --limit-concurrency 192 --no-access-log"]
