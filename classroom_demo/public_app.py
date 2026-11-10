@@ -7,13 +7,15 @@ from pathlib import Path
 from threading import Lock
 import uuid
 
-from fastapi import FastAPI, HTTPException
-from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
-from PIL import Image, ImageEnhance
+from fastapi import FastAPI, HTTPException, Query
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, Response
+from PIL import Image
 from industrial_inspection.pipeline import inspect_image
+from industrial_inspection.workflow import transform_image
 
 ROOT=Path(__file__).resolve().parent
-CASES={'tile':('tile','crack_000.png'), 'bottle':('bottle','broken_large_000.png')}
+CASES={'tile':('tile','crack_000.png'), 'bottle':('bottle','broken_large_000.png'),
+       'bottle-compare':('bottle','broken_large_000.png')}
 SLOTS=Lock()
 app=FastAPI(docs_url=None,redoc_url=None,openapi_url=None)
 
@@ -25,7 +27,7 @@ def health():
 
 @app.get('/',response_class=HTMLResponse)
 def home():
-    return HTMLResponse((ROOT/'index.html').read_text(encoding='utf-8'))
+    return HTMLResponse((ROOT/'index.html').read_text(encoding='utf-8'), headers={'Cache-Control':'no-cache'})
 
 
 @app.get('/sample/{case}')
@@ -33,6 +35,15 @@ def sample(case:str):
     if case not in CASES:raise HTTPException(404)
     product, file=CASES[case]
     return FileResponse(ROOT/'samples'/product/file, media_type='image/png')
+
+
+@app.get('/preview/bottle')
+def preview(brightness: float = Query(1, ge=.1, le=1.8), blur: float = Query(0, ge=0, le=5)):
+    with Image.open(ROOT/'samples/bottle/broken_large_000.png') as image:
+        changed = transform_image(image, brightness, blur)
+    buffer = BytesIO()
+    changed.save(buffer, format='PNG')
+    return Response(buffer.getvalue(), media_type='image/png')
 
 
 def encode(image):
@@ -43,19 +54,23 @@ def encode(image):
 
 
 @app.post('/run/{case}')
-def run(case:str):
+def run(case:str, brightness: float = Query(.1, ge=.1, le=1.8), blur: float = Query(0, ge=0, le=5)):
     if case not in CASES:raise HTTPException(404)
     if not SLOTS.acquire(blocking=False):raise HTTPException(429,'A demonstration is running. Try again in a moment.')
     try:
         product, file=CASES[case]
         with Image.open(ROOT/'samples'/product/file) as opened:im=opened.convert('RGB')
-        outputs=[('Feature memory','patch',im),('Pixel baseline','pixel',im)] if case=='tile' else [
-                 ('Original photo','patch',im),('Brightness 0.1','patch',ImageEnhance.Brightness(im).enhance(.1))]
+        if case == 'bottle':
+            outputs = [('Original', 'patch', im), ('Transformed', 'patch', transform_image(im, brightness, blur))]
+        else:
+            outputs = [('Feature memory (ResNet18)', 'patch', im), ('Pixel baseline', 'pixel', im)]
         rows=[]
         for name,method,image in outputs:
             overlay,report=inspect_image(image,ROOT/'models'/f'{product}_{method}')
             rows.append({'name':name,'image':encode(image.copy()),'overlay':encode(overlay.copy()),'report':report})
-        return JSONResponse({'id':uuid.uuid4().hex[:8],'case':case,'rows':rows},headers={'Cache-Control':'no-store'})
+        result = {'id':uuid.uuid4().hex[:8], 'case':case, 'rows':rows}
+        if case == 'bottle':
+            result['transform'] = {'brightness':brightness, 'blur':blur}
+        return JSONResponse(result,headers={'Cache-Control':'no-store'})
     finally:
         SLOTS.release()
-

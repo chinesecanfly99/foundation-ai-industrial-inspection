@@ -1,23 +1,344 @@
-<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Industrial Inspection Workbench · Classroom Demo</title>
-<style>
-*{box-sizing:border-box}body{margin:0;background:linear-gradient(140deg,#deebfb,#f5f7fc,#e5f4ee) fixed;color:#183251;font:17px/1.5 system-ui,sans-serif}main{max-width:1270px;margin:auto;padding:24px 26px 36px}header{background:linear-gradient(110deg,#10203e,#2552a0,#077780);color:#fff;border-left:7px solid #5ee7d5;border-radius:18px;padding:22px 29px}header strong{font-size:14px;letter-spacing:.13em;color:#8af2df}h1{font-size:clamp(27px,4vw,45px);margin:5px 0}p{margin:5px 0 13px}h2{font-size:25px;margin:0 0 10px}h3{font-size:21px;margin:0}.layout{display:grid;grid-template-columns:minmax(270px,1fr) minmax(450px,2fr);gap:18px;margin-top:18px}section{background:#f6faff;border:1px solid #bed2ea;border-radius:15px;padding:18px}#output{background:#eff9f6;border-color:#c4e3db}.controls{display:flex;gap:8px;flex-wrap:wrap}button{font:700 16px system-ui;border:1px solid #b4cbeb;background:#e5effd;color:#154386;padding:10px 13px;border-radius:8px;cursor:pointer}button[aria-pressed=true],button.primary{background:#275fb8;color:white;border-color:#275fb8}button:disabled{opacity:.55;cursor:wait}#run{margin-top:11px;width:100%;font-size:19px}img{max-width:100%;object-fit:contain;display:block;width:100%;height:242px;background:#e0e9f2;border-radius:9px}#original{margin-top:12px;height:250px}.paired{display:grid;grid-template-columns:1fr 1fr;gap:12px}.recommend{font-size:20px;font-weight:800;margin:8px 0 1px}.reject{color:#8f2920}.review{color:#8c5700}.undetermined{color:#553b99}.pass{color:#0d694f}#saved{border-top:1px solid #c2dbd3;margin-top:12px;padding-top:12px}.small{font-size:14px;color:#405771}footer{padding:17px 0}a{color:#16488a}@media(max-width:820px){.layout{grid-template-columns:1fr}.paired img{height:190px}}
-</style><main><header><strong>FOUNDATION OF AI / PUBLIC CLASSROOM DEMO</strong><h1>Industrial Inspection Workbench</h1><p>Run the original detectors on two reference cases. Use the desktop project for custom images and full review history.</p></header>
-<div class="layout"><section><h2>1 · Choose a case</h2><div class="controls"><button id="tile" aria-pressed="true">Tile crack</button><button id="bottle" aria-pressed="false">Bottle retake test</button></div><img id="original" alt="Original sample" src="/sample/tile"><p id="hint">Compare both models on the same tile image.</p><button id="run" class="primary">Start inspection</button></section>
-<section id="output"><h2>2 · Compare the evidence</h2><p id="status" role="status">Ready to inspect.</p><div id="results" class="paired"></div><div id="saved" hidden><h2>3 · Saved record and reports</h2><p id="record"></p><div class="controls"><button id="csv">Download CSV</button><button id="json">Download JSON</button></div><p class="small">Recent results stay in this browser. The public demo does not accept uploads or store shared history.</p></div></section></div>
-<footer class="small">Reference photos: <a href="https://www.mvtec.com/research-teaching/datasets/mvtec-ad">MVTec AD</a> (MVTec Software GmbH), <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a>. Classroom prototype, no industrial acceptance certification.</footer></main>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Industrial Inspection Workbench · Classroom Demo</title>
+  <style>
+    :root{color-scheme:light;font:16px Arial,system-ui,sans-serif;color:#172a43;background:#f8fbfe}
+    *{box-sizing:border-box} [hidden]{display:none!important}
+    body{margin:0;background:linear-gradient(145deg,#edf5ff,#f7fafc 52%,#ecf7f3);min-height:100vh}
+    main{max-width:1264px;margin:auto;padding:26px 24px 36px}
+    header{color:white;background:linear-gradient(110deg,#112040 0%,#23468f 72%,#007f87 100%);border-radius:18px;border-left:6px solid #50e1d3;padding:19px 24px 20px;margin-bottom:20px}
+    header strong{color:#8df4df;font-size:13px;letter-spacing:.13em}
+    h1{font-size:clamp(27px,4vw,42px);margin:5px 0 8px;line-height:1.12}
+    header p{color:#e3f1ff;margin:0;line-height:1.45}
+    h2{font-size:23px;margin:4px 0 18px;line-height:1.25}
+    p{line-height:1.45} a{color:#174592}
+    nav{display:flex;gap:4px;border-bottom:1px solid #ceddec;margin-bottom:19px;flex-wrap:wrap}
+    nav button{background:transparent;border:0;border-bottom:2px solid transparent;color:#142a45;border-radius:7px 7px 0 0;padding:10px 15px;cursor:pointer;font-size:16px;font-weight:700}
+    nav button[aria-selected="true"]{background:#e8f1ff;border-bottom-color:#245bb8;color:#174592}
+    .layout{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:16px;align-items:start}
+    .panel{border:1px solid #cddded;border-radius:14px;background:#edf5ff;padding:14px;min-width:0}
+    .result,.evidence{background:#eaf6f3;border-color:#cbe3dc}
+    .result{min-height:505px}
+    .pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    .controls{background:white;border:1px solid #dde6f1;border-radius:5px;padding:11px;margin:0 0 14px}
+    label{display:block;color:#405c7b;font-size:15px}
+    select,button{font:inherit}
+    select{display:block;background:#fff;border:1px solid #dce5ef;border-radius:5px;color:#172a43;width:100%;margin-top:7px;padding:9px}
+    .photo{margin:0 0 14px;background:#fff;border:1px solid #dce5ef;border-radius:5px;overflow:hidden}
+    .photo figcaption{color:#405c7b;border-bottom:1px solid #edf1f6;font-size:15px;padding:6px 9px}
+    .photo img,.empty{display:block;width:100%;height:clamp(175px,27vw,294px);object-fit:contain}
+    .empty{display:grid;place-items:center;color:#52708e;font-size:15px;text-align:center}
+    .button{cursor:pointer;padding:10px 15px;border:1px solid #c4d5e9;border-radius:6px;background:#f0f5fc;color:#174592;font-weight:700}
+    .primary{background:#2460eb;color:white;border-color:#2460eb}
+    button:disabled,select:disabled{opacity:.56;cursor:default}
+    #inspect{width:100%;font-size:18px;margin-bottom:12px}
+    details{padding:9px 12px;background:#fff;border:1px solid #dae4ee;border-radius:5px}
+    summary{cursor:pointer}
+    .decision{border:1px solid #d9e5f2;border-left:5px solid #3472ce;border-radius:13px;background:#edf5ff;color:#1b3e73;padding:12px 16px;margin:10px 0 18px}
+    .decision h3{font-size:25px;margin:0 0 4px}.decision p{margin:0}
+    .decision.pass{background:#eaf9f0;color:#14522b;border-color:#3da464}
+    .decision.review{background:#fff5dd;color:#714700;border-color:#c17c10}
+    .decision.reject{background:#ffefee;color:#842620;border-color:#cb5347}
+    .decision.undetermined{background:#f1efff;color:#4f3584;border-color:#8664ca}
+    .metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:14px 0}
+    .metric{border:1px solid #d7e1ee;border-top:3px solid #62bcb6;border-radius:10px;background:white;padding:9px}
+    .metric span{display:block;font-size:13px;color:#455b73;margin-bottom:6px}.metric strong{font-size:21px}
+    .evidence{margin-top:15px;border-left:5px solid #008272}
+    .record{font-weight:700;color:#145943}
+    .table-wrap{overflow-x:auto;margin:10px 0 14px}
+    table{width:100%;border-collapse:collapse;font-size:15px;background:white;color:#183452}
+    th,td{border:1px solid #d6e3ec;padding:9px 10px;text-align:left}
+    th{background:#e8f3fc} .downloads{display:flex;flex-wrap:wrap;gap:9px;margin-top:12px}
+    .small{font-size:14px;color:#405a76} footer{margin-top:16px}
+    .challenge-actions{margin-bottom:14px}
+    @media(max-width:760px){main{padding:16px 12px 28px}.layout{grid-template-columns:1fr}.result{min-height:0}.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media(max-width:410px){.pair{grid-template-columns:1fr}nav button{padding:10px 7px}}
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <strong>FOUNDATION OF AI / CLASSROOM DEMO</strong>
+    <h1>Industrial Inspection Workbench</h1>
+    <p>Inspect the tile crack or bottle break using the same detectors and rules as the local workbench.</p>
+  </header>
+  <nav role="tablist" aria-label="Inspection workflows">
+    <button id="single-tab" role="tab" type="button" aria-controls="single" aria-selected="true">Single inspection</button>
+    <button id="challenge-tab" role="tab" type="button" aria-controls="challenge" aria-selected="false" tabindex="-1">Image quality challenge</button>
+  </nav>
+  <section id="single" role="tabpanel" aria-labelledby="single-tab">
+    <div class="layout">
+      <section class="panel">
+        <h2>1 · Select a product, image and model</h2>
+        <div class="controls pair">
+          <label>Product category<select id="product"><option value="tile">Tile surface</option><option value="bottle-compare">Bottle</option></select></label>
+          <label>Demonstration sample<select id="sample"><option>Crack · Sample 000</option></select></label>
+        </div>
+        <figure class="photo"><figcaption>Input image</figcaption><img id="input-photo" src="/sample/tile" alt="Selected inspection sample"></figure>
+        <button class="button primary" id="inspect" type="button">Start inspection</button>
+        <details>
+          <summary>Model and sample settings</summary>
+          <label>Inspection model<select id="model"><option value="patch">Feature memory (ResNet18)</option><option value="pixel">Pixel baseline</option></select></label>
+          <p class="small">The comparison also runs the other model on the same image.</p>
+        </details>
+      </section>
+      <section class="panel result">
+        <h2>2 · Review anomalies and the recommendation</h2>
+        <div id="inspection-decision" class="decision" role="status">
+          <h3 id="decision-title">Ready to inspect</h3><p id="decision-reason">Select a sample, then click Start inspection.</p>
+        </div>
+        <figure class="photo">
+          <figcaption>Anomaly heatmap</figcaption>
+          <div id="heatmap-placeholder" class="empty">The heatmap will appear here.</div>
+          <img id="heatmap" alt="Primary model anomaly heatmap" hidden>
+        </figure>
+        <div id="metrics" class="metrics" hidden></div>
+      </section>
+    </div>
+    <section id="comparison" class="panel evidence" hidden>
+      <h2>3 · Comparison and saved record</h2>
+      <p id="inspection-record" class="record"></p>
+      <div class="table-wrap">
+        <table aria-label="Model comparison">
+          <thead><tr><th>Model</th><th>Score / threshold</th><th>Recommendation</th></tr></thead>
+          <tbody id="comparison-rows"></tbody>
+        </table>
+      </div>
+      <details id="second-heatmap"><summary>Second model heatmap</summary>
+        <figure class="photo"><img id="comparison-heatmap" alt="Comparison model anomaly heatmap"></figure>
+      </details>
+      <div class="downloads">
+        <button class="button" data-report="inspection" data-format="json" type="button">Download JSON report</button>
+        <button class="button" data-report="inspection" data-format="csv" type="button">Download CSV summary</button>
+      </div>
+    </section>
+  </section>
+  <section id="challenge" role="tabpanel" aria-labelledby="challenge-tab" hidden>
+    <section class="panel">
+      <h2>Compare the original and transformed bottle photo</h2>
+      <p>Change the brightness or blur, then run the same feature memory model on both images.</p>
+      <div class="controls">
+        <label>Product category<select id="quality-product"><option>Bottle</option></select></label>
+      </div>
+      <div class="pair">
+        <figure class="photo"><figcaption>Challenge source image</figcaption><img id="quality-input" alt="Original bottle photograph" hidden><div id="quality-input-placeholder" class="empty">Load the bottle sample below.</div></figure>
+        <figure class="photo"><figcaption>Transformed preview</figcaption><img id="quality-preview" alt="Transformed bottle preview" hidden><div id="quality-preview-placeholder" class="empty">The preview will appear here.</div></figure>
+      </div>
+      <div class="controls pair">
+        <label>Brightness multiplier<select id="brightness"><option value="1">1.0</option><option>0.7</option><option>0.4</option><option>0.1</option><option>1.5</option></select></label>
+        <label>Blur radius<select id="blur"><option>0</option><option>1</option><option>3</option><option>5</option></select></label>
+      </div>
+      <div class="pair challenge-actions">
+        <button class="button" id="load-bottle" type="button">Load defect example</button>
+        <button class="button primary" id="inspect-quality" type="button" disabled>Inspect original and transformed images</button>
+      </div>
+      <p id="quality-status" role="status">Load the defect example to start.</p>
+    </section>
+    <section id="quality-results" class="panel evidence" hidden>
+      <h2>Image quality comparison</h2>
+      <div class="pair">
+        <figure class="photo"><figcaption>Original image heatmap</figcaption><img id="original-heatmap" alt="Original bottle heatmap"></figure>
+        <figure class="photo"><figcaption>Transformed image heatmap</figcaption><img id="transformed-heatmap" alt="Transformed bottle heatmap"></figure>
+      </div>
+      <div class="table-wrap">
+        <table aria-label="Image quality comparison">
+          <thead><tr><th>Variant</th><th>Mean brightness</th><th>Laplacian variance</th><th>Score / threshold</th><th>AI recommendation</th></tr></thead>
+          <tbody id="quality-rows"></tbody>
+        </table>
+      </div>
+      <p id="quality-record" class="record"></p>
+      <div class="downloads">
+        <button class="button" data-report="quality" data-format="json" type="button">Download JSON report</button>
+        <button class="button" data-report="quality" data-format="csv" type="button">Download CSV summary</button>
+      </div>
+    </section>
+  </section>
+  <footer class="small">
+    The classroom demo uses the supplied samples and saves recent results in this browser. Custom uploads, batch inspection and human review are available in the full local workbench.
+    Reference photos from <a href="https://www.mvtec.com/research-teaching/datasets/mvtec-ad">MVTec AD</a> (MVTec Software GmbH), <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a>.
+  </footer>
+</main>
 <script>
-const e=id=>document.getElementById(id);let active='tile',last=null;
-const decisions={pass:'Pass',review:'Manual review',reject:'Reject recommendation',undetermined:'Cannot determine · Retake photo'};
-for(const k of ['tile','bottle'])e(k).onclick=()=>{active=k;e('original').src='/sample/'+k;e('tile').setAttribute('aria-pressed',k==='tile');e('bottle').setAttribute('aria-pressed',k==='bottle');e('hint').textContent=k==='tile'?'Compare both models on the same tile image.':'Compare the original bottle photo with brightness reduced to 0.1. Blur stays at zero.';e('results').replaceChildren();e('saved').hidden=true;e('status').textContent='Ready to inspect.';};
-function node(tag,text,cls){const a=document.createElement(tag);if(text)a.textContent=text;if(cls)a.className=cls;return a;}
-e('run').onclick=async()=>{const buttons=['run','tile','bottle'];buttons.forEach(id=>e(id).disabled=true);e('status').textContent='Running the original detectors…';e('results').replaceChildren();e('saved').hidden=true;
- try {const response=await fetch('/run/'+active,{method:'POST'});if(!response.ok)throw new Error('Please try again, or use the recorded demo.');const data=await response.json();
- for(const row of data.rows){const card=node('article'),img=node('img'),r=row.report;img.src=row.overlay;img.alt=row.name+' anomaly overlay';card.append(node('h3',row.name),img,node('p',decisions[r.decision],'recommend '+r.decision),node('p',`${(r.score/r.image_threshold).toFixed(2)}× threshold · brightness ${r.brightness.toFixed(2)}`,'small'));e('results').append(card);}
- last={id:data.id,case:data.case,reports:data.rows.map(r=>({label:r.name,...r.report}))};let stored=false;try{const list=JSON.parse(localStorage.getItem('classroom-inspections')||'[]');localStorage.setItem('classroom-inspections',JSON.stringify([last,...list].slice(0,12)));stored=true;}catch{}e('record').textContent=`Record ${last.id} · ${stored?'saved in this browser':'available for download'}`;e('saved').hidden=false;e('status').textContent='Inspection complete.';
- }catch(error){e('status').textContent=error.message;}finally{buttons.forEach(id=>e(id).disabled=false);}};
-function download(text,name,type){if(!last)return;const url=URL.createObjectURL(new Blob([text],{type}));const a=node('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
-e('json').onclick=()=>download(JSON.stringify(last,null,2),'inspection-'+last.id+'.json','application/json');
-e('csv').onclick=()=>download(['model,decision,score,threshold,brightness',...last.reports.map(r=>[r.label,r.decision,r.score,r.image_threshold,r.brightness].join(','))].join('\n'),'inspection-'+last.id+'.csv','text/csv');
-</script></html>
+  const el = id => document.getElementById(id);
+  const tabs = [el('single-tab'), el('challenge-tab')];
+  const decisions = {pass:'Pass', review:'Manual review', reject:'Reject recommendation', undetermined:'Cannot determine'};
+  const samples = {tile:'Crack · Sample 000', 'bottle-compare':'Large break · Sample 000'};
+  const records = {};
+  const format = value => value.toFixed(4);
+  const ratio = report => format(report.score / report.image_threshold);
 
+  function selectTab(selected) {
+    for (const tab of tabs) {
+      const active = tab === selected;
+      tab.setAttribute('aria-selected', String(active));
+      tab.tabIndex = active ? 0 : -1;
+      el(tab.getAttribute('aria-controls')).hidden = !active;
+    }
+  }
+  tabs.forEach((tab, index) => {
+    tab.addEventListener('click', () => selectTab(tab));
+    tab.addEventListener('keydown', event => {
+      if (!['ArrowLeft','ArrowRight','Home','End'].includes(event.key)) return;
+      event.preventDefault();
+      const next = event.key === 'Home' ? tabs[0] : event.key === 'End' ? tabs[1] : tabs[1-index];
+      selectTab(next);
+      next.focus();
+    });
+  });
+
+  function node(tag, text) {
+    const item = document.createElement(tag);
+    if (text !== undefined) item.textContent = text;
+    return item;
+  }
+  function setRows(id, rows) {
+    el(id).replaceChildren(...rows.map(values => {
+      const tr = node('tr');
+      tr.append(...values.map(value => node('td', value)));
+      return tr;
+    }));
+  }
+  function decision(title, reason, code = '') {
+    el('inspection-decision').className = 'decision ' + code;
+    el('decision-title').textContent = title;
+    el('decision-reason').textContent = reason;
+  }
+  function resetInspection() {
+    for (const id of ['heatmap','metrics','comparison']) el(id).hidden = true;
+    el('heatmap-placeholder').hidden = false;
+    el('second-heatmap').open = false;
+    decision('Ready to inspect', 'Select a sample, then click Start inspection.');
+  }
+  el('product').addEventListener('change', () => {
+    const selected = el('product').value;
+    el('sample').replaceChildren(node('option', samples[selected]));
+    el('input-photo').src = '/sample/' + selected;
+    resetInspection();
+  });
+  el('model').addEventListener('change', resetInspection);
+
+  function saveRecord(key, data) {
+    const record = {id:data.id, case:data.case, reports:data.rows.map(row => ({label:row.name, ...row.report}))};
+    if (data.transform) record.transform = data.transform;
+    records[key] = record;
+    try {
+      const history = JSON.parse(localStorage.getItem('classroom-inspections') || '[]');
+      localStorage.setItem('classroom-inspections', JSON.stringify([record,...history].slice(0,12)));
+      el(key + '-record').textContent = 'Saved record ' + record.id + ' · this browser';
+    } catch {
+      el(key + '-record').textContent = 'Record ' + record.id + ' · available for download';
+    }
+  }
+  async function run(path) {
+    const response = await fetch(path, {method:'POST', signal:AbortSignal.timeout(90000)});
+    if (response.status === 429) throw new Error('Another inspection is running. Try again in a moment.');
+    if (!response.ok) throw new Error('The inspection could not finish. Try again or play the offline video.');
+    return response.json();
+  }
+  function errorMessage(error) {
+    return error.name === 'TimeoutError' ? 'The server took too long. Try again or play the offline video.' : error.message;
+  }
+  function toggleControls(ids, disabled) {
+    ids.forEach(id => {el(id).disabled = disabled;});
+  }
+
+  el('inspect').addEventListener('click', async () => {
+    const controls = ['inspect','product','sample','model','inspect-quality'];
+    const selectedModel = el('model').value;
+    toggleControls(controls, true);
+    resetInspection();
+    decision('Inspecting…','Running both models on the selected photo.');
+    try {
+      const data = await run('/run/' + el('product').value);
+      const order = selectedModel === 'pixel' ? [data.rows[1],data.rows[0]] : data.rows;
+      const [primary, other] = order;
+      const report = primary.report;
+      decision(decisions[report.decision], report.reasons[0], report.decision);
+      el('heatmap').src = primary.overlay;
+      el('heatmap').hidden = false;
+      el('heatmap-placeholder').hidden = true;
+      const facts = [['Anomaly score',format(report.score)],['Image threshold',format(report.image_threshold)],
+        ['Anomalous area',(100*report.anomaly_area_ratio).toFixed(2)+'%'],
+        ['Anomaly inside critical region',(100*report.critical_overlap_ratio).toFixed(2)+'%']];
+      el('metrics').replaceChildren(...facts.map(([label, value]) => {
+        const item = node('div');
+        item.className = 'metric';
+        item.append(node('span',label),node('strong',value));
+        return item;
+      }));
+      el('metrics').hidden = false;
+      setRows('comparison-rows', order.map(row => [row.name, ratio(row.report), decisions[row.report.decision]]));
+      el('comparison-heatmap').src = other.overlay;
+      saveRecord('inspection', {...data, rows:order});
+      el('comparison').hidden = false;
+    } catch (error) {
+      decision('Inspection interrupted',errorMessage(error),'undetermined');
+    } finally {
+      toggleControls(controls, false);
+      el('inspect-quality').disabled = el('quality-input').hidden;
+    }
+  });
+
+  const qualityQuery = () => new URLSearchParams({brightness:el('brightness').value, blur:el('blur').value});
+  function updatePreview() {
+    if (el('quality-input').hidden) return;
+    el('quality-preview').src = '/preview/bottle?' + qualityQuery();
+    el('quality-results').hidden = true;
+    el('quality-status').textContent = 'Ready to inspect both images.';
+  }
+  el('load-bottle').addEventListener('click', () => {
+    el('quality-input').src = '/sample/bottle';
+    for (const id of ['quality-input','quality-preview']) {
+      el(id).hidden = false;
+      el(id + '-placeholder').hidden = true;
+    }
+    el('inspect-quality').disabled = el('inspect').disabled;
+    updatePreview();
+  });
+  for (const id of ['brightness','blur']) el(id).addEventListener('change', updatePreview);
+
+  el('inspect-quality').addEventListener('click', async () => {
+    const controls = ['brightness','blur','load-bottle','inspect-quality','inspect'];
+    toggleControls(controls,true);
+    el('quality-results').hidden = true;
+    el('quality-status').textContent = 'Inspecting the original and transformed images…';
+    try {
+      const data = await run('/run/bottle?' + qualityQuery());
+      const [original, transformed] = data.rows;
+      el('original-heatmap').src = original.overlay;
+      el('transformed-heatmap').src = transformed.overlay;
+      setRows('quality-rows', data.rows.map(({name,report}) =>
+        [name,format(report.brightness),format(report.sharpness),ratio(report),decisions[report.decision]]));
+      saveRecord('quality',data);
+      el('quality-results').hidden = false;
+      el('quality-status').textContent = transformed.report.decision === 'undetermined' ?
+        'Retake the photo. The transformed input failed the image quality check.' : 'Inspection complete.';
+    } catch (error) {
+      el('quality-status').textContent = errorMessage(error);
+    } finally {
+      toggleControls(controls,false);
+    }
+  });
+
+  function download(record, format) {
+    const csv = ['model,decision,score,threshold,brightness', ...record.reports.map(r =>
+      [r.label,r.decision,r.score,r.image_threshold,r.brightness].join(','))].join('\n');
+    const payload = format === 'json' ? JSON.stringify(record,null,2) : csv;
+    const url = URL.createObjectURL(new Blob([payload],{type:format === 'json' ? 'application/json' : 'text/csv'}));
+    const link = node('a');
+    link.href = url;
+    link.download = 'inspection-' + record.id + '.' + format;
+    link.click();
+    setTimeout(() => URL.revokeObjectURL(url),1000);
+  }
+  document.querySelectorAll('[data-report]').forEach(button => button.addEventListener('click', () => {
+    const record = records[button.dataset.report];
+    if (record) download(record,button.dataset.format);
+  }));
+  if (new URLSearchParams(location.search).get('demo') === 'challenge') selectTab(tabs[1]);
+</script>
+</body>
+</html>
